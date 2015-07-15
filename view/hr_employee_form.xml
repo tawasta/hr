@@ -7,7 +7,9 @@
 			<field name="arch" type="xml">
 
 				<field name="user_id" position="after">
-
+					<div id="security groups">
+						<field name="group_sales" />
+					</div>
 				</field>
 
 			</field>
