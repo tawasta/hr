@@ -26,6 +26,6 @@ HR User
 Allows adding users from HR-module.
 ''',
     'data': [
-
+        'view/hr_employee_form.xml',
     ],
 }
