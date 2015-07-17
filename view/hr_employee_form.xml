@@ -16,7 +16,7 @@
 				</label>
 
 				<!-- Add an "User information"-page -->
-				<field name="user_id" positon="replace" />
+				<field name="user_id" position="replace" />
 
 				<page string="Personal Information" position="after">
 					<page string="User Information" groups="base.group_hr_manager">
