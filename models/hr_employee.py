@@ -17,15 +17,19 @@ class HrEmployee(models.Model):
 
     @api.onchange('name')
     def onchange_name(self):
-        pass
-        # manager_group = self.get_group_by_name("Manager", "Sales")
+        groups = []
+
+        groups.append(
+            self.get_group_by_name('See all Leads', 'Sales').id or False)
+        groups.append(
+            self.get_group_by_name('Employee', 'Human Resources').id or False)
 
     @api.model
     def create(self, vals):
         ''' Creates an user and sets default permission rights '''
 
         if not self.user_id:
-            vals = self.create_user(self, vals)
+            vals = self.create_user(vals)
 
         return super(HrEmployee, self).create(vals)
 
@@ -35,6 +39,7 @@ class HrEmployee(models.Model):
         user_vals = {
             'login': vals['work_email'],
             'name': vals['name'],
+            'groups_id': {(6, False, self.get_default_groups())}
         }
 
         user_id = users_object.sudo().create(user_vals)
@@ -65,8 +70,8 @@ class HrEmployee(models.Model):
 
         groups = self.get_groups_by_category_name(category_name)
 
-        group = groups_obj.search([('name', '=', group_name),
-                                   ('category_id', 'in', groups.ids)])
+        group = groups_obj.search([('name', 'ilike', group_name),
+                                   ('id', 'in', groups.ids)])
 
         return group
 
@@ -75,6 +80,18 @@ class HrEmployee(models.Model):
 
         groups_obj = self.env['res.groups']
 
-        groups = groups_obj.search([('category_id.name', '=', category_name)])
+        groups = groups_obj.search(
+            [('category_id.name', 'ilike', category_name)]
+        )
 
         return groups
+
+    def get_default_groups(self):
+        groups = []
+
+        groups.append(
+            self.get_group_by_name('See all Leads', 'Sales').id or False)
+        groups.append(
+            self.get_group_by_name('Employee', 'Human Resources').id or False)
+
+        return tuple(groups)
