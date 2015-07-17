@@ -64,14 +64,23 @@ class HrEmployee(models.Model):
         return group
 
     def set_group_sales(self):
-        if self.group_sales == 'employee':
-            pass
+        sales_groups = self.get_groups_by_category_name("Sales")
 
-        elif self.group_sales == 'officer':
-            pass
+        if not self.group_sales:
+            group = False
+        elif self.group_sales == 'salesperson':
+            group = self.get_group_by_name("See all Leads", "Sales")
 
-        elif self.group_sales == 'manager':
-            pass
+        elif self.group_sales == 'salesmanager':
+            group = self.get_group_by_name("Manager", "Sales")
+
+        ''' Unset current sale groups '''
+        for sales_group in sales_groups:
+            self.user_id.groups_id = [(3, sales_group.id)]
+
+        ''' Set the new sale group '''
+        if group:
+            self.user_id.groups_id = [(4, group.id)]
 
     def get_group_hr(self):
         group = [
@@ -83,10 +92,13 @@ class HrEmployee(models.Model):
         return group
 
     def set_group_hr(self):
-        if self.group_sales == 'salesperson':
+        if self.group_sales == 'employee':
             pass
 
-        elif self.group_sales == 'salesmanager':
+        elif self.group_sales == 'officer':
+            pass
+
+        elif self.group_sales == 'manager':
             pass
 
     def get_group_by_name(self, group_name, category_name):
