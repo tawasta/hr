@@ -12,13 +12,15 @@ class HrEmployee(models.Model):
     group_sales = fields.Selection(
         selection='get_group_sales',
         inverse='set_group_sales',
-        string='Sales role'
+        string='Sales role',
+        default='salesperson',
     )
 
     group_hr = fields.Selection(
         selection='get_group_hr',
         inverse='set_group_hr',
         string='Human relations role',
+        default='employee',
         required=True,
     )
 
