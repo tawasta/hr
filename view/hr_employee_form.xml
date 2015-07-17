@@ -6,16 +6,33 @@
 			<field name="inherit_id" ref="hr.view_employee_form"/>
 			<field name="arch" type="xml">
 
-				<!-- Set email as required for user creation -->
-				<field name="work_email" position="attributes">
-					<attribute name="required">1</attribute>
-				</field>
-
-				<field name="user_id" position="after">
-					<field name="group_sales" attrs="{'invisible': [('user_id','=',False)]}"/>
-				</field>
+				<!-- Set email as required for user creation and move it right after name -->
+				<field name="work_email" position="replace" />
+				<label for="work_email" position="replace" />
 				
+				<label for="category_ids" position="before">
+					<label for="work_email" class="oe_edit_only"/>
+					<field name="work_email" required="1" widget="email"/>
+				</label>
 
+				<!-- Add an "User information"-page -->
+				<field name="user_id" positon="replace" />
+
+				<page string="Personal Information" position="after">
+					<page string="User Information" groups="base.group_hr_manager">
+						<group string="User groups">
+							<group>
+								<field name="user_id" on_change="onchange_user(user_id)" string="Related User"
+	                            	context="{'default_groups_ref': ['base.group_user']}"/>
+                            </group>
+                            <group>	
+								<field name="group_sales" attrs="{'invisible': [('user_id','=',False)]}"/>
+							</group>
+							
+						</group>
+					</page>
+				</page>
+				
 			</field>
         </record>
         
