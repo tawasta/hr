@@ -25,19 +25,24 @@ class HrEmployee(models.Model):
         ''' Creates an user and sets default permission rights '''
 
         if not self.user_id:
-            users_object = self.env['res.users']
-
-            user_vals = {
-                'login': vals['work_email'],
-                'name': vals['name'],
-            }
-
-            user_id = users_object.sudo().create(user_vals)
-
-            vals['user_id'] = user_id.id
-            vals['address_home_id'] = user_id.partner_id.id
+            vals = self.create_user(self, vals)
 
         return super(HrEmployee, self).create(vals)
+
+    def create_user(self, vals):
+        users_object = self.env['res.users']
+
+        user_vals = {
+            'login': vals['work_email'],
+            'name': vals['name'],
+        }
+
+        user_id = users_object.sudo().create(user_vals)
+
+        vals['user_id'] = user_id.id
+        vals['address_home_id'] = user_id.partner_id.id
+
+        return vals
 
     def get_group_sales(self):
         group = [
