@@ -18,7 +18,8 @@ class HrEmployee(models.Model):
     group_hr = fields.Selection(
         selection='get_group_hr',
         inverse='set_group_hr',
-        string='Human relations role'
+        string='Human relations role',
+        required=True,
     )
 
     @api.onchange('name')
@@ -55,6 +56,9 @@ class HrEmployee(models.Model):
 
         return vals
 
+    '''
+    SALES
+    '''
     def get_group_sales(self):
         group = [
             ('salesperson', 'Salesperson'),
@@ -64,15 +68,16 @@ class HrEmployee(models.Model):
         return group
 
     def set_group_sales(self):
-        sales_groups = self.get_groups_by_category_name("Sales")
-
         if not self.group_sales:
             group = False
+
         elif self.group_sales == 'salesperson':
             group = self.get_group_by_name("See all Leads", "Sales")
 
         elif self.group_sales == 'salesmanager':
             group = self.get_group_by_name("Manager", "Sales")
+
+        sales_groups = self.get_groups_by_category_name("Sales")
 
         ''' Unset current sale groups '''
         for sales_group in sales_groups:
@@ -82,6 +87,9 @@ class HrEmployee(models.Model):
         if group:
             self.user_id.groups_id = [(4, group.id)]
 
+    '''
+    HUMAN RESOURCES
+    '''
     def get_group_hr(self):
         group = [
             ('employee', 'Employee'),
@@ -92,14 +100,30 @@ class HrEmployee(models.Model):
         return group
 
     def set_group_hr(self):
-        if self.group_sales == 'employee':
-            pass
+        category_name = "Human Resources"
 
-        elif self.group_sales == 'officer':
-            pass
+        if not self.group_hr:
+            group = False
 
-        elif self.group_sales == 'manager':
-            pass
+        elif self.group_hr == 'employee':
+            group = self.get_group_by_name("Employee", category_name)
+
+        elif self.group_hr == 'officer':
+            group = self.get_group_by_name("Officer", category_name)
+
+        elif self.group_hr == 'manager':
+            group = self.get_group_by_name("Manager", category_name)
+
+        hr_groups = self.get_groups_by_category_name(category_name)
+
+        ''' Unset current sale groups '''
+        for hr_group in hr_groups:
+            _logger.warn("Unsetting %s", hr_group.id)
+            self.user_id.groups_id = [(3, hr_group.id)]
+
+        ''' Set the new sale group '''
+        if group:
+            self.user_id.groups_id = [(4, group.id)]
 
     def get_group_by_name(self, group_name, category_name):
         # Gets security group by group name
@@ -114,7 +138,6 @@ class HrEmployee(models.Model):
 
     def get_groups_by_category_name(self, category_name):
         # Gets security groups by category name
-
         groups_obj = self.env['res.groups']
 
         groups = groups_obj.search(
