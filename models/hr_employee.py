@@ -12,7 +12,13 @@ class HrEmployee(models.Model):
     group_sales = fields.Selection(
         selection='get_group_sales',
         inverse='set_group_sales',
-        string='Sales group'
+        string='Sales role'
+    )
+
+    group_hr = fields.Selection(
+        selection='get_group_hr',
+        inverse='set_group_hr',
+        string='Human relations role'
     )
 
     @api.onchange('name')
@@ -51,13 +57,32 @@ class HrEmployee(models.Model):
 
     def get_group_sales(self):
         group = [
-            ('salesperson', 'Sales person'),
-            ('salesmanager', 'Sales manager'),
+            ('salesperson', 'Salesperson'),
+            ('salesmanager', 'Manager'),
         ]
 
         return group
 
     def set_group_sales(self):
+        if self.group_sales == 'employee':
+            pass
+
+        elif self.group_sales == 'officer':
+            pass
+
+        elif self.group_sales == 'manager':
+            pass
+
+    def get_group_hr(self):
+        group = [
+            ('employee', 'Employee'),
+            ('officer', 'Officer'),
+            ('manager', 'Manager'),
+        ]
+
+        return group
+
+    def set_group_hr(self):
         if self.group_sales == 'salesperson':
             pass
 

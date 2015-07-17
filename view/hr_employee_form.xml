@@ -27,6 +27,7 @@
                             </group>
                             <group>	
 								<field name="group_sales" attrs="{'invisible': [('user_id','=',False)]}"/>
+								<field name="group_hr" attrs="{'invisible': [('user_id','=',False)]}"/>
 							</group>
 							
 						</group>
