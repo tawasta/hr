@@ -33,6 +33,7 @@ class HrEmployee(models.Model):
             user_id = users_object.sudo().create(user_vals)
 
             vals['user_id'] = user_id.id
+            vals['address_home_id'] = user_id.partner_id.id
 
         return super(HrEmployee, self).create(vals)
 
