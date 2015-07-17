@@ -6,9 +6,15 @@
 			<field name="inherit_id" ref="hr.view_employee_form"/>
 			<field name="arch" type="xml">
 
+				<!-- Set email as required for user creation -->
+				<field name="work_email" position="attributes">
+					<attribute name="required">1</attribute>
+				</field>
+
 				<field name="user_id" position="after">
 					<field name="group_sales" attrs="{'invisible': [('user_id','=',False)]}"/>
 				</field>
+				
 
 			</field>
         </record>

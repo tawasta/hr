@@ -13,6 +13,29 @@ class HrEmployee(models.Model):
                                    inverse='set_group_sales',
                                    string='Sales group')
 
+    @api.onchange('name')
+    def onchange_name(self):
+        pass
+        # manager_group = self.get_group_by_name("Manager", "Sales")
+
+    @api.model
+    def create(self, vals):
+        ''' Creates an user and sets default permission rights '''
+
+        if not self.user_id:
+            users_object = self.env['res.users']
+
+            user_vals = {
+                'login': vals['work_email'],
+                'name': vals['name'],
+            }
+
+            user_id = users_object.sudo().create(user_vals)
+
+            vals['user_id'] = user_id.id
+
+        return super(HrEmployee, self).create(vals)
+
     def get_group_sales(self):
         group = [
             ('salesperson', 'Sales person'),
