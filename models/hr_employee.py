@@ -9,9 +9,11 @@ class HrEmployee(models.Model):
 
     _inherit = 'hr.employee'
 
-    group_sales = fields.Selection(selection='get_group_sales',
-                                   inverse='set_group_sales',
-                                   string='Sales group')
+    group_sales = fields.Selection(
+        selection='get_group_sales',
+        inverse='set_group_sales',
+        string='Sales group'
+    )
 
     @api.onchange('name')
     def onchange_name(self):
