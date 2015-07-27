@@ -6,6 +6,19 @@
 			<field name="inherit_id" ref="hr.view_employee_form"/>
 			<field name="arch" type="xml">
 
+				<!-- Invitation buttons -->
+				<div name="button_box" position="inside">
+					<field name="user_state" invisible="1" />
+	                <button string="Send Reset Password Instructions"
+	                        class="oe_link"
+	                        type="object" name="action_reset_password"
+	                        attrs="{'invisible': [('user_state', '!=', 'active')]}"/>
+	                <button string="Send an Invitation Email"
+	                        class="oe_link"
+	                        type="object" name="action_reset_password" context="{'create_user': 1}"
+	                        attrs="{'invisible': [('user_state', '!=', 'new')]}"/>
+				</div>
+
 				<!-- Set email as required for user creation and move it right after name -->
 				<field name="work_email" position="replace" />
 				<label for="work_email" position="replace" />

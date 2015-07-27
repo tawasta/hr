@@ -180,3 +180,7 @@ class HrEmployee(models.Model):
         groups = filter(None, groups)
 
         return tuple(groups)
+
+    @api.one
+    def action_reset_password(self):
+        return self.user_id.action_reset_password
