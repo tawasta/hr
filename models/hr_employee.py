@@ -120,7 +120,6 @@ class HrEmployee(models.Model):
 
         ''' Unset current sale groups '''
         for hr_group in hr_groups:
-            _logger.warn("Unsetting %s", hr_group.id)
             self.user_id.groups_id = [(3, hr_group.id)]
 
         ''' Set the new sale group '''
