@@ -72,6 +72,9 @@ class HrEmployee(models.Model):
         vals['user_id'] = user_id.id
         vals['address_home_id'] = user_id.partner_id.id
 
+        user_id.partner_id.email = vals['work_email']
+        user_id.partner_id.phone = vals['mobile_phone']
+
         return vals
 
     def get_user_state(self):
