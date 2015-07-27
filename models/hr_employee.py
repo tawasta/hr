@@ -3,6 +3,7 @@ from openerp import models, api, fields
 from openerp import tools
 from openerp import exceptions
 
+import re
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -38,10 +39,10 @@ class HrEmployee(models.Model):
     @api.onchange('work_email')
     def onchange_work_email(self):
         if self.work_email:
-            valid_email = tools.single_email_re.match(self.work_email)
+            valid_email = re.match(tools.single_email_re, self.work_email)
 
             if not valid_email:
-                raise exceptions.Warning("Invalid email")
+                raise exceptions.Warning("Invalid email!")
 
     @api.model
     def create(self, vals):
