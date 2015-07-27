@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from openerp import models, api, fields
+from openerp import tools
+from openerp import exceptions
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -32,6 +34,14 @@ class HrEmployee(models.Model):
             self.get_group_by_name('See all Leads', 'Sales').id or False)
         groups.append(
             self.get_group_by_name('Employee', 'Human Resources').id or False)
+
+    @api.onchange('work_email')
+    def onchange_work_email(self):
+        if self.work_email:
+            valid_email = tools.single_email_re.match(self.work_email)
+
+            if not valid_email:
+                raise exceptions.Warning("Invalid email")
 
     @api.model
     def create(self, vals):
