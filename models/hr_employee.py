@@ -132,8 +132,10 @@ class HrEmployee(models.Model):
 
         groups = self.get_groups_by_category_name(category_name)
 
-        group = groups_obj.search([('name', 'ilike', group_name),
-                                   ('id', 'in', groups.ids)])
+        # Search without lang
+        group = groups_obj.with_context(lang=False).\
+            search([('name', 'ilike', group_name),
+                    ('id', 'in', groups.ids)])
 
         return group
 
@@ -141,7 +143,8 @@ class HrEmployee(models.Model):
         # Gets security groups by category name
         groups_obj = self.env['res.groups']
 
-        groups = groups_obj.search(
+        # Search without lang
+        groups = groups_obj.with_context(lang=False).search(
             [('category_id.name', 'ilike', category_name)]
         )
 
@@ -154,5 +157,7 @@ class HrEmployee(models.Model):
             self.get_group_by_name('See all Leads', 'Sales').id or False)
         groups.append(
             self.get_group_by_name('Employee', 'Human Resources').id or False)
+
+        groups = filter(None, groups)
 
         return tuple(groups)
