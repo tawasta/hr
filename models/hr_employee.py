@@ -186,4 +186,16 @@ class HrEmployee(models.Model):
 
     @api.one
     def action_reset_password(self):
-        return self.user_id.action_reset_password
+        res = self.user_id.action_reset_password()
+
+        url = self.user_id.signup_url
+
+        msg = "An invitation mail to\
+            <b>%s</b>\
+            containing subcription link\
+            <a href='%s'><b>%s</b></a>\
+            has been sent" % (self.user_id.partner_id.email, url, url)
+
+        self.message_post(msg)
+
+        return res
