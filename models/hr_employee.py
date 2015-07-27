@@ -192,9 +192,9 @@ class HrEmployee(models.Model):
         url = self.user_id.signup_url
 
         msg = _("An invitation mail to")
-        msg += " <b>%s</b>" % self.user_id.partner_id.email
+        msg += " <b>%s</b> " % self.user_id.partner_id.email
         msg += _("containing subcription link")
-        msg += " <a href='%s'><b>%s</b></a>" % (url, url)
+        msg += " <a href='%s'><b>%s</b></a> " % (url, url)
         msg += _("has been sent")
 
         self.message_post(msg)
