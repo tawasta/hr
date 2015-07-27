@@ -15,7 +15,7 @@
 {
     'name': 'HR User',
     'category': 'CRM',
-    'version': '0.1',
+    'version': '0.2',
     'author': 'Oy Tawasta Technologies Ltd.',
     'website': 'http://www.tawasta.fi',
     'depends': ['hr'],
@@ -24,6 +24,12 @@ HR User
 -------
 
 Allows adding users from HR-module.
+
+Features
+========
+* Allows creating user from employee form
+* Allows editing sales role from employee form
+* Allows editing HR role from employee form
 ''',
     'data': [
         'view/hr_employee_form.xml',
