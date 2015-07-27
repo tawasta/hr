@@ -27,6 +27,11 @@ class HrEmployee(models.Model):
         required=True,
     )
 
+    user_state = fields.Char(
+        compute='get_user_state',
+        readonly=True
+    )
+
     @api.onchange('name')
     def onchange_name(self):
         groups = []
@@ -68,6 +73,9 @@ class HrEmployee(models.Model):
         vals['address_home_id'] = user_id.partner_id.id
 
         return vals
+
+    def get_user_state(self):
+        self.user_state = ('active' if self.user_id.login_date else 'new')
 
     '''
     SALES
