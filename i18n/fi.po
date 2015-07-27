@@ -1,0 +1,63 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* hr_user
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-07-27 11:34+0000\n"
+"PO-Revision-Date: 2015-07-27 14:35+0200\n"
+"Last-Translator: Jarmo Kortetjärvi <jarmo@futurable.fi>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: fi\n"
+"X-Generator: Poedit 1.7.5\n"
+
+#. module: hr_user
+#: model:ir.model,name:hr_user.model_hr_employee
+msgid "Employee"
+msgstr "Työntekijä"
+
+#. module: hr_user
+#: field:hr.employee,group_hr:0
+msgid "Human relations role"
+msgstr "Henkilöstöhallinnon rooli"
+
+#. module: hr_user
+#: view:hr.employee:hr_user.view_employee_form
+msgid "Personal Information"
+msgstr "Henkilötiedot"
+
+#. module: hr_user
+#: view:hr.employee:hr_user.view_employee_form
+msgid "Related User"
+msgstr "Yhdistä käyttäjään"
+
+#. module: hr_user
+#: field:hr.employee,group_sales:0
+msgid "Sales role"
+msgstr "Myynnin rooli"
+
+#. module: hr_user
+#: view:hr.employee:hr_user.view_employee_form
+msgid "Send Reset Password Instructions"
+msgstr "Lähetä ohjeet salasanan uusimiseen"
+
+#. module: hr_user
+#: view:hr.employee:hr_user.view_employee_form
+msgid "Send an Invitation Email"
+msgstr "Lähetä kutsuviesti"
+
+#. module: hr_user
+#: view:hr.employee:hr_user.view_employee_form
+msgid "User Information"
+msgstr "Käyttäjätiedot"
+
+#. module: hr_user
+#: view:hr.employee:hr_user.view_employee_form
+msgid "User groups"
+msgstr "Käyttäjäryhmät"
