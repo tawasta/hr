@@ -2,6 +2,7 @@
 from openerp import models, api, fields
 from openerp import tools
 from openerp import exceptions
+from openerp import _
 
 import re
 import logging
@@ -190,11 +191,11 @@ class HrEmployee(models.Model):
 
         url = self.user_id.signup_url
 
-        msg = "An invitation mail to\
-            <b>%s</b>\
-            containing subcription link\
-            <a href='%s'><b>%s</b></a>\
-            has been sent" % (self.user_id.partner_id.email, url, url)
+        msg = _("An invitation mail to")
+        msg += " <b>%s</b>" % self.user_id.partner_id.email
+        msg += _("containing subcription link")
+        msg += " <a href='%s'><b>%s</b></a>" % (url, url)
+        msg += _("has been sent")
 
         self.message_post(msg)
 

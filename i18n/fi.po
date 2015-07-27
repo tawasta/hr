@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-27 11:34+0000\n"
-"PO-Revision-Date: 2015-07-27 14:35+0200\n"
+"POT-Creation-Date: 2015-07-27 11:44+0000\n"
+"PO-Revision-Date: 2015-07-27 14:47+0200\n"
 "Last-Translator: Jarmo Kortetjärvi <jarmo@futurable.fi>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,6 +16,12 @@ msgstr ""
 "Plural-Forms: \n"
 "Language: fi\n"
 "X-Generator: Poedit 1.7.5\n"
+
+#. module: hr_user
+#: code:addons/hr_user/models/hr_employee.py:194
+#, python-format
+msgid "An invitation mail to"
+msgstr "Kutsuviesti osoitteeseen"
 
 #. module: hr_user
 #: model:ir.model,name:hr_user.model_hr_employee
@@ -61,3 +67,15 @@ msgstr "Käyttäjätiedot"
 #: view:hr.employee:hr_user.view_employee_form
 msgid "User groups"
 msgstr "Käyttäjäryhmät"
+
+#. module: hr_user
+#: code:addons/hr_user/models/hr_employee.py:196
+#, python-format
+msgid "containing subcription link"
+msgstr "liittymislinkillä"
+
+#. module: hr_user
+#: code:addons/hr_user/models/hr_employee.py:198
+#, python-format
+msgid "has been sent"
+msgstr "on lähetetty"
