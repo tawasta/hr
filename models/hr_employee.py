@@ -106,11 +106,11 @@ class HrEmployee(models.Model):
 
         ''' Unset current sale groups '''
         for sales_group in sales_groups:
-            self.user_id.groups_id = [(3, sales_group.id)]
+            self.sudo().user_id.groups_id = [(3, sales_group.id)]
 
         ''' Set the new sale group '''
         if group:
-            self.user_id.groups_id = [(4, group.id)]
+            self.sudo().user_id.groups_id = [(4, group.id)]
 
     '''
     HUMAN RESOURCES
@@ -143,11 +143,11 @@ class HrEmployee(models.Model):
 
         ''' Unset current sale groups '''
         for hr_group in hr_groups:
-            self.user_id.groups_id = [(3, hr_group.id)]
+            self.sudo().user_id.groups_id = [(3, hr_group.id)]
 
         ''' Set the new sale group '''
         if group:
-            self.user_id.groups_id = [(4, group.id)]
+            self.sudo().user_id.groups_id = [(4, group.id)]
 
     def get_group_by_name(self, group_name, category_name):
         # Gets security group by group name
@@ -156,7 +156,7 @@ class HrEmployee(models.Model):
         groups = self.get_groups_by_category_name(category_name)
 
         # Search without lang
-        group = groups_obj.with_context(lang=False).\
+        group = groups_obj.sudo().with_context(lang=False).\
             search([('name', 'ilike', group_name),
                     ('id', 'in', groups.ids)])
 
@@ -167,7 +167,7 @@ class HrEmployee(models.Model):
         groups_obj = self.env['res.groups']
 
         # Search without lang
-        groups = groups_obj.with_context(lang=False).search(
+        groups = groups_obj.sudo().with_context(lang=False).search(
             [('category_id.name', 'ilike', category_name)]
         )
 
@@ -187,9 +187,9 @@ class HrEmployee(models.Model):
 
     @api.one
     def action_reset_password(self):
-        res = self.user_id.action_reset_password()
+        res = self.sudo().user_id.action_reset_password()
 
-        url = self.user_id.signup_url
+        url = self.sudo().user_id.signup_url
 
         msg = _("An invitation mail to")
         msg += " <b>%s</b> " % self.user_id.partner_id.email
