@@ -59,6 +59,12 @@ class HrEmployee(models.Model):
 
         return super(HrEmployee, self).create(vals)
 
+    @api.one
+    def unlink(self):
+        self.user_id.active = False
+
+        super(HrEmployee, self).unlink()
+
     def create_user(self, vals):
         users_object = self.env['res.users']
 
