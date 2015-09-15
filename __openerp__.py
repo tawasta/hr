@@ -22,19 +22,6 @@
         'hr',
         'auth_signup',
     ],
-    'description': '''
-HR User
--------
-
-Allows adding users from HR-module.
-
-Features
-========
-* Allows creating user from employee form
-* Allows editing sales role from employee form
-* Allows editing HR role from employee form
-* Allow sending invitaiton link from employee form
-''',
     'data': [
         'view/hr_employee_form.xml',
     ],
