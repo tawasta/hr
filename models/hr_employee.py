@@ -60,6 +60,13 @@ class HrEmployee(models.Model):
         return super(HrEmployee, self).create(vals)
 
     @api.one
+    def write(self, vals):
+        if self.user_id and 'work_email' in vals:
+            self.sudo().user_id.login = vals['work_email']
+
+        return super(HrEmployee, self).write(vals)
+
+    @api.one
     def unlink(self):
         self.user_id.active = False
 
