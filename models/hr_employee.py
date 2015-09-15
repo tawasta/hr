@@ -68,7 +68,7 @@ class HrEmployee(models.Model):
 
     @api.one
     def unlink(self):
-        self.user_id.active = False
+        self.sudo().user_id.active = False
 
         super(HrEmployee, self).unlink()
 
