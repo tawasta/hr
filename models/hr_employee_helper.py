@@ -70,6 +70,9 @@ class HrEmployeeHelper(models.Model):
     def compute_show_group_sales(self):
         self.show_group_sales = self.compute_show_group('sale')
 
+    def compute_show_group_purchase(self):
+        self.show_group_sales = self.compute_show_group('purchase')
+
     def compute_show_group_project(self):
         self.show_group_project = self.compute_show_group('project')
 

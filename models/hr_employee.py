@@ -24,6 +24,17 @@ class HrEmployee(models.Model):
         default='salesperson',
     )
 
+    ''' PURCHASES '''
+    show_group_purchase = fields.Boolean(
+        compute='compute_show_group_purchase',
+    )
+    group_purchase = fields.Selection(
+        selection='get_group_purchase',
+        inverse='set_group_purchase',
+        string='Purchases role',
+        default='user',
+    )
+
     ''' PROJECT '''
     show_group_project = fields.Boolean(
         compute='compute_show_group_project',
@@ -154,6 +165,35 @@ class HrEmployee(models.Model):
             self.sudo().user_id.groups_id = [(3, sales_group.id)]
 
         ''' Set the new sale group '''
+        if group:
+            self.sudo().user_id.groups_id = [(4, group.id)]
+
+    ''' PURCHASES '''
+    def get_group_purchase(self):
+        group = [
+            ('user', 'User'),
+            ('manager', 'Manager'),
+        ]
+
+        return group
+
+    def set_group_purchase(self):
+        if not self.group_purchase:
+            group = False
+
+        elif self.group_purchase == 'user':
+            group = self.get_group_by_name("User", "Purchases")
+
+        elif self.group_purchase == 'manager':
+            group = self.get_group_by_name("Manager", "Purchases")
+
+        purchase_groups = self.get_groups_by_category_name("Purchases")
+
+        ''' Unset current purchase groups '''
+        for group_purchase in purchase_groups:
+            self.sudo().user_id.groups_id = [(3, group_purchase.id)]
+
+        ''' Set the new purchase group '''
         if group:
             self.sudo().user_id.groups_id = [(4, group.id)]
 
