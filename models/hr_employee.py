@@ -15,7 +15,6 @@ class HrEmployee(models.Model):
 
     group_sales_show = fields.Boolean(
         compute='compute_group_sales_show',
-        invisible=True
     )
     group_sales = fields.Selection(
         selection='get_group_sales',
