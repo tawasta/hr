@@ -23,6 +23,9 @@ class HrEmployee(models.Model):
         default='salesperson',
     )
 
+    group_hr_show = fields.Boolean(
+        compute='compute_group_hr_show',
+    )
     group_hr = fields.Selection(
         selection='get_group_hr',
         inverse='set_group_hr',
@@ -217,13 +220,21 @@ class HrEmployee(models.Model):
 
         return res
 
-    def compute_group_sales_show(self):
+    def compute_group_show(self, module_name):
         visible = False
 
-        if self.get_module_status('sale'):
+        if self.get_module_status(module_name):
             visible = True
 
-            self.group_sales_show = visible
+        return visible
+
+    ''' Field visibility helpers '''
+    ''' TODO: could this be done in one method? '''
+    def compute_group_sales_show(self):
+        self.group_sales_show = self.compute_group_show('sale')
+
+    def compute_group_hr_show(self):
+        self.group_hr_show = self.compute_group_show('hr')
 
     def get_module_status(self, module_name):
         ''' If the module is installed, returns true '''
