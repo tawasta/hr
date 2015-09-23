@@ -13,6 +13,7 @@ class HrEmployee(models.Model):
 
     _inherit = 'hr.employee'
 
+    ''' SALES '''
     show_group_sales = fields.Boolean(
         compute='compute_show_group_sales',
     )
@@ -23,6 +24,7 @@ class HrEmployee(models.Model):
         default='salesperson',
     )
 
+    ''' PROJECT '''
     show_group_project = fields.Boolean(
         compute='compute_show_group_project',
     )
@@ -33,6 +35,7 @@ class HrEmployee(models.Model):
         default='user',
     )
 
+    ''' HR '''
     show_group_hr = fields.Boolean(
         compute='compute_show_group_hr',
     )
@@ -44,6 +47,7 @@ class HrEmployee(models.Model):
         required=True,
     )
 
+    ''' USER RELATION '''
     user_state = fields.Char(
         compute='get_user_state',
         readonly=True
