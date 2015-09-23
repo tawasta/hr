@@ -3,7 +3,6 @@ from openerp import models, api, fields
 from openerp import tools
 from openerp import exceptions
 from openerp import _
-from openerp import modules
 
 import re
 import logging
@@ -14,6 +13,10 @@ class HrEmployee(models.Model):
 
     _inherit = 'hr.employee'
 
+    group_sales_show = fields.Boolean(
+        compute='compute_group_sales_show',
+        invisible=True
+    )
     group_sales = fields.Selection(
         selection='get_group_sales',
         inverse='set_group_sales',
@@ -215,14 +218,24 @@ class HrEmployee(models.Model):
 
         return res
 
-    def check_module_status(self, module_name):
+    def compute_group_sales_show(self):
+        visible = False
+
+        if self.get_module_status('sale'):
+            visible = True
+
+            self.group_sales_show = visible
+
+    def get_module_status(self, module_name):
         ''' If the module is installed, returns true '''
-        modules = self.env['ir_module_module']
+        modules = self.env['ir.module.module']
+
+        installed = False
 
         if modules.search([
             ('name', '=', module_name),
             ('state', '=', 'installed')
         ]):
-            return True
-        else:
-            return False
+            installed = True
+
+        return installed

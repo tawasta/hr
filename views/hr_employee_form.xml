@@ -31,6 +31,10 @@
 				<!-- Add an "User information"-page -->
 				<field name="user_id" position="replace" />
 
+                <field name='notes' position='replace'>
+                    <field name='notes' widget="bootstrap_markdown" />
+                </field>
+
 				<page string="Personal Information" position="after">
 					<page string="User Information" groups="base.group_hr_manager">
 						<group string="User groups">
@@ -38,11 +42,13 @@
 								<field name="user_id" on_change="onchange_user(user_id)" string="Related User"
 	                            	context="{'default_groups_ref': ['base.group_user']}"/>
                             </group>
-                            <group attrs="{'invisible': [('user_id','=',False)]}">	
-								<field name="group_sales" />
+                            <group attrs="{'invisible': [('user_id','=',False)]}">
+                                <field name="group_sales_show" />
+								<field name="group_sales" attrs="{'invisible': [('group_sales_show','=',False)]}"/>
+								
 								<field name="group_hr"/>
 							</group>
-							
+
 						</group>
 					</page>
 				</page>
