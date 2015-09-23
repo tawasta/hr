@@ -36,7 +36,7 @@ class HrEmployeeUser(models.Model):
     group_purchase = fields.Selection(
         selection='get_group_purchase',
         inverse='set_group_purchase',
-        string='Purchases role',
+        string='Purchases',
         default='user',
     )
 
@@ -47,7 +47,7 @@ class HrEmployeeUser(models.Model):
     group_project = fields.Selection(
         selection='get_group_project',
         inverse='set_group_project',
-        string='Projects role',
+        string='Projects',
         default='user',
     )
 
@@ -58,7 +58,7 @@ class HrEmployeeUser(models.Model):
     group_account = fields.Selection(
         selection='get_group_account',
         inverse='set_group_account',
-        string='Finance role',
+        string='Finance',
         default='invoicing',
     )
 
@@ -69,7 +69,7 @@ class HrEmployeeUser(models.Model):
     group_hr = fields.Selection(
         selection='get_group_hr',
         inverse='set_group_hr',
-        string='Human relations role',
+        string='Human relations',
         default='employee',
         required=True,
     )
@@ -118,16 +118,18 @@ class HrEmployeeUser(models.Model):
         return group
 
     def set_group_sales(self):
+        category_name = "Sales"
+
         if not self.group_sales:
             group = False
 
         elif self.group_sales == 'user':
-            group = self.get_group_by_name("See all Leads", "Sales")
+            group = self.get_group_by_name("See all Leads", category_name)
 
         elif self.group_sales == 'manager':
-            group = self.get_group_by_name("Manager", "Sales")
+            group = self.get_group_by_name("Manager", category_name)
 
-        sales_groups = self.get_groups_by_category_name("Sales")
+        sales_groups = self.get_groups_by_category_name(category_name)
 
         ''' Unset current sale groups '''
         for sales_group in sales_groups:
@@ -147,16 +149,18 @@ class HrEmployeeUser(models.Model):
         return group
 
     def set_group_purchase(self):
+        category_name = "Purchases"
+
         if not self.group_purchase:
             group = False
 
         elif self.group_purchase == 'user':
-            group = self.get_group_by_name("User", "Purchases")
+            group = self.get_group_by_name("User", category_name)
 
         elif self.group_purchase == 'manager':
-            group = self.get_group_by_name("Manager", "Purchases")
+            group = self.get_group_by_name("Manager", category_name)
 
-        purchase_groups = self.get_groups_by_category_name("Purchases")
+        purchase_groups = self.get_groups_by_category_name(category_name)
 
         ''' Unset current purchase groups '''
         for group_purchase in purchase_groups:
@@ -176,16 +180,18 @@ class HrEmployeeUser(models.Model):
         return group
 
     def set_group_project(self):
+        category_name = "Project"
+
         if not self.group_project:
             group = False
 
         elif self.group_project == 'user':
-            group = self.get_group_by_name("User", "Project")
+            group = self.get_group_by_name("User", category_name)
 
         elif self.group_project == 'manager':
-            group = self.get_group_by_name("Manager", "Project")
+            group = self.get_group_by_name("Manager", category_name)
 
-        project_groups = self.get_groups_by_category_name("Project")
+        project_groups = self.get_groups_by_category_name(category_name)
 
         ''' Unset current project groups '''
         for project_group in project_groups:
@@ -207,22 +213,24 @@ class HrEmployeeUser(models.Model):
         return group
 
     def set_group_account(self):
+        category_name = "Accounting"
+
         if not self.group_account:
             group = False
 
         elif self.group_account == 'view':
-            group = self.get_group_by_name("Can view", "Accounting")
+            group = self.get_group_by_name("Can view", category_name)
 
         elif self.group_account == 'invoicing':
-            group = self.get_group_by_name("Invoicing", "Accounting")
+            group = self.get_group_by_name("Invoicing", category_name)
 
         elif self.group_account == 'accountant':
-            group = self.get_group_by_name("Accountant", "Accounting")
+            group = self.get_group_by_name("Accountant", category_name)
 
         elif self.group_account == 'manager':
-            group = self.get_group_by_name("Financial Manager", "Accounting")
+            group = self.get_group_by_name("Financial Manager", category_name)
 
-        account_groups = self.get_groups_by_category_name("Accounting")
+        account_groups = self.get_groups_by_category_name(category_name)
 
         ''' Unset current account groups '''
         for group_account in account_groups:
