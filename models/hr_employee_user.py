@@ -19,11 +19,14 @@ class HrEmployeeUser(models.Model):
     group_sales = fields.Selection(
         selection='get_group_sales',
         inverse='set_group_sales',
-        string='Sales role',
+        string='Sales',
         default='user',
-        help='SALES ROLE' + '\n\n' +
-        'User - Can create sales' + '\n' +
-        'Manager - Can manage sales'
+        help='SALES PERMISSIONS' + '\n\n' +
+        'User' + '\n' +
+        'Leads, opportunities, sales, partners and calls.' + '\n\n' +
+        'Manager' + '\n' +
+        'Leads, opportunities, sales, partners, calls, products,' + ' \n' +
+        'categories, packaging, pricelists, etc.'
     )
 
     ''' PURCHASES '''
