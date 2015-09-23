@@ -35,6 +35,17 @@ class HrEmployee(models.Model):
         default='user',
     )
 
+    ''' ACCOUNT '''
+    show_group_account = fields.Boolean(
+        compute='compute_show_group_account',
+    )
+    group_account = fields.Selection(
+        selection='get_group_account',
+        inverse='set_group_account',
+        string='Finance role',
+        default='invoicing',
+    )
+
     ''' HR '''
     show_group_hr = fields.Boolean(
         compute='compute_show_group_hr',
@@ -53,6 +64,7 @@ class HrEmployee(models.Model):
         readonly=True
     )
 
+    ''' Onchanges '''
     @api.onchange('name')
     def onchange_name(self):
         groups = []
@@ -70,6 +82,7 @@ class HrEmployee(models.Model):
             if not valid_email:
                 raise exceptions.Warning("Invalid email!")
 
+    ''' Main function overrides '''
     @api.model
     def create(self, vals):
         ''' Creates an user and sets default permission rights '''
@@ -92,13 +105,14 @@ class HrEmployee(models.Model):
 
         super(HrEmployee, self).unlink()
 
+    ''' User creation '''
     def create_user(self, vals):
         users_object = self.env['res.users']
 
         user_vals = {
             'login': vals['work_email'],
             'name': vals['name'],
-            'groups_id': {(6, False, self.get_default_groups())}
+            # 'groups_id': {(6, False, self.get_default_groups())}
         }
 
         user_id = users_object.sudo().create(user_vals)
@@ -114,9 +128,7 @@ class HrEmployee(models.Model):
     def get_user_state(self):
         self.user_state = ('active' if self.user_id.login_date else 'new')
 
-    '''
-    SALES
-    '''
+    ''' SALES '''
     def get_group_sales(self):
         group = [
             ('salesperson', 'Salesperson'),
@@ -144,9 +156,8 @@ class HrEmployee(models.Model):
         ''' Set the new sale group '''
         if group:
             self.sudo().user_id.groups_id = [(4, group.id)]
-    '''
-    PROJECT
-    '''
+
+    ''' PROJECT '''
     def get_group_project(self):
         group = [
             ('user', 'User'),
@@ -175,9 +186,44 @@ class HrEmployee(models.Model):
         if group:
             self.sudo().user_id.groups_id = [(4, group.id)]
 
-    '''
-    HUMAN RESOURCES
-    '''
+    ''' ACCOUNT '''
+    def get_group_account(self):
+        group = [
+            ('view', 'View'),
+            ('invoicing', 'Invoicing'),
+            ('accountant', 'Accountant'),
+            ('manager', 'Manager'),
+        ]
+
+        return group
+
+    def set_group_account(self):
+        if not self.group_account:
+            group = False
+
+        elif self.group_account == 'view':
+            group = self.get_group_by_name("Can view", "Accounting")
+
+        elif self.group_account == 'invoicing':
+            group = self.get_group_by_name("Invoicing", "Accounting")
+
+        elif self.group_account == 'accountant':
+            group = self.get_group_by_name("Accountant", "Accounting")
+
+        elif self.group_account == 'manager':
+            group = self.get_group_by_name("Financial Manager", "Accounting")
+
+        account_groups = self.get_groups_by_category_name("Accounting")
+
+        ''' Unset current account groups '''
+        for group_account in account_groups:
+            self.sudo().user_id.groups_id = [(3, group_account.id)]
+
+        ''' Set the new account group '''
+        if group:
+            self.sudo().user_id.groups_id = [(4, group.id)]
+
+    ''' HUMAN RESOURCES '''
     def get_group_hr(self):
         group = [
             ('employee', 'Employee'),
@@ -211,88 +257,3 @@ class HrEmployee(models.Model):
         ''' Set the new sale group '''
         if group:
             self.sudo().user_id.groups_id = [(4, group.id)]
-
-    def get_group_by_name(self, group_name, category_name):
-        # Gets security group by group name
-        groups_obj = self.env['res.groups']
-
-        groups = self.get_groups_by_category_name(category_name)
-
-        # Search without lang
-        group = groups_obj.sudo().with_context(lang=False).\
-            search([('name', 'ilike', group_name),
-                    ('id', 'in', groups.ids)])
-
-        return group
-
-    def get_groups_by_category_name(self, category_name):
-        # Gets security groups by category name
-        groups_obj = self.env['res.groups']
-
-        # Search without lang
-        groups = groups_obj.sudo().with_context(lang=False).search(
-            [('category_id.name', 'ilike', category_name)]
-        )
-
-        return groups
-
-    def get_default_groups(self):
-        groups = []
-
-        groups.append(
-            self.get_group_by_name('See all Leads', 'Sales').id or False)
-        groups.append(
-            self.get_group_by_name('Employee', 'Human Resources').id or False)
-
-        groups = filter(None, groups)
-
-        return tuple(groups)
-
-    @api.one
-    def action_reset_password(self):
-        res = self.sudo().user_id.action_reset_password()
-
-        url = self.sudo().user_id.signup_url
-
-        msg = _("An invitation mail to")
-        msg += " <b>%s</b> " % self.user_id.partner_id.email
-        msg += _("containing subcription link")
-        msg += " <a href='%s'><b>%s</b></a> " % (url, url)
-        msg += _("has been sent")
-
-        self.message_post(msg)
-
-        return res
-
-    def compute_show_group(self, module_name):
-        visible = False
-
-        if self.get_module_status(module_name):
-            visible = True
-
-        return visible
-
-    ''' Field visibility helpers '''
-    ''' TODO: could this be done in one method? '''
-    def compute_show_group_sales(self):
-        self.show_group_sales = self.compute_show_group('sale')
-
-    def compute_show_group_project(self):
-        self.show_group_project = self.compute_show_group('project')
-
-    def compute_show_group_hr(self):
-        self.show_group_hr = self.compute_show_group('hr')
-
-    def get_module_status(self, module_name):
-        ''' If the module is installed, returns true '''
-        modules = self.env['ir.module.module']
-
-        installed = False
-
-        if modules.search([
-            ('name', '=', module_name),
-            ('state', '=', 'installed')
-        ]):
-            installed = True
-
-        return installed
