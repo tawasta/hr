@@ -38,9 +38,9 @@
 								<field name="user_id" on_change="onchange_user(user_id)" string="Related User"
 	                            	context="{'default_groups_ref': ['base.group_user']}"/>
                             </group>
-                            <group>	
-								<field name="group_sales" attrs="{'invisible': [('user_id','=',False)]}"/>
-								<field name="group_hr" attrs="{'invisible': [('user_id','=',False)]}"/>
+                            <group attrs="{'invisible': [('user_id','=',False)]}">	
+								<field name="group_sales" />
+								<field name="group_hr"/>
 							</group>
 							
 						</group>
