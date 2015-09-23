@@ -20,7 +20,10 @@ class HrEmployeeUser(models.Model):
         selection='get_group_sales',
         inverse='set_group_sales',
         string='Sales role',
-        default='salesperson',
+        default='user',
+        help='SALES ROLE' + '\n\n' +
+        'User - Can create sales' + '\n' +
+        'Manager - Can manage sales'
     )
 
     ''' PURCHASES '''
@@ -94,8 +97,8 @@ class HrEmployeeUser(models.Model):
     ''' SALES '''
     def get_group_sales(self):
         group = [
-            ('salesperson', 'Salesperson'),
-            ('salesmanager', 'Manager'),
+            ('user', 'User'),
+            ('manager', 'Manager'),
         ]
 
         return group
@@ -104,10 +107,10 @@ class HrEmployeeUser(models.Model):
         if not self.group_sales:
             group = False
 
-        elif self.group_sales == 'salesperson':
+        elif self.group_sales == 'user':
             group = self.get_group_by_name("See all Leads", "Sales")
 
-        elif self.group_sales == 'salesmanager':
+        elif self.group_sales == 'manager':
             group = self.get_group_by_name("Manager", "Sales")
 
         sales_groups = self.get_groups_by_category_name("Sales")
