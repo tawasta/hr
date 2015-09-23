@@ -21,7 +21,7 @@
 {
     'name': 'HR User',
     'category': 'CRM',
-    'version': '8.0.0.1.0',
+    'version': '8.0.0.1.1',
     'author': 'Oy Tawasta Technologies Ltd.',
     'website': 'http://www.tawasta.fi',
     'depends': [
@@ -29,6 +29,6 @@
         'auth_signup',
     ],
     'data': [
-        'view/hr_employee_form.xml',
+        'views/hr_employee_form.xml',
     ],
 }
