@@ -39,11 +39,11 @@
 	                            	context="{'default_groups_ref': ['base.group_user']}"/>
                             </group>
                             <group attrs="{'invisible': [('user_id','=',False)]}">
-                                <field name="group_sales_show" invisible='1'/>
-								<field name="group_sales" attrs="{'invisible': [('group_sales_show','=',False)]}"/>
+                                <field name="show_group_sales" invisible='1'/>
+								<field name="group_sales" attrs="{'invisible': [('show_group_sales','=',False)]}"/>
 								
-                                <field name="group_hr_show" invisible='1'/>
-								<field name="group_hr" attrs="{'invisible': [('group_hr_show','=',False)]}"/>
+                                <field name="show_group_hr" invisible='1'/>
+								<field name="group_hr" attrs="{'invisible': [('show_group_hr','=',False)]}"/>
 							</group>
 
 						</group>
