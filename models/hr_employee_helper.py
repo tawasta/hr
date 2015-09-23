@@ -82,6 +82,9 @@ class HrEmployeeHelper(models.Model):
     def compute_show_group_hr(self):
         self.show_group_hr = self.compute_show_group('hr')
 
+    def compute_show_group_stock(self):
+        self.show_group_stock = self.compute_show_group('stock')
+
     def get_module_status(self, module_name):
         ''' If the module is installed, returns true '''
         modules = self.env['ir.module.module']

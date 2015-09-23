@@ -74,6 +74,17 @@ class HrEmployeeUser(models.Model):
         required=True,
     )
 
+    ''' STOCK '''
+    show_group_stock = fields.Boolean(
+        compute='compute_show_group_stock',
+    )
+    group_stock = fields.Selection(
+        selection='get_group_stock',
+        inverse='set_group_stock',
+        string='Warehouse',
+        default='user',
+    )
+
     ''' User creation '''
     def create_user(self, vals):
         users_object = self.env['res.users']
@@ -248,10 +259,41 @@ class HrEmployeeUser(models.Model):
 
         hr_groups = self.get_groups_by_category_name(category_name)
 
-        ''' Unset current sale groups '''
+        ''' Unset current hr groups '''
         for hr_group in hr_groups:
             self.sudo().user_id.groups_id = [(3, hr_group.id)]
 
-        ''' Set the new sale group '''
+        ''' Set the new hr group '''
+        if group:
+            self.sudo().user_id.groups_id = [(4, group.id)]
+
+    ''' WAREHOUSE / STOCK '''
+    def get_group_stock(self):
+        group = [
+            ('user', 'User'),
+            ('manager', 'Manager'),
+        ]
+
+        return group
+
+    def set_group_stock(self):
+        category_name = "Warehouse"
+
+        if not self.group_stock:
+            group = False
+
+        elif self.group_hr == 'user':
+            group = self.get_group_by_name("User", category_name)
+
+        elif self.group_hr == 'manager':
+            group = self.get_group_by_name("Manager", category_name)
+
+        stock_groups = self.get_groups_by_category_name(category_name)
+
+        ''' Unset current stock groups '''
+        for stock_group in stock_groups:
+            self.sudo().user_id.groups_id = [(3, stock_group.id)]
+
+        ''' Set the new stock group '''
         if group:
             self.sudo().user_id.groups_id = [(4, group.id)]
