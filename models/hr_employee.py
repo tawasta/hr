@@ -3,6 +3,7 @@ from openerp import models, api, fields
 from openerp import tools
 from openerp import exceptions
 from openerp import _
+from openerp import modules
 
 import re
 import logging
@@ -213,3 +214,15 @@ class HrEmployee(models.Model):
         self.message_post(msg)
 
         return res
+
+    def check_module_status(self, module_name):
+        ''' If the module is installed, returns true '''
+        modules = self.env['ir_module_module']
+
+        if modules.search([
+            ('name', '=', module_name),
+            ('state', '=', 'installed')
+        ]):
+            return True
+        else:
+            return False
