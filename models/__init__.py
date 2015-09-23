@@ -14,4 +14,5 @@
 ##############################################################################
 
 import hr_employee_helper
+import hr_employee_user
 import hr_employee
