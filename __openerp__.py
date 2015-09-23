@@ -21,7 +21,7 @@
 {
     'name': 'HR User',
     'category': 'CRM',
-    'version': '8.0.0.5.0',
+    'version': '8.0.0.5.1',
     'author': 'Oy Tawasta Technologies Ltd.',
     'website': 'http://www.tawasta.fi',
     'depends': [

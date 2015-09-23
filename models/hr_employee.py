@@ -13,8 +13,8 @@ class HrEmployee(models.Model):
 
     _inherit = 'hr.employee'
 
-    group_sales_show = fields.Boolean(
-        compute='compute_group_sales_show',
+    show_group_sales = fields.Boolean(
+        compute='compute_show_group_sales',
     )
     group_sales = fields.Selection(
         selection='get_group_sales',
@@ -23,8 +23,8 @@ class HrEmployee(models.Model):
         default='salesperson',
     )
 
-    group_hr_show = fields.Boolean(
-        compute='compute_group_hr_show',
+    show_group_hr = fields.Boolean(
+        compute='compute_show_group_hr',
     )
     group_hr = fields.Selection(
         selection='get_group_hr',
@@ -220,7 +220,7 @@ class HrEmployee(models.Model):
 
         return res
 
-    def compute_group_show(self, module_name):
+    def compute_show_group(self, module_name):
         visible = False
 
         if self.get_module_status(module_name):
@@ -230,11 +230,11 @@ class HrEmployee(models.Model):
 
     ''' Field visibility helpers '''
     ''' TODO: could this be done in one method? '''
-    def compute_group_sales_show(self):
-        self.group_sales_show = self.compute_group_show('sale')
+    def compute_show_group_sales(self):
+        self.show_group_sales = self.compute_show_group('sale')
 
-    def compute_group_hr_show(self):
-        self.group_hr_show = self.compute_group_show('hr')
+    def compute_show_group_hr(self):
+        self.show_group_hr = self.compute_show_group('hr')
 
     def get_module_status(self, module_name):
         ''' If the module is installed, returns true '''
