@@ -35,8 +35,11 @@
 					<page string="User Information" groups="base.group_hr_manager">
 						<group string="User">
 							<group>
-								<field name="user_id" on_change="onchange_user(user_id)" string="Related User"
-								    context="{'default_groups_ref': ['base.group_user']}"/>
+								<field name="user_id" 
+								    on_change="onchange_user(user_id)" 
+								    string="Related User"
+								    context="{'default_groups_ref': ['base.group_user']}"
+								/>
 							</group>
 							<group />
 						</group>
