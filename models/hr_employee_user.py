@@ -129,13 +129,13 @@ class HrEmployeeUser(models.Model):
         elif self.group_sales == 'manager':
             group = self.get_group_by_name("Manager", category_name)
 
-        sales_groups = self.get_groups_by_category_name(category_name)
+        current_groups = self.get_groups_by_category_name(category_name)
 
-        ''' Unset current sale groups '''
-        for sales_group in sales_groups:
-            self.sudo().user_id.groups_id = [(3, sales_group.id)]
+        ''' Unset current groups '''
+        for current_group in current_groups:
+            self.sudo().user_id.groups_id = [(3, current_group.id)]
 
-        ''' Set the new sale group '''
+        ''' Set the new group '''
         if group:
             self.sudo().user_id.groups_id = [(4, group.id)]
 
@@ -160,13 +160,13 @@ class HrEmployeeUser(models.Model):
         elif self.group_purchase == 'manager':
             group = self.get_group_by_name("Manager", category_name)
 
-        purchase_groups = self.get_groups_by_category_name(category_name)
+        current_groups = self.get_groups_by_category_name(category_name)
 
-        ''' Unset current purchase groups '''
-        for group_purchase in purchase_groups:
-            self.sudo().user_id.groups_id = [(3, group_purchase.id)]
+        ''' Unset current groups '''
+        for current_group in current_groups:
+            self.sudo().user_id.groups_id = [(3, current_group.id)]
 
-        ''' Set the new purchase group '''
+        ''' Set the new group '''
         if group:
             self.sudo().user_id.groups_id = [(4, group.id)]
 
@@ -191,13 +191,13 @@ class HrEmployeeUser(models.Model):
         elif self.group_project == 'manager':
             group = self.get_group_by_name("Manager", category_name)
 
-        project_groups = self.get_groups_by_category_name(category_name)
+        current_groups = self.get_groups_by_category_name(category_name)
 
-        ''' Unset current project groups '''
-        for project_group in project_groups:
-            self.sudo().user_id.groups_id = [(3, project_group.id)]
+        ''' Unset current groups '''
+        for current_group in current_groups:
+            self.sudo().user_id.groups_id = [(3, current_group.id)]
 
-        ''' Set the new project group '''
+        ''' Set the new group '''
         if group:
             self.sudo().user_id.groups_id = [(4, group.id)]
 
@@ -230,13 +230,13 @@ class HrEmployeeUser(models.Model):
         elif self.group_account == 'manager':
             group = self.get_group_by_name("Financial Manager", category_name)
 
-        account_groups = self.get_groups_by_category_name(category_name)
+        current_groups = self.get_groups_by_category_name(category_name)
 
-        ''' Unset current account groups '''
-        for group_account in account_groups:
-            self.sudo().user_id.groups_id = [(3, group_account.id)]
+        ''' Unset current groups '''
+        for current_group in current_groups:
+            self.sudo().user_id.groups_id = [(3, current_group.id)]
 
-        ''' Set the new account group '''
+        ''' Set the new group '''
         if group:
             self.sudo().user_id.groups_id = [(4, group.id)]
 
@@ -265,13 +265,13 @@ class HrEmployeeUser(models.Model):
         elif self.group_hr == 'manager':
             group = self.get_group_by_name("Manager", category_name)
 
-        hr_groups = self.get_groups_by_category_name(category_name)
+        current_groups = self.get_groups_by_category_name(category_name)
 
-        ''' Unset current hr groups '''
-        for hr_group in hr_groups:
-            self.sudo().user_id.groups_id = [(3, hr_group.id)]
+        ''' Unset current groups '''
+        for current_group in current_groups:
+            self.sudo().user_id.groups_id = [(3, current_group.id)]
 
-        ''' Set the new hr group '''
+        ''' Set the new group '''
         if group:
             self.sudo().user_id.groups_id = [(4, group.id)]
 
@@ -296,12 +296,12 @@ class HrEmployeeUser(models.Model):
         elif self.group_hr == 'manager':
             group = self.get_group_by_name("Manager", category_name)
 
-        stock_groups = self.get_groups_by_category_name(category_name)
+        current_groups = self.get_groups_by_category_name(category_name)
 
-        ''' Unset current stock groups '''
-        for stock_group in stock_groups:
-            self.sudo().user_id.groups_id = [(3, stock_group.id)]
+        ''' Unset current groups '''
+        for current_group in current_groups:
+            self.sudo().user_id.groups_id = [(3, current_group.id)]
 
-        ''' Set the new stock group '''
+        ''' Set the new group '''
         if group:
             self.sudo().user_id.groups_id = [(4, group.id)]
