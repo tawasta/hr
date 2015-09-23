@@ -23,6 +23,16 @@ class HrEmployee(models.Model):
         default='salesperson',
     )
 
+    show_group_project = fields.Boolean(
+        compute='compute_show_group_project',
+    )
+    group_project = fields.Selection(
+        selection='get_group_project',
+        inverse='set_group_project',
+        string='Projects role',
+        default='user',
+    )
+
     show_group_hr = fields.Boolean(
         compute='compute_show_group_hr',
     )
@@ -130,6 +140,36 @@ class HrEmployee(models.Model):
         ''' Set the new sale group '''
         if group:
             self.sudo().user_id.groups_id = [(4, group.id)]
+    '''
+    PROJECT
+    '''
+    def get_group_project(self):
+        group = [
+            ('user', 'User'),
+            ('manager', 'Manager'),
+        ]
+
+        return group
+
+    def set_group_project(self):
+        if not self.group_project:
+            group = False
+
+        elif self.group_project == 'user':
+            group = self.get_group_by_name("User", "Project")
+
+        elif self.group_project == 'manager':
+            group = self.get_group_by_name("Manager", "Project")
+
+        project_groups = self.get_groups_by_category_name("Project")
+
+        ''' Unset current project groups '''
+        for project_group in project_groups:
+            self.sudo().user_id.groups_id = [(3, project_group.id)]
+
+        ''' Set the new project group '''
+        if group:
+            self.sudo().user_id.groups_id = [(4, group.id)]
 
     '''
     HUMAN RESOURCES
@@ -232,6 +272,9 @@ class HrEmployee(models.Model):
     ''' TODO: could this be done in one method? '''
     def compute_show_group_sales(self):
         self.show_group_sales = self.compute_show_group('sale')
+
+    def compute_show_group_project(self):
+        self.show_group_project = self.compute_show_group('project')
 
     def compute_show_group_hr(self):
         self.show_group_hr = self.compute_show_group('hr')

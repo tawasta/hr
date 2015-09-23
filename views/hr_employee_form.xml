@@ -42,6 +42,9 @@
                                 <field name="show_group_sales" invisible='1'/>
 								<field name="group_sales" attrs="{'invisible': [('show_group_sales','=',False)]}"/>
 								
+                                <field name="show_group_project" invisible='1'/>
+								<field name="group_project" attrs="{'invisible': [('show_group_project','=',False)]}"/>
+								
                                 <field name="show_group_hr" invisible='1'/>
 								<field name="group_hr" attrs="{'invisible': [('show_group_hr','=',False)]}"/>
 							</group>
