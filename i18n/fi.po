@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-27 11:44+0000\n"
-"PO-Revision-Date: 2015-07-27 14:47+0200\n"
+"POT-Creation-Date: 2015-09-24 08:09+0000\n"
+"PO-Revision-Date: 2015-09-24 11:23+0200\n"
 "Last-Translator: Jarmo Kortetjärvi <jarmo@futurable.fi>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -18,10 +18,10 @@ msgstr ""
 "X-Generator: Poedit 1.7.5\n"
 
 #. module: hr_user
-#: code:addons/hr_user/models/hr_employee.py:194
+#: code:addons/hr_user/models/hr_employee_helper.py:51
 #, python-format
 msgid "An invitation mail to"
-msgstr "Kutsuviesti osoitteeseen"
+msgstr "Kutsuviesti käyttäjälle"
 
 #. module: hr_user
 #: model:ir.model,name:hr_user.model_hr_employee
@@ -29,9 +29,102 @@ msgid "Employee"
 msgstr "Työntekijä"
 
 #. module: hr_user
+#: help:hr.employee,group_account:0
+msgid ""
+"FINANCE PERMISSIONS\n"
+"\n"
+"Invoicing\n"
+"Invoices, reconciliations, accounts, vouchers\n"
+"\n"
+"Accountant\n"
+"All of the above AND bank statements, tax codes, reports, sale orders\n"
+"\n"
+"Manager\n"
+"All of the above AND tax templates, account charts, payment terms, taxes, journals, fiscal years, currencies, etc."
+msgstr ""
+"TALOUDEN OIKEUDET\n"
+"\n"
+"Laskutus\n"
+"Laskut, hyvitykset, tilit, tositteet\n"
+"\n"
+"Kirjanpitäjä\n"
+"Kaikki ylläolevat JA pankin tiliotteet, verokoodit, raportit, myyntitilaukset\n"
+"\n"
+"Päällikkö\n"
+"Kaikki ylläolevat JA veromallit, tilikartat, maksuehdot, verot, päiväkirjat, tilikaudet, valuutat jne."
+
+#. module: hr_user
+#: field:hr.employee,group_account:0
+msgid "Finance"
+msgstr "Talous"
+
+#. module: hr_user
+#: help:hr.employee,group_hr:0
+msgid ""
+"HR PERMISSIONS\n"
+"\n"
+"Employee\n"
+"Resources, leaves, messages, mails, documents, notifications, discussions, events, calendars, procurements, analytic journal\n"
+"\n"
+"Officer\n"
+"All of the above AND employees, resource details, jobs, attendance, timesheets\n"
+"\n"
+"Manager\n"
+"All of the above AND costs, taxes"
+msgstr ""
+"HENKILÖSTÖHALLINNON OIKEUDET\n"
+"\n"
+"Työntekijä\n"
+"Resurssit, poissaolot, viestit, sähköpostit, dokumentit, huomautukset, keskustelut, tapahtumat, kalenterit, hankinnat, analyyttiset päiväkirjat\n"
+"\n"
+"Toimihenkilö\n"
+"Kaikki ylläolevat JA työntekijät, resurssien tiedot, työpaikat, läsnäolot, tuntikortit\n"
+"\n"
+"Päällikkö\n"
+"All of the above AND costs, taxes"
+
+#. module: hr_user
 #: field:hr.employee,group_hr:0
-msgid "Human relations role"
-msgstr "Henkilöstöhallinnon rooli"
+msgid "Human relations"
+msgstr "Henkilöstöhallinto"
+
+#. module: hr_user
+#: help:hr.employee,group_project:0
+msgid ""
+"PROJECT PERMISSIONS\n"
+"\n"
+"User\n"
+"Tasks, task stages, leaves\n"
+"\n"
+"Manager\n"
+"All of the above AND projects, project categories, attendance"
+msgstr ""
+"PROJEKTIEN OIKEUDET\n"
+"\n"
+"Käyttäjä\n"
+"Tehtävät, tehtävien vaiheet, poissaolot\n"
+"\n"
+"Päällikkö\n"
+"Kaikki ylläolevat JA projektit, projektien kategoriat, läsnäolot"
+
+#. module: hr_user
+#: help:hr.employee,group_purchase:0
+msgid ""
+"PURCHASES PERMISSIONS\n"
+"\n"
+"User\n"
+"Purchase orders, warehouse, products\n"
+"\n"
+"Manager\n"
+"All of the above AND reports, packaging, pricelists"
+msgstr ""
+"PURCHASES PERMISSIONS\n"
+"\n"
+"User\n"
+"Purchase orders, warehouse, products\n"
+"\n"
+"Manager\n"
+"All of the above AND reports, packaging, pricelists"
 
 #. module: hr_user
 #: view:hr.employee:hr_user.view_employee_form
@@ -39,14 +132,48 @@ msgid "Personal Information"
 msgstr "Henkilötiedot"
 
 #. module: hr_user
+#: field:hr.employee,group_project:0
+msgid "Projects"
+msgstr "Projektit"
+
+#. module: hr_user
+#: field:hr.employee,group_purchase:0
+msgid "Purchases"
+msgstr "Ostot"
+
+#. module: hr_user
 #: view:hr.employee:hr_user.view_employee_form
 msgid "Related User"
 msgstr "Yhdistä käyttäjään"
 
 #. module: hr_user
+#: view:hr.employee:hr_user.view_employee_form
+msgid "Roles"
+msgstr "Roolit"
+
+#. module: hr_user
+#: help:hr.employee,group_sales:0
+msgid ""
+"SALES PERMISSIONS\n"
+"\n"
+"User\n"
+"Leads, opportunities, sales, partners, calls.\n"
+"\n"
+"Manager\n"
+"All of the above AND products, categories, packaging, pricelists, reports, etc."
+msgstr ""
+"MYYNNIN OIKEUDET\n"
+"\n"
+"Käyttäjä\n"
+"Liidit, mahdollisuudet, myynnit, kumppanit, puhelut.\n"
+"\n"
+"Päällikkö\n"
+"Kaikki ylläolevat JA tuotteet, kategoriat, pakkaukset, hinnastot, raportit, yms."
+
+#. module: hr_user
 #: field:hr.employee,group_sales:0
-msgid "Sales role"
-msgstr "Myynnin rooli"
+msgid "Sales"
+msgstr "Myynnit"
 
 #. module: hr_user
 #: view:hr.employee:hr_user.view_employee_form
@@ -60,22 +187,46 @@ msgstr "Lähetä kutsuviesti"
 
 #. module: hr_user
 #: view:hr.employee:hr_user.view_employee_form
+msgid "User"
+msgstr "Käyttäjä"
+
+#. module: hr_user
+#: view:hr.employee:hr_user.view_employee_form
 msgid "User Information"
 msgstr "Käyttäjätiedot"
 
 #. module: hr_user
-#: view:hr.employee:hr_user.view_employee_form
-msgid "User groups"
-msgstr "Käyttäjäryhmät"
+#: help:hr.employee,group_stock:0
+msgid ""
+"WAREHOUSE PERMISSIONS\n"
+"\n"
+"User\n"
+"Picking lists, moves, inventory, products, invoices\n"
+"\n"
+"Manager\n"
+"All of the above AND incoterms, warehouses, locations, product categories, packaging, pricelists, procurements, routes"
+msgstr ""
+"VARASTON OIKEUDET\n"
+"\n"
+"Käyttäjä\n"
+"Keräilylistat, siirrot, inventaario, tuotteet, laskut\n"
+"\n"
+"Päällikkö\n"
+"Kaikki ylläolevat JA toimitusehdot, varastot, sijainnit, tuotekategoriat, pakkaukset, hinnastot, hankinnat, reititykset"
 
 #. module: hr_user
-#: code:addons/hr_user/models/hr_employee.py:196
+#: field:hr.employee,group_stock:0
+msgid "Warehouse"
+msgstr "Varasto"
+
+#. module: hr_user
+#: code:addons/hr_user/models/hr_employee_helper.py:53
 #, python-format
 msgid "containing subcription link"
-msgstr "liittymislinkillä"
+msgstr "sisältäen kutsulinkin"
 
 #. module: hr_user
-#: code:addons/hr_user/models/hr_employee.py:198
+#: code:addons/hr_user/models/hr_employee_helper.py:55
 #, python-format
 msgid "has been sent"
 msgstr "on lähetetty"
