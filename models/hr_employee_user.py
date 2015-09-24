@@ -21,12 +21,14 @@ class HrEmployeeUser(models.Model):
         inverse='set_group_sales',
         string='Sales',
         default='user',
+
         help='SALES PERMISSIONS' + '\n\n' +
         'User' + '\n' +
-        'Leads, opportunities, sales, partners and calls.' + '\n\n' +
+        'Leads, opportunities, sales, partners, calls.' + '\n\n' +
+
         'Manager' + '\n' +
-        'Leads, opportunities, sales, partners, calls, products,' + ' \n' +
-        'categories, packaging, pricelists, etc.'
+        'All of the above and' + ' \n' +
+        'products, categories, packaging, pricelists, reports, etc.'
     )
 
     ''' PURCHASES '''
@@ -38,6 +40,14 @@ class HrEmployeeUser(models.Model):
         inverse='set_group_purchase',
         string='Purchases',
         default='user',
+
+        help='PURCHASES PERMISSIONS' + '\n\n' +
+        'User' + '\n' +
+        'Purchase orders, warehouse, products' + '\n\n' +
+
+        'Manager' + '\n' +
+        'All of the above and' + ' \n' +
+        'reports, packaging, pricelists'
     )
 
     ''' PROJECT '''
@@ -49,6 +59,14 @@ class HrEmployeeUser(models.Model):
         inverse='set_group_project',
         string='Projects',
         default='user',
+
+        help='PROJECT PERMISSIONS' + '\n\n' +
+        'User' + '\n' +
+        'Tasks, task stages, leaves' + '\n\n' +
+
+        'Manager' + '\n' +
+        'All of the above and' + ' \n' +
+        'projects, project categories, attendance'
     )
 
     ''' ACCOUNT '''
@@ -60,6 +78,19 @@ class HrEmployeeUser(models.Model):
         inverse='set_group_account',
         string='Finance',
         default='invoicing',
+
+        help='FINANCE PERMISSIONS' + '\n\n' +
+        'Invoicing' + '\n' +
+        'Invoices, reconciliations, accounts, vouchers' + '\n\n' +
+
+        'Accountant' + '\n' +
+        'All of the above and' + ' \n' +
+        'bank statements, tax codes, reports, sale orders' + '\n\n' +
+
+        'Manager' + '\n' +
+        'All of the above and' + ' \n' +
+        'tax templates, account charts, payment terms, taxes,' + ' \n' +
+        'journals, fiscal years, currencies, etc.'
     )
 
     ''' HR '''
@@ -72,9 +103,23 @@ class HrEmployeeUser(models.Model):
         string='Human relations',
         default='employee',
         required=True,
+
+        help='HR PERMISSIONS' + '\n\n' +
+        'Employee' + '\n' +
+        'Resources, leaves, messages, mails, documents,' + ' \n' +
+        'notifications, discussions, events, calendars,' + ' \n' +
+        'procurements, analytic journal'
+
+        'Officer' + '\n' +
+        'All of the above and' + ' \n' +
+        'employees, resource details, jobs, attendance, timesheets' + '\n\n' +
+
+        'Manager' + '\n' +
+        'All of the above and' + ' \n' +
+        'costs, taxes'
     )
 
-    ''' STOCK '''
+    ''' STOCK / WAREHOUSE '''
     show_group_stock = fields.Boolean(
         compute='compute_show_group_stock',
     )
@@ -83,6 +128,15 @@ class HrEmployeeUser(models.Model):
         inverse='set_group_stock',
         string='Warehouse',
         default='user',
+
+        help='WAREHOUSE PERMISSIONS' + '\n\n' +
+        'User' + '\n' +
+        'Picking lists, mouves, inventory, products, invoices' + '\n\n' +
+
+        'Manager' + '\n' +
+        'All of the above and' + ' \n' +
+        'incoterms, warehouses, locations, product categories,'
+        'packaging, pricelists, procurements, routes'
     )
 
     ''' User creation '''
@@ -174,7 +228,6 @@ class HrEmployeeUser(models.Model):
     ''' ACCOUNT '''
     def get_group_account(self):
         group = [
-            ('view', 'View'),
             ('invoicing', 'Invoicing'),
             ('accountant', 'Accountant'),
             ('manager', 'Manager'),
@@ -186,10 +239,7 @@ class HrEmployeeUser(models.Model):
         category_name = "Accounting"
         group = False
 
-        if self.group_account == 'view':
-            group = self.get_group_by_name("Can view", category_name)
-
-        elif self.group_account == 'invoicing':
+        if self.group_account == 'invoicing':
             group = self.get_group_by_name("Invoicing", category_name)
 
         elif self.group_account == 'accountant':
