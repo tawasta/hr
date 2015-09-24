@@ -27,7 +27,7 @@ class HrEmployeeUser(models.Model):
         'Leads, opportunities, sales, partners, calls.' + '\n\n' +
 
         'Manager' + '\n' +
-        'All of the above and' + ' \n' +
+        'All of the above AND' + ' ' +
         'products, categories, packaging, pricelists, reports, etc.'
     )
 
@@ -46,7 +46,7 @@ class HrEmployeeUser(models.Model):
         'Purchase orders, warehouse, products' + '\n\n' +
 
         'Manager' + '\n' +
-        'All of the above and' + ' \n' +
+        'All of the above AND' + ' ' +
         'reports, packaging, pricelists'
     )
 
@@ -65,7 +65,7 @@ class HrEmployeeUser(models.Model):
         'Tasks, task stages, leaves' + '\n\n' +
 
         'Manager' + '\n' +
-        'All of the above and' + ' \n' +
+        'All of the above AND' + ' ' +
         'projects, project categories, attendance'
     )
 
@@ -84,12 +84,12 @@ class HrEmployeeUser(models.Model):
         'Invoices, reconciliations, accounts, vouchers' + '\n\n' +
 
         'Accountant' + '\n' +
-        'All of the above and' + ' \n' +
+        'All of the above AND' + ' ' +
         'bank statements, tax codes, reports, sale orders' + '\n\n' +
 
         'Manager' + '\n' +
-        'All of the above and' + ' \n' +
-        'tax templates, account charts, payment terms, taxes,' + ' \n' +
+        'All of the above AND' + ' ' +
+        'tax templates, account charts, payment terms, taxes,' + ' ' +
         'journals, fiscal years, currencies, etc.'
     )
 
@@ -106,16 +106,16 @@ class HrEmployeeUser(models.Model):
 
         help='HR PERMISSIONS' + '\n\n' +
         'Employee' + '\n' +
-        'Resources, leaves, messages, mails, documents,' + ' \n' +
-        'notifications, discussions, events, calendars,' + ' \n' +
-        'procurements, analytic journal'
+        'Resources, leaves, messages, mails, documents,' + ' ' +
+        'notifications, discussions, events, calendars,' + ' ' +
+        'procurements, analytic journal' + '\n\n' +
 
         'Officer' + '\n' +
-        'All of the above and' + ' \n' +
+        'All of the above AND' + ' ' +
         'employees, resource details, jobs, attendance, timesheets' + '\n\n' +
 
         'Manager' + '\n' +
-        'All of the above and' + ' \n' +
+        'All of the above AND' + ' ' +
         'costs, taxes'
     )
 
@@ -134,8 +134,8 @@ class HrEmployeeUser(models.Model):
         'Picking lists, mouves, inventory, products, invoices' + '\n\n' +
 
         'Manager' + '\n' +
-        'All of the above and' + ' \n' +
-        'incoterms, warehouses, locations, product categories,'
+        'All of the above AND' + ' ' +
+        'incoterms, warehouses, locations, product categories,' + " " +
         'packaging, pricelists, procurements, routes'
     )
 
