@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-from openerp import models, api, fields
+from openerp import models, api
 from openerp import tools
 from openerp import exceptions
-from openerp import _
 
 import re
 import logging

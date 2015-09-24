@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from openerp import models, api
+from openerp import _
 
 
 class HrEmployeeHelper(models.Model):
