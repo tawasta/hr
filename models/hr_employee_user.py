@@ -131,7 +131,7 @@ class HrEmployeeUser(models.Model):
 
         help='WAREHOUSE PERMISSIONS' + '\n\n' +
         'User' + '\n' +
-        'Picking lists, mouves, inventory, products, invoices' + '\n\n' +
+        'Picking lists, moves, inventory, products, invoices' + '\n\n' +
 
         'Manager' + '\n' +
         'All of the above AND' + ' ' +
