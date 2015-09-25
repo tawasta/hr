@@ -152,12 +152,29 @@ class HrEmployeeUser(models.Model):
         help='MANUFACTURING PERMISSIONS' + '\n\n' +
         'User' + '\n' +
         'Work centers, routings, bill of materials, manufacturing,' + ' ' +
-        'stock moves, picking lists, work orders'
+        'stock moves, picking lists, work orders' + '\n\n' +
 
         'Manager' + '\n' +
         'All of the above AND' + ' ' +
         'resource calendars, work center loads, stock value variation' + " " +
         'units of measure, packaging, pricelists, etc.'
+    )
+
+    ''' WEBSITE '''
+    show_group_website = fields.Boolean(
+        compute='compute_show_group_website',
+    )
+    group_website = fields.Selection(
+        selection='get_group_website',
+        inverse='set_group_website',
+        string='Website',
+
+        help='WEBSITE PERMISSIONS' + '\n\n' +
+        'Display Editor Bar on Website' + '\n' +
+        'Display Editor Bar on Website' + '\n\n' +
+
+        'Manage Website' + '\n' +
+        'Website, website menu, SEO metadata, qWeb view'
     )
 
     ''' User creation '''
@@ -325,10 +342,22 @@ class HrEmployeeUser(models.Model):
         category_name = "Manufacturing"
         new_group = False
 
-        groups = self.get_group_mrp()
-
-        for group in groups:
+        for group in self.get_group_mrp():
             if self.group_mrp == group[0]:
+                new_group = self.get_group_by_name(group[1], category_name)
+
+        self.set_group(new_group, category_name)
+
+    ''' WEBSITE '''
+    def get_group_website(self):
+        return self.get_group("Website")
+
+    def set_group_website(self):
+        category_name = "Website"
+        new_group = False
+
+        for group in self.get_group_website():
+            if self.group_website == group[0]:
                 new_group = self.get_group_by_name(group[1], category_name)
 
         self.set_group(new_group, category_name)

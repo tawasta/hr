@@ -89,6 +89,9 @@ class HrEmployeeHelper(models.Model):
     def compute_show_group_mrp(self):
         self.show_group_mrp = self.compute_show_group('mrp')
 
+    def compute_show_group_website(self):
+        self.show_group_website = self.compute_show_group('website')
+
     def get_module_status(self, module_name):
         ''' If the module is installed, returns true '''
         modules = self.env['ir.module.module']

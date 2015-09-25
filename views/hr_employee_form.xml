@@ -44,7 +44,7 @@
 							<group />
 						</group>
 					
-						<group string="Roles" attrs="{'invisible': [('user_id','=',False)]}">
+						<group string="Roles" attrs="{'invisible': [('user_id','=',False)]}" groups="base.group_hr_manager">
                             <group>
                                 <group col='2'>
 	                                <field name="show_group_sales" invisible='1'/>
@@ -55,12 +55,12 @@
 									
                                     <field name="show_group_account" invisible='1'/>
                                     <field name="group_account" attrs="{'invisible': [('show_group_account','=',False)]}"/>
+                                    
+                                    <field name="show_group_project" invisible='1'/>
+                                    <field name="group_project" attrs="{'invisible': [('show_group_project','=',False)]}"/>
 								</group>
 								
 								<group col='2'>
-	                                <field name="show_group_project" invisible='1'/>
-									<field name="group_project" attrs="{'invisible': [('show_group_project','=',False)]}"/>
-									
 	                                <field name="show_group_hr" invisible='1'/>
 									<field name="group_hr" attrs="{'invisible': [('show_group_hr','=',False)]}"/>
 									
@@ -69,6 +69,9 @@
                                     
                                     <field name="show_group_mrp" invisible='1'/>
                                     <field name="group_mrp" attrs="{'invisible': [('show_group_mrp','=',False)]}"/>
+                                    
+                                    <field name="show_group_website" invisible='1'/>
+                                    <field name="group_website" attrs="{'invisible': [('show_group_website','=',False)]}"/>
 								</group>
 							</group>
 
