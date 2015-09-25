@@ -319,12 +319,7 @@ class HrEmployeeUser(models.Model):
 
     ''' MRP / MANUFACTURING '''
     def get_group_mrp(self):
-        groups = []
-
-        for group in self.get_groups_by_category_name('Manufacturing'):
-            groups.append((group.name.lower(), group.name))
-
-        return groups
+        return self.get_group("Manufacturing")
 
     def set_group_mrp(self):
         category_name = "Manufacturing"
@@ -337,6 +332,14 @@ class HrEmployeeUser(models.Model):
                 new_group = self.get_group_by_name(group[1], category_name)
 
         self.set_group(new_group, category_name)
+
+    def get_group(self, category_name):
+        groups = []
+
+        for group in self.get_groups_by_category_name(category_name):
+            groups.append((group.name.lower(), group.name))
+
+        return groups
 
     def set_group(self, new_group, category_name):
         groups = self.get_groups_by_category_name(category_name)
