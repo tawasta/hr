@@ -139,6 +139,27 @@ class HrEmployeeUser(models.Model):
         'packaging, pricelists, procurements, routes'
     )
 
+    ''' MANUFACTURING '''
+    show_group_mrp = fields.Boolean(
+        compute='compute_show_group_mrp',
+    )
+    group_mrp = fields.Selection(
+        selection='get_group_mrp',
+        inverse='set_group_mrp',
+        string='Manufacturing',
+        default='user',
+
+        help='MANUFACTURING PERMISSIONS' + '\n\n' +
+        'User' + '\n' +
+        'Work centers, routings, bill of materials, manufacturing,' + ' ' +
+        'stock moves, picking lists, work orders'
+
+        'Manager' + '\n' +
+        'All of the above AND' + ' ' +
+        'resource calendars, work center loads, stock value variation' + " " +
+        'units of measure, packaging, pricelists, etc.'
+    )
+
     ''' User creation '''
     def create_user(self, vals):
         users_object = self.env['res.users']
@@ -295,6 +316,27 @@ class HrEmployeeUser(models.Model):
             group = self.get_group_by_name("Manager", category_name)
 
         self.set_group(group, category_name)
+
+    ''' MRP / MANUFACTURING '''
+    def get_group_mrp(self):
+        groups = []
+
+        for group in self.get_groups_by_category_name('Manufacturing'):
+            groups.append((group.name.lower(), group.name))
+
+        return groups
+
+    def set_group_mrp(self):
+        category_name = "Manufacturing"
+        new_group = False
+
+        groups = self.get_group_mrp()
+
+        for group in groups:
+            if self.group_mrp == group[0]:
+                new_group = self.get_group_by_name(group[1], category_name)
+
+        self.set_group(new_group, category_name)
 
     def set_group(self, new_group, category_name):
         groups = self.get_groups_by_category_name(category_name)
