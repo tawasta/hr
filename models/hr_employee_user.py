@@ -290,49 +290,31 @@ class HrEmployeeUser(models.Model):
 
     ''' HUMAN RESOURCES '''
     def get_group_hr(self):
-        group = [
-            ('employee', 'Employee'),
-            ('officer', 'Officer'),
-            ('manager', 'Manager'),
-        ]
-
-        return group
+        return self.get_group("Human Resources")
 
     def set_group_hr(self):
         category_name = "Human Resources"
-        group = False
+        new_group = False
 
-        if self.group_hr == 'employee':
-            group = self.get_group_by_name("Employee", category_name)
+        for group in self.get_group_hr():
+            if self.group_hr == group[0]:
+                new_group = self.get_group_by_name(group[1], category_name)
 
-        elif self.group_hr == 'officer':
-            group = self.get_group_by_name("Officer", category_name)
-
-        elif self.group_hr == 'manager':
-            group = self.get_group_by_name("Manager", category_name)
-
-        self.set_group(group, category_name)
+        self.set_group(new_group, category_name)
 
     ''' WAREHOUSE / STOCK '''
     def get_group_stock(self):
-        group = [
-            ('user', 'User'),
-            ('manager', 'Manager'),
-        ]
-
-        return group
+        return self.get_group("Warehouse")
 
     def set_group_stock(self):
         category_name = "Warehouse"
-        group = False
+        new_group = False
 
-        if self.group_stock == 'user':
-            group = self.get_group_by_name("User", category_name)
+        for group in self.get_group_stock():
+            if self.group_stock == group[0]:
+                new_group = self.get_group_by_name(group[1], category_name)
 
-        elif self.group_stock == 'manager':
-            group = self.get_group_by_name("Manager", category_name)
-
-        self.set_group(group, category_name)
+        self.set_group(new_group, category_name)
 
     ''' MRP / MANUFACTURING '''
     def get_group_mrp(self):
