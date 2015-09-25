@@ -156,8 +156,8 @@ class HrEmployeeUser(models.Model):
 
         'Manager' + '\n' +
         'All of the above AND' + ' ' +
-        'resource calendars, work center loads, stock value variation' + " " +
-        'units of measure, packaging, pricelists, etc.'
+        'resource calendars, work center loads, stock value variation,' + " " +
+        'units of measurement, packaging, pricelists, etc.'
     )
 
     ''' WEBSITE '''

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-24 08:09+0000\n"
-"PO-Revision-Date: 2015-09-24 11:23+0200\n"
+"POT-Creation-Date: 2015-09-25 13:54+0000\n"
+"PO-Revision-Date: 2015-09-25 17:01+0200\n"
 "Last-Translator: Jarmo Kortetjärvi <jarmo@futurable.fi>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -81,12 +81,36 @@ msgstr ""
 "Kaikki ylläolevat JA työntekijät, resurssien tiedot, työpaikat, läsnäolot, tuntikortit\n"
 "\n"
 "Päällikkö\n"
-"All of the above AND costs, taxes"
+"Kaikki ylläolevat ja hinnat, verot"
 
 #. module: hr_user
 #: field:hr.employee,group_hr:0
 msgid "Human relations"
-msgstr "Henkilöstöhallinto"
+msgstr "Human relations"
+
+#. module: hr_user
+#: help:hr.employee,group_mrp:0
+msgid ""
+"MANUFACTURING PERMISSIONS\n"
+"\n"
+"User\n"
+"Work centers, routings, bill of materials, manufacturing, stock moves, picking lists, work orders\n"
+"\n"
+"Manager\n"
+"All of the above AND resource calendars, work center loads, stock value variation, units of measurement, packaging, pricelists, etc."
+msgstr ""
+"VALMISTUKSEN OIKEUDET\n"
+"\n"
+"Käyttäjä\n"
+"Työpisteet, reititykset, tuoterakenteet, valmistus, varastosiirrot, keräilylistat, työtilaukset\n"
+"\n"
+"Päällikkö\n"
+"Kaikki ylläolevat JA resurssikalenterit, työpisteiden kuormitus, varaston arvon muutokset, varastoyksiköt, pakkaukset, hinnoittelu, yms. "
+
+#. module: hr_user
+#: field:hr.employee,group_mrp:0
+msgid "Manufacturing"
+msgstr "Valmistus"
 
 #. module: hr_user
 #: help:hr.employee,group_project:0
@@ -118,13 +142,13 @@ msgid ""
 "Manager\n"
 "All of the above AND reports, packaging, pricelists"
 msgstr ""
-"PURCHASES PERMISSIONS\n"
+"OSTOJEN OIKEUDET\n"
 "\n"
-"User\n"
-"Purchase orders, warehouse, products\n"
+"Käyttäjä\n"
+"Ostotilaukset, varastot, tuotteet\n"
 "\n"
-"Manager\n"
-"All of the above AND reports, packaging, pricelists"
+"Päällikkö\n"
+"Kaikki ylläolevat JA raportit, pakkaukset ja hinnoittelu"
 
 #. module: hr_user
 #: view:hr.employee:hr_user.view_employee_form
@@ -188,7 +212,7 @@ msgstr "Lähetä kutsuviesti"
 #. module: hr_user
 #: view:hr.employee:hr_user.view_employee_form
 msgid "User"
-msgstr "Käyttäjä"
+msgstr "User"
 
 #. module: hr_user
 #: view:hr.employee:hr_user.view_employee_form
@@ -215,9 +239,33 @@ msgstr ""
 "Kaikki ylläolevat JA toimitusehdot, varastot, sijainnit, tuotekategoriat, pakkaukset, hinnastot, hankinnat, reititykset"
 
 #. module: hr_user
+#: help:hr.employee,group_website:0
+msgid ""
+"WEBSITE PERMISSIONS\n"
+"\n"
+"Display Editor Bar on Website\n"
+"Display Editor Bar on Website\n"
+"\n"
+"Manage Website\n"
+"Website, website menu, SEO metadata, qWeb view"
+msgstr ""
+"VERKKOSIVUN OIKEUDET\n"
+"\n"
+"Näytä muokkausvalikko verkkosivuilla\n"
+"Näytä muokkausvalikko verkkosivuilla\n"
+"\n"
+"Hallitse verkkosivuja ja qWeb-näkymää\n"
+"Verkkosivut, verkkosivun valikot, hakukoneoptimoinnin metatiedot, qWeb-näkymä"
+
+#. module: hr_user
 #: field:hr.employee,group_stock:0
 msgid "Warehouse"
 msgstr "Varasto"
+
+#. module: hr_user
+#: field:hr.employee,group_website:0
+msgid "Website"
+msgstr "Verkkosivu"
 
 #. module: hr_user
 #: code:addons/hr_user/models/hr_employee_helper.py:53
