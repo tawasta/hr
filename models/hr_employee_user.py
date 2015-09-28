@@ -147,7 +147,6 @@ class HrEmployeeUser(models.Model):
         selection='get_group_mrp',
         inverse='set_group_mrp',
         string='Manufacturing',
-        default='user',
 
         help='MANUFACTURING PERMISSIONS' + '\n\n' +
         'User' + '\n' +
