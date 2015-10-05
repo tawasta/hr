@@ -35,7 +35,7 @@ class HrEmployee(models.Model):
     def create(self, vals):
         ''' Creates an user and sets default permission rights '''
 
-        if 'user_id' not in vals:
+        if 'user_id' not in vals or not vals['user_id']:
             vals = self.create_user(vals)
 
         return super(HrEmployee, self).create(vals)

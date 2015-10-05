@@ -354,6 +354,9 @@ class HrEmployeeUser(models.Model):
     def set_group(self, new_group, category_name):
         groups = self.get_groups_by_category_name(category_name)
 
+        if not self.sudo().user_id:
+            return False
+
         ''' Unset current groups '''
         for unset_group in groups:
             self.sudo().user_id.groups_id = [(3, unset_group.id)]
