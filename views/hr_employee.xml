@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+
+		<record id="hr_employee_view_form_simplified" model="ir.ui.view">
+			<field name="name">Simplified HR Employee From</field>
+			<field name="model">hr.employee</field>
+			<field name="inherit_id" ref="hr.view_employee_form" />
+			<field name="arch" type="xml">
+				
+	            <!-- Add a 'show all' checkbox after the main group -->
+	            <xpath expr="//group[1]" position="after">
+	                <div id='show_all' class="oe_right">
+	                    <label for="show_all" />
+	                    <field name="show_all" />
+	                </div>
+	            </xpath>
+
+			</field>
+		</record> 
+
+	</data>
+</openerp>
