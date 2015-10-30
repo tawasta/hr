@@ -15,6 +15,35 @@
 	                    <field name="show_all" />
 	                </div>
 	            </xpath>
+	            
+	            <!-- Hide rarely used fields -->
+				<field name='mobile_phone' position='attributes'>
+				    <attribute name='attrs'>{'invisible':[('show_all','=',False)]}</attribute>
+				</field>
+				
+				<field name='work_location' position='attributes'>
+				    <attribute name='attrs'>{'invisible':[('show_all','=',False)]}</attribute>
+				</field>
+				
+				<field name='department_id' position='attributes'>
+				    <attribute name='attrs'>{'invisible':[('show_all','=',False)]}</attribute>
+				</field>
+				
+				<field name='coach_id' position='attributes'>
+				    <attribute name='attrs'>{'invisible':[('show_all','=',False)]}</attribute>
+				</field>
+				
+				<field name='identification_id' position='attributes'>
+				    <attribute name='attrs'>{'invisible':[('show_all','=',False)]}</attribute>
+				</field>
+				
+				<field name='passport_id' position='attributes'>
+				    <attribute name='attrs'>{'invisible':[('show_all','=',False)]}</attribute>
+				</field>
+				
+				<field name='otherid' position='attributes'>
+				    <attribute name='attrs'>{'invisible':[('show_all','=',False)]}</attribute>
+				</field>
 
 			</field>
 		</record> 
