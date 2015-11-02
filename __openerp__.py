@@ -21,7 +21,7 @@
 
 {
     'name': 'HR Simplification',
-    'version': '8.0.0.1.1',
+    'version': '8.0.0.1.2',
     'category': 'Human Resources',
     'website': 'http://www.tawasta.fi',
     'author': 'Oy Tawasta Technologies Ltd.',
