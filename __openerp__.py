@@ -20,9 +20,9 @@
 ##############################################################################
 
 {
-    'name': 'Expense line view',
+    'name': 'Expense Line View',
     'summary': 'Adds expenses line view',
-    'version': '8.0.0.1.0',
+    'version': '8.0.0.2.0',
     'category': 'Human Resources',
     'website': 'http://www.tawasta.fi',
     'author': 'Oy Tawasta Technologies Ltd.',
