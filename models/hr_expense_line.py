@@ -32,7 +32,7 @@ class HrExpenseLine(models.Model):
     # 4. Compute and search fields, in the same order that fields declaration
     @api.one
     def _get_employee(self):
-        self.employee = self.expense_id.employee_id
+        self.employee = self.sudo().expense_id.employee_id
 
     # 5. Constraints and onchanges
 
