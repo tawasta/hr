@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from openerp import models, fields
+from openerp import models, fields, api
 
 
 class HrEmployeeUser(models.Model):
@@ -196,6 +196,7 @@ class HrEmployeeUser(models.Model):
 
         return vals
 
+    @api.one
     def get_user_state(self):
         self.user_state = ('active' if self.user_id.login_date else 'new')
 
@@ -208,6 +209,7 @@ class HrEmployeeUser(models.Model):
 
         return group
 
+    @api.one
     def set_group_sales(self):
         category_name = "Sales"
         group = False

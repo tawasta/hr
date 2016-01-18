@@ -58,6 +58,7 @@ class HrEmployeeHelper(models.Model):
 
         return res
 
+    @api.one
     def compute_show_group(self, module_name):
         visible = False
 
@@ -68,27 +69,35 @@ class HrEmployeeHelper(models.Model):
 
     ''' Field visibility helpers '''
     ''' TODO: could this be done in one method? '''
+    @api.one
     def compute_show_group_sales(self):
         self.show_group_sales = self.compute_show_group('sale')
 
+    @api.one
     def compute_show_group_purchase(self):
         self.show_group_purchase = self.compute_show_group('purchase')
 
+    @api.one
     def compute_show_group_project(self):
         self.show_group_project = self.compute_show_group('project')
 
+    @api.one
     def compute_show_group_account(self):
         self.show_group_account = self.compute_show_group('account')
 
+    @api.one
     def compute_show_group_hr(self):
         self.show_group_hr = self.compute_show_group('hr')
 
+    @api.one
     def compute_show_group_stock(self):
         self.show_group_stock = self.compute_show_group('stock')
 
+    @api.one
     def compute_show_group_mrp(self):
         self.show_group_mrp = self.compute_show_group('mrp')
 
+    @api.one
     def compute_show_group_website(self):
         self.show_group_website = self.compute_show_group('website')
 
