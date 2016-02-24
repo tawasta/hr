@@ -180,6 +180,8 @@ class HrEmployeeUser(models.Model):
     def create_user(self, vals):
         users_object = self.env['res.users']
 
+        i
+
         user_vals = {
             'login': vals['work_email'],
             'name': vals['name'],

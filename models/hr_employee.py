@@ -33,7 +33,7 @@ class HrEmployee(models.Model):
     ''' Main function overrides '''
     @api.model
     def create(self, vals):
-        ''' Creates an user and sets default permission rights '''
+        # Creates an user and sets default permission rights
 
         if 'user_id' not in vals or not vals['user_id']:
             vals = self.create_user(vals)
