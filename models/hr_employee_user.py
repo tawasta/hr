@@ -127,7 +127,6 @@ class HrEmployeeUser(models.Model):
         selection='get_group_stock',
         inverse='set_group_stock',
         string='Warehouse',
-        default='user',
 
         help='WAREHOUSE PERMISSIONS' + '\n\n' +
         'User' + '\n' +
@@ -192,8 +191,10 @@ class HrEmployeeUser(models.Model):
             vals['user_id'] = user_id.id
             vals['address_home_id'] = user_id.partner_id.id
 
-            user_id.partner_id.email = vals['work_email']
-            user_id.partner_id.phone = vals['mobile_phone']
+            if 'work_email' in vals:
+                user_id.partner_id.email = vals['work_email']
+            if 'mobile_phone' in vals:
+                user_id.partner_id.phone = vals['mobile_phone']
 
         return vals
 
