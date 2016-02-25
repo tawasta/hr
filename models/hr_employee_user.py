@@ -180,19 +180,20 @@ class HrEmployeeUser(models.Model):
     def create_user(self, vals):
         users_object = self.env['res.users']
 
-        user_vals = {
-            'login': vals['work_email'],
-            'name': vals['name'],
-            # 'groups_id': {(6, False, self.get_default_groups())}
-        }
+        if 'work_email' in vals and 'name' in vals:
+            user_vals = {
+                'login': vals['work_email'],
+                'name': vals['name'],
+                # 'groups_id': {(6, False, self.get_default_groups())}
+            }
 
-        user_id = users_object.sudo().create(user_vals)
+            user_id = users_object.sudo().create(user_vals)
 
-        vals['user_id'] = user_id.id
-        vals['address_home_id'] = user_id.partner_id.id
+            vals['user_id'] = user_id.id
+            vals['address_home_id'] = user_id.partner_id.id
 
-        user_id.partner_id.email = vals['work_email']
-        user_id.partner_id.phone = vals['mobile_phone']
+            user_id.partner_id.email = vals['work_email']
+            user_id.partner_id.phone = vals['mobile_phone']
 
         return vals
 
