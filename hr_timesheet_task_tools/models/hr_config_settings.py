@@ -40,5 +40,24 @@ class HrConfigSettings(models.TransientModel):
         analytic_lines = self.env['hr.analytic.timesheet'].search(
             []
         )
+        _logger.info("Found %s timesheet lines" % len(analytic_lines))
 
-        _logger.info("Updated %s lines" % count)
+        for analytic_line in analytic_lines:
+            task_name = analytic_line.line_id.name.split(':')
+
+            if len(task_name) < 1:
+                continue
+
+            task_id = self.env['project.task'].search([
+                ('name', '=', task_name[0]),
+                ('project_id.name', '=', analytic_line.account_id.name)
+            ])
+
+            self._cr.execute(
+                "UPDATE account_analytic_line SET task_id = %s WHERE id = %s",
+                (task_id.id, analytic_line.line_id.id)
+            )
+
+            count += 1
+
+        _logger.info("Updated %s timesheet lines" % count)
