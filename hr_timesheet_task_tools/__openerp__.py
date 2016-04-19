@@ -21,7 +21,7 @@
 
 {
     'name': 'HR Timesheet Task Tools',
-    'version': '8.0.0.3.0',
+    'version': '8.0.0.3.1',
     'category': 'HR',
     'website': 'http://www.tawasta.fi',
     'author': 'Oy Tawasta Technologies Ltd.',

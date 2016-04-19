@@ -53,11 +53,12 @@ class HrConfigSettings(models.TransientModel):
                 ('project_id.name', '=', analytic_line.account_id.name)
             ])
 
-            self._cr.execute(
-                "UPDATE account_analytic_line SET task_id = %s WHERE id = %s",
-                (task_id.id, analytic_line.line_id.id)
-            )
+            if task_id:
+                self._cr.execute(
+                    "UPDATE account_analytic_line SET task_id = %s WHERE id = %s",
+                    (task_id.id, analytic_line.line_id.id)
+                )
 
-            count += 1
+                count += 1
 
         _logger.info("Updated %s timesheet lines" % count)
