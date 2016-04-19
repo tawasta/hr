@@ -6,7 +6,11 @@
 HR Timesheet Task Tools
 =======================
 
-This module extends hr_timesheet_task functionality
+Extends hr_timesheet_task functionality.
+
+Features
+--------
+* Allows setting tasks to hr analytic lines
 
 Installation
 ============
