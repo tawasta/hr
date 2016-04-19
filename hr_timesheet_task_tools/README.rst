@@ -23,7 +23,7 @@ Configuration
 
 Usage
 =====
-\-
+Install and go to Settings->Human resources and click "Timesheet tasks update"
 
 Known issues / Roadmap
 ======================
