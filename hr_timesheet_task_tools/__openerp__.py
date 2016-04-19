@@ -20,16 +20,18 @@
 ##############################################################################
 
 {
-    'name': 'HR Timesheet Task Toolse',
-    'version': '8.0.0.1.0',
+    'name': 'HR Timesheet Task Tools',
+    'version': '8.0.0.2.0',
     'category': 'HR',
     'website': 'http://www.tawasta.fi',
     'author': 'Oy Tawasta Technologies Ltd.',
     'license': 'AGPL-3',
     'application': False,
     'depends': [
+        'hr',
         'hr_timesheet_task',
     ],
     'data': [
+        'views/hr_config_settings.xml',
     ],
 }
