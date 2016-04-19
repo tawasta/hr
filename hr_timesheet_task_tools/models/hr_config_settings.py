@@ -53,12 +53,19 @@ class HrConfigSettings(models.TransientModel):
                 ('project_id.name', '=', analytic_line.account_id.name)
             ])
 
-            if task_id:
+            # No task found
+            if not task_id:
+                continue
+
+            if len(task_id) == 1:
                 self._cr.execute(
                     "UPDATE account_analytic_line SET task_id = %s WHERE id = %s",
                     (task_id.id, analytic_line.line_id.id)
                 )
 
                 count += 1
+            else:
+                _logger.warning("Multiple tasks found! (%s)" % task_id.ids)
+
 
         _logger.info("Updated %s timesheet lines" % count)
