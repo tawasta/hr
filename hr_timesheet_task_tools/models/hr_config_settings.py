@@ -38,19 +38,22 @@ class HrConfigSettings(models.TransientModel):
     def update_tasks_from_description(self):
         count = 0
         notFound = 0
-        task_works = self.env['project.task.work'].search(
-            []
-        )
-        # analytic_lines = self.env['hr.analytic.timesheet'].search(
-        #     []
-        # )
+        task_works = self.env['project.task.work'].search([])
+
+        _logger.info("Found %s task works" % len(task_works))
+
         for work in task_works:
 
             if work.hr_analytic_timesheet_id:
                 if not work.hr_analytic_timesheet_id.line_id.task_id:
+                    task_id = work.task_id.id
+                    line_id = work.hr_analytic_timesheet_id.line_id.id
+
+                    _logger.debug("Updating task %s to timesheet %s" % (task_id, line_id))
+
                     self._cr.execute(
                         "UPDATE account_analytic_line SET task_id = %s WHERE id = %s",
-                        (work.task_id.id, work.hr_analytic_timesheet_id.line_id.id)
+                        (task_id, line_id)
                     )
                     count += 1
             else:
@@ -61,8 +64,7 @@ class HrConfigSettings(models.TransientModel):
             #         if len(task_name) :
 
             # _logger.warning("Multiple tasks found! (%s)" % task_id.ids)
-        _logger.info("Found %s task works!" % len(task_works))
-        _logger.info("Inserted to %s timesheets!" % count)
+        _logger.info("Inserted to %s timesheets" % count)
         _logger.warning("Timesheets null on task_works: %s" % notFound)
 
         # count = 0
