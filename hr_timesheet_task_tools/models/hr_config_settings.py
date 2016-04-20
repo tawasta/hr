@@ -73,8 +73,9 @@ class HrConfigSettings(models.TransientModel):
                         # If project matches and task name matches and work name matches without split or with split
                         if analytic_line.line_id.account_id.name == work.task_id.project_id.name and \
                             line_name[0] == work.task_id.name and \
+                            work.create_date == analytic_line.line_id.create_date and \
                             (analytic_line.line_id.name == work.name or line_name[1] == work.name):
-
+                            
                             self._cr.execute(
                                 "UPDATE account_analytic_line SET task_id = %s WHERE id = %s",
                                 (work.task_id.id, analytic_line.line_id.id)
