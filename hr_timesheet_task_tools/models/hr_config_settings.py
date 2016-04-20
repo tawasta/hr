@@ -52,7 +52,8 @@ class HrConfigSettings(models.TransientModel):
                     task_id = work.task_id.id
                     line_id = work.hr_analytic_timesheet_id.line_id.id
 
-                    _logger.debug("Updating task %s to timesheet %s" % (task_id, line_id))
+                    _logger.debug(
+                        "Updating task %s to timesheet %s" % (task_id, line_id))
 
                     self._cr.execute(
                         "UPDATE account_analytic_line SET task_id = %s WHERE id = %s",
@@ -65,26 +66,26 @@ class HrConfigSettings(models.TransientModel):
                     line_name = analytic_line.line_id.name.split(': ')
 
                     if len(line_name) == 1:
-                        work_name=line_name[0]
-                    
-                    elif len(line_name) == 2:
-                        work_name = line_name[1]
-                    
-                    else:
                         continue
-                    
-                    # If work name matches without split or with split
-                    if  analytic_line.line_id.name == work.name or work_name == work.name:
 
-                        self._cr.execute(
-                            "UPDATE account_analytic_line SET task_id = %s WHERE id = %s",
-                            (work.task_id.id, analytic_line.line_id.id)
-                        )
-                        _logger.debug("Timesheet: %s and Task: %s" % (analytic_line.line_id, work.task_id))
-                        hardWay += 1
+                    elif len(line_name) == 2:
 
-        
+                        # If project matches and task name matches and work name matches without split or with split
+                        if analytic_line.line_id.account_id.name == work.task_id.project_id.name and \
+                            line_name[0] == work.task_id.name and \
+                            (analytic_line.line_id.name == work.name or line_name[1] == work.name):
+
+                            self._cr.execute(
+                                "UPDATE account_analytic_line SET task_id = %s WHERE id = %s",
+                                (work.task_id.id, analytic_line.line_id.id)
+                            )
+                            _logger.debug(
+                                "Timesheet: %s and Task: %s" % (analytic_line.line_id, work.task_id))
+                            hardWay += 1
+
+
         _logger.info("Found %s task works!" % len(task_works))
         _logger.info("Inserted to %s timesheets!" % count)
         _logger.warning("Timesheets null on task_works: %s" % notFound)
-        _logger.warning("Timesheets null on task_works and fixed: %s" % hardWay)
+        _logger.warning(
+            "Timesheets null on task_works and fixed: %s" % hardWay)
