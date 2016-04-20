@@ -80,8 +80,7 @@ class HrConfigSettings(models.TransientModel):
                             "UPDATE account_analytic_line SET task_id = %s WHERE id = %s",
                             (work.task_id.id, analytic_line.line_id.id)
                         )
-                        _logger.warning("Timesheet: %s and Task: %s" % (analytic_line.line_id, work.task_id))
-
+                        _logger.debug("Timesheet: %s and Task: %s" % (analytic_line.line_id, work.task_id))
                         hardWay += 1
 
         
