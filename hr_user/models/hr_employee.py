@@ -14,7 +14,7 @@ class HrEmployee(models.Model):
 
     ''' Onchanges '''
     @api.onchange('name')
-    def onchange_name(self):
+    def onchange_name_update_groups(self):
         groups = []
 
         groups.append(
@@ -23,7 +23,7 @@ class HrEmployee(models.Model):
             self.get_group_by_name('Employee', 'Human Resources').id or False)
 
     @api.onchange('work_email')
-    def onchange_work_email(self):
+    def onchange_work_email_validate_email(self):
         if self.work_email:
             valid_email = re.match(tools.single_email_re, self.work_email)
 
