@@ -32,13 +32,14 @@ class HrEmployee(models.Model):
 
     ''' Main function overrides '''
     @api.model
-    def create(self, vals):
+    def create(self, values):
         # Creates an user and sets default permission rights
 
-        if 'user_id' not in vals or not vals['user_id']:
-            vals = self.create_user(vals)
+        # Create user
+        if 'user_id' not in values or not values['user_id']:
+            values = self.create_user(values)
 
-        return super(HrEmployee, self).create(vals)
+        return super(HrEmployee, self).create(values)
 
     @api.one
     def write(self, vals):

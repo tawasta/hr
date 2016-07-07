@@ -176,27 +176,36 @@ class HrEmployeeUser(models.Model):
     )
 
     ''' User creation '''
-    def create_user(self, vals):
+    def create_user(self, values):
         users_object = self.env['res.users']
 
-        if 'work_email' in vals and 'name' in vals:
+        if 'work_email' in values and 'name' in values:
             user_vals = {
-                'login': vals['work_email'],
-                'name': vals['name'],
+                'login': values['work_email'],
+                'name': values['name'],
                 # 'groups_id': {(6, False, self.get_default_groups())}
             }
 
-            user_id = users_object.sudo().create(user_vals)
+            user = users_object.sudo().create(user_vals)
 
-            vals['user_id'] = user_id.id
-            vals['address_home_id'] = user_id.partner_id.id
+            # Update partner info
+            partner_values = {
+                'parent_id': values['company_id'],
+                'is_company': False,
+                'type': 'contact',
+            }
+            user.partner_id.write(partner_values)
 
-            if 'work_email' in vals:
-                user_id.partner_id.email = vals['work_email']
-            if 'mobile_phone' in vals:
-                user_id.partner_id.phone = vals['mobile_phone']
+            # Return user info to employee
+            values['user_id'] = user.id
+            values['address_home_id'] = user.partner_id.id
 
-        return vals
+            if 'work_email' in values:
+                user.partner_id.email = values['work_email']
+            if 'mobile_phone' in values:
+                user.partner_id.phone = values['mobile_phone']
+
+        return values
 
     @api.one
     def get_user_state(self):

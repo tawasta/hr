@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Author: Jarmo Kortetjärvi
+#    Author: Oy Tawasta OS Technologies Ltd.
 #    Copyright 2015 Oy Tawasta OS Technologies Ltd.
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -21,7 +21,7 @@
 {
     'name': 'HR User',
     'category': 'CRM',
-    'version': '8.0.1.2.12',
+    'version': '8.0.1.2.13',
     'author': 'Oy Tawasta Technologies Ltd.',
     'website': 'http://www.tawasta.fi',
     'depends': [
