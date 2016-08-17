@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+
+		<record id="hr_timesheet_sheet_form_with_activity" model="ir.ui.view">
+			<field name="name">hr.timesheet.sheet.form.with.activity</field>
+			<field name="model">hr_timesheet_sheet.sheet</field>
+			<field name="inherit_id" ref="hr_timesheet_task.hr_timesheet_sheet_form_with_activity" />
+			<field name="arch" type="xml">
+
+				<field name="task_id" position="attributes">
+					<attribute name="domain">
+						[
+							('project_id.analytic_account_id','=',account_id),
+							('stage_id.fold','=', False),
+						]
+					</attribute>
+				</field>
+
+			</field>
+		</record> 
+
+	</data>
+</openerp>

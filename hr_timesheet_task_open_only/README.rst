@@ -6,7 +6,9 @@
 Timesheet only show open tasks
 ==============================
 
-Only show open tasks on timesheets
+Only show open tasks on timesheets.
+
+Overrides the task_id domain in timesheets and timesheet activities.
 
 Installation
 ============
