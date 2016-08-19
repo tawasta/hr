@@ -12,7 +12,7 @@
 					<attribute name="domain">
 						[
 							('project_id.analytic_account_id','=',account_id),
-							('stage_id.fold','=', False),
+							('stage_id.fold', '=', False),
 						]
 					</attribute>
 				</field>

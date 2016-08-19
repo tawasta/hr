@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<openerp>
+    <data>
+        <template id="timesheet_assets_open_task_only" name="timesheet assets open tasks only" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <script type="text/javascript" src="/hr_timesheet_task_open_only/static/src/js/timesheet.js"></script>
+            </xpath>
+        </template>
+    </data>
+</openerp>
