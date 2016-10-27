@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+
+		<record id="view_task_form2" model="ir.ui.view">
+			<field name="name">view_task_form2_begin_end</field>
+			<field name="model">project.task</field>
+			<field name="inherit_id" ref="timesheet_task.view_task_form2" />
+			<field name="arch" type="xml">
+
+				<xpath expr="//tree/field[@name='to_invoice']" position="before">
+
+                    <field name="time_start" widget="float_time" />
+                    <field name="time_stop" widget="float_time" />
+
+                </xpath>
+
+			</field>
+		</record> 
+
+	</data>
+</openerp>
