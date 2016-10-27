@@ -22,7 +22,7 @@
 {
     'name': ' Timesheet Activities - Begin/End Hours on projects',
     'summary': 'Adds starting and ending hours fields on the timesheet activities on projects',
-    'version': '8.0.0.2.1',
+    'version': '8.0.0.3.0',
     'category': 'Human Resources',
     'website': 'http://www.tawasta.fi',
     'author': 'Oy Tawasta Technologies Ltd.',

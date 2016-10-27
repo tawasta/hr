@@ -13,11 +13,10 @@ from openerp import api, fields, models
 
 # 6. Unknown third party imports:
 
-
-class ProjectTask(models.Model):
+class AccountAnalyticLine(models.Model):
     
     # 1. Private attributes
-    _inherit = 'project.task'
+    _inherit = 'account.analytic.line'
 
     # 2. Fields declaration
 
@@ -26,6 +25,11 @@ class ProjectTask(models.Model):
     # 4. Compute and search fields, in the same order that fields declaration
 
     # 5. Constraints and onchanges
+    @api.one
+    @api.constrains('time_start', 'time_stop', 'unit_amount')
+    def _check_time_start_stop(self):
+        # Override validation
+        return True
 
     # 6. CRUD methods
 
