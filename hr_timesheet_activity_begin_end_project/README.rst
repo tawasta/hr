@@ -23,7 +23,7 @@ Usage
 
 Known issues / Roadmap
 ======================
-\-
+- Overrides time validation completely. This should be optional
 
 Credits
 =======
