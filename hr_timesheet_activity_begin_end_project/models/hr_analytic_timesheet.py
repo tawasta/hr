@@ -13,11 +13,10 @@ from openerp import api, fields, models
 
 # 6. Unknown third party imports:
 
-class AccountAnalyticLine(models.Model):
+class HrAnalyticTimesheet(models.Model):
     
     # 1. Private attributes
-    _inherit = 'account.analytic.line'
-
+    _inherit = 'hr.analytic.timesheet'
     # 2. Fields declaration
 
     # 3. Default methods
@@ -25,14 +24,6 @@ class AccountAnalyticLine(models.Model):
     # 4. Compute and search fields, in the same order that fields declaration
 
     # 5. Constraints and onchanges
-    @api.one
-    @api.constrains('time_start', 'time_stop', 'unit_amount')
-    def _check_time_start_stop(self):
-        # Override validation
-        return True
-
-
-    @api.onchange('time_start', 'time_stop')
     def onchange_hours_start_stop(self):
         print "Here"
         # Override onchange
