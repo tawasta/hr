@@ -25,7 +25,6 @@ class HrAnalyticTimesheet(models.Model):
 
     # 5. Constraints and onchanges
     def onchange_hours_start_stop(self):
-        print "Here"
         # Override onchange
         return True
 

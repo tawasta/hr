@@ -34,7 +34,6 @@ class AccountAnalyticLine(models.Model):
 
     @api.onchange('time_start', 'time_stop')
     def onchange_hours_start_stop(self):
-        print "Here"
         # Override onchange
         return True
 
