@@ -62,6 +62,23 @@ class AccountAnalyticLine(models.Model):
             data=data,
         )
 
-        res['name'] = analytic_lines[0].task_id.name
+        line_name = ""
+
+        products = list()
+        for analytic_line in analytic_lines:
+            products.append(analytic_line.task_id.name)
+
+        products = set(products)
+
+        pos = 0
+        for product in products:
+            pos += 1
+
+            line_name += product
+
+            if not pos == len(products):
+                line_name += "\n"
+
+        res['name'] = line_name
 
         return res

@@ -22,7 +22,7 @@
 {
     'name': 'Invoice by timesheet using project info',
     'summary': 'Invoice by timesheet using invoice reference and task name from project',
-    'version': '8.0.1.0.0',
+    'version': '8.0.1.0.1',
     'category': 'Project',
     'website': 'http://www.tawasta.fi',
     'author': 'Oy Tawasta Technologies Ltd.',
