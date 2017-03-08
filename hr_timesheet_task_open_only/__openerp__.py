@@ -22,7 +22,7 @@
 {
     'name': 'Timesheet only show open tasks',
     'summary': 'Only show open tasks on timesheets',
-    'version': '8.0.1.1.1',
+    'version': '8.0.1.1.2',
     'category': 'HR',
     'website': 'http://www.tawasta.fi',
     'author': 'Oy Tawasta Technologies Ltd.',
