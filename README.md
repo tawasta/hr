@@ -1,5 +1,5 @@
-Human relationships management
-==============================
+Human relations management
+==========================
 
 [//]: # (addons)
 
