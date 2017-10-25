@@ -27,6 +27,7 @@
     'author': 'Oy Tawasta Technologies Ltd.',
     'license': 'AGPL-3',
     'application': False,
+    'installable': False,
     'depends': [
         'hr',
         'hr_timesheet_task',

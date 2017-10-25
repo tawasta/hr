@@ -24,6 +24,7 @@
     'version': '8.0.1.2.14',
     'author': 'Oy Tawasta Technologies Ltd.',
     'website': 'http://www.tawasta.fi',
+    'installable': False,
     'depends': [
         'hr',
         'auth_signup',
