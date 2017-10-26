@@ -1,0 +1,26 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* hr_employee_tag_edit_permissions
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-10-26 09:56+0000\n"
+"PO-Revision-Date: 2017-10-26 09:56+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hr_employee_tag_edit_permissions
+#: model:res.groups,name:hr_employee_tag_edit_permissions.group_tag_editor
+msgid "Employee Tag Editor"
+msgstr "Työntekijätagien muokkaus"
+
+#. module: hr_employee_tag_edit_permissions
+#: model:res.groups,comment:hr_employee_tag_edit_permissions.group_tag_editor
+msgid "The user has the right to create, edit and delete employee tags."
+msgstr "Käyttäjällä on oikeus lisätä, muokata ja poistaa työntekijätageja."
