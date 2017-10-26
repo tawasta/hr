@@ -7,6 +7,12 @@ Unported addons
 ----------------
 **Addon** | **Summary**
 --- | ---
+[hr_employee_tag_edit_permissions](hr_employee_tag_edit_permissions/) | Disable quick create for employee tags & add a new group with tag edit permissions
+
+Unported addons
+----------------
+**Addon** | **Summary**
+--- | ---
 [hr_expense_line_view](hr_expense_line_view/) | Adds expenses line view
 [hr_simplification](hr_simplification/) | HR Simplification
 [hr_timesheet_activity_begin_end_project](hr_timesheet_activity_begin_end_project/) | Adds starting and ending hours fields on the timesheet activities on projects

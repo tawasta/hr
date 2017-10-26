@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <!-- Remove the quick create functionality from employee form's tag field -->
+    <record id="hr_employee_tag_edit_permissions_form" model="ir.ui.view">
+        <field name="name">hr.employee.tag.edit.permissions.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <field name="category_ids" position="attributes">
+                <attribute name="options">{ 'no_create': True }</attribute>
+            </field>
+        </field>
+    </record>
+
+    <!-- Make Employees/Configuration/Employee Tags menuitem no longer require technical features permission -->
+    <record model="ir.ui.menu" id="hr.menu_view_employee_category_form">
+        <field name="groups_id" eval="[(6,0,[ref('hr_employee_tag_edit_permissions.group_tag_editor')])]"/>
+    </record>
+
+  </data>
+</openerp>
