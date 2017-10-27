@@ -37,10 +37,10 @@
         'hr',
     ],
     'data': [
-        'views/hr_employee.xml',
         'data/res_groups.xml',
         'security/ir_model_access.xml',
         'security/ir.model.access.csv',
+        'views/hr_employee.xml',
     ],
     'demo': [
     ],
