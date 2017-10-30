@@ -16,7 +16,12 @@
             <xpath expr="(//div[contains(@class, 'o_kanban_primary_right')]/div[@class='row'])[1]" position="after">
                 <div class="row">
                     <div class="col-xs-9">
+                      <a t-if="record.application_ids.raw_value.length > 0" name="%(hr_recruitment.action_hr_job_applications)d" type="action">
                         Application(s)
+                      </a>
+                      <span t-if="record.application_ids.raw_value.length == 0">
+                        Application(s)
+                      </span>
                     </div>
                     <div class="col-xs-3">
                         <span><t t-esc="record.application_ids.raw_value.length"/></span>
