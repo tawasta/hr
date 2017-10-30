@@ -6,7 +6,7 @@
 Pin Jobs to Top
 ===============
 
-* Enables pinning certain jobs to top (both in front-end and back-end)
+* Enables pinning certain jobs to top of lists
 * This affects both front-end and back-end job listings
 
 Installation
