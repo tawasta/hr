@@ -3,12 +3,13 @@ Human relations management
 
 [//]: # (addons)
 
-Unported addons
+Available addons
 ----------------
 **Addon** | **Summary**
 --- | ---
 [hr_employee_tag_edit_permissions](hr_employee_tag_edit_permissions/) | Disable quick create for employee tags & add a new group with tag edit permissions
 [hr_recruitment_application_tags_from_employee](hr_recruitment_application_tags_from_employee/) | Job application tags are replaced by showing related employee's tags
+[hr_recruitment_job_application_count](hr_recruitment_job_application_count/) | Show the # of applications for each job position in kanban view
 
 Unported addons
 ----------------

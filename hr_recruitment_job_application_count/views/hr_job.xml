@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+
+    <!-- Show # of applications per job position in the kanban view -->
+    <record id="hr_job_application_count_form" model="ir.ui.view">
+        <field name="name">hr.job.application.count.form</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr_recruitment.view_hr_job_kanban"/>
+        <field name="arch" type="xml">
+
+            <field name="user_id" position="after">
+                <field name="application_ids"/>
+            </field>
+
+            <xpath expr="(//div[contains(@class, 'o_kanban_primary_right')]/div[@class='row'])[1]" position="after">
+                <div class="row">
+                    <div class="col-xs-9">
+                        Application(s)
+                    </div>
+                    <div class="col-xs-3">
+                        <span><t t-esc="record.application_ids.raw_value.length"/></span>
+                    </div>
+                </div>
+            </xpath>
+
+        </field>
+    </record>
+
+  </data>
+</openerp>
