@@ -29,6 +29,8 @@ class HrApplicant(models.Model):
             'default_composition_mode': 'comment',
         })
 
+        return ctx
+
     @api.multi
     def launch_wizard(self):
         ''' Open the wizard for composing new e-mail '''
