@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="website_hr_timesheet.timesheet" name="Timesheet">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container text-center mb64">
+                    <h1>HR timesheet</h1>
+
+                    <form id="timesheet_form" method="post" role="form" action="/my/timesheet/confirm">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <div class="mt16">
+                            <div class="row mt8">
+                                <div class="col-md-8 col-md-offset-2">
+                                    <input type="text" id="select-project" list="project-datalist" class="form-control" title="Select project" placeholder="Select project"/>
+                                    <datalist id="project-datalist">
+                                        <t t-foreach="projects" t-as="project">
+                                            <option t-att-data-value="project.id" t-att-value="project.name"><span t-if="project.partner_id" t-field="project.partner_id.name"/></option>
+                                        </t>
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="row mt8">
+                                <div class="col-md-8 col-md-offset-2">
+                                    <input type="text" id="select-task" list="task-datalist" class="form-control" title="Select task" placeholder="Select task"/>
+                                    <datalist id="task-datalist">
+                                        <t t-foreach="tasks" t-as="task">
+                                            <option t-att-data-value="task.id" t-att-value="task.name"><span t-if="task.user_id" t-field="task.user_id.name"/></option>
+                                        </t>
+                                    </datalist>
+                                </div>
+                            </div>
+                            <div class="row mt8">
+                                <div class="col-md-2 col-md-offset-3">
+                                    <div id="timer" />
+                                </div>
+                                <div class="col-md-2">
+                                    <input id="select-hours" type="number" class="form-control col-xs-2" title="Select hours" placeholder="Select hours" />
+                                </div>
+                                <div class="col-md-2">
+                                    <input id="select-minutes" type="number" class="form-control col-xs2" title="Select minutes" placeholder="Select minutes" />
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </t>
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/timer.jquery/0.7.0/timer.jquery.js"></script>
+         <script type="text/javascript" src="/website_hr_timesheet/static/src/js/hr_timesheet.js"/>
+    </template>
+</odoo>
