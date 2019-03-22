@@ -1,3 +1,7 @@
+[![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](https://www.gnu.org/licenses/agpl-3.0)
+[![Build Status](https://travis-ci.org/Tawasta/hr.svg?branch=10.0)](https://travis-ci.org/Tawasta/hr)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/afb03dcb8c6b4521b814123424221bfe)](https://www.codacy.com/app/Tawasta/hr?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Tawasta/hr&amp;utm_campaign=Badge_Grade)
+
 Human relations management
 ==========================
 
