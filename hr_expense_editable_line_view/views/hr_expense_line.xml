@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <record id="view_hr_expense_sheet_form" model="ir.ui.view">
+        <field name="name">hr.expense.sheet.form.editable</field>
+        <field name="model">hr.expense.sheet</field>
+        <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='expense_line_ids']/tree" position="attributes">
+                <attribute name="editable">bottom</attribute>
+            </xpath>
+            <xpath expr="//field[@name='expense_line_ids']" position="attributes">
+                <attribute name="widget"></attribute>
+                <attribute name="context">{'default_state': 'draft'}</attribute>
+            </xpath>
+            <xpath expr="//field[@name='expense_line_ids']/tree/field[@name='name']" position="before">
+                <field name="product_id"/>
+            </xpath>
+            <xpath expr="//field[@name='expense_line_ids']/tree/field[@name='name']" position="after">
+                <field name="quantity"/>
+                <field name="unit_amount"/>
+            </xpath>
+            <xpath expr="//button[@name='approve_expense_sheets']" position="before">
+                <button name="submit_expenses" states="draft" string="Submit to Manager" type="object" groups="hr_expense.group_hr_expense_user" class="oe_highlight o_expense_submit"/>
+            </xpath>
+            <xpath expr="//form[@class='o_expense_sheet']/header/field[@name='state']" position="attributes">
+                <attribute name="statusbar_visible">draft,submit,approve,post,done,cancel</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
