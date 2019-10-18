@@ -21,7 +21,7 @@
                 <field name="unit_amount"/>
             </xpath>
             <xpath expr="//button[@name='approve_expense_sheets']" position="before">
-                <button name="submit_expenses" states="draft" string="Submit to Manager" type="object" groups="hr_expense.group_hr_expense_user" class="oe_highlight o_expense_submit"/>
+                <button name="submit_expenses" states="draft" string="Submit to Manager" type="object" groups="base.group_user" class="oe_highlight o_expense_submit"/>
             </xpath>
             <xpath expr="//form[@class='o_expense_sheet']/header/field[@name='state']" position="attributes">
                 <attribute name="statusbar_visible">draft,submit,approve,post,done,cancel</attribute>
