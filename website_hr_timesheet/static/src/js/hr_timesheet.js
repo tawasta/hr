@@ -5,6 +5,16 @@ odoo.define('hr_timesheet', function (require) {
 
     $(function() {
 
+        $('#project_id').select2({
+            placeholder: _t('Select project'),
+            allowClear: true
+        });
+
+        $('#task_id').select2({
+            placeholder: _t('Select task'),
+            allowClear: false
+        });
+
         // Creates project datalist
         function create_project_datalist() {
             var action = "/project/datalist";
@@ -38,15 +48,12 @@ odoo.define('hr_timesheet', function (require) {
         // Creates task datalist
         function create_task_datalist() {
             var action = "/task/datalist";
-            console.log(action);
 
-            // Remove old project options
-            $('#task-datalist').empty();
+            var task = $('#task_id');
 
-            var project = $('#select-project');
-            var project_id = $('#project-datalist option').filter(function() {
-                return this.value == project.val();
-            }).data('id');
+            // Remove old task selections
+            task.empty().trigger("change");
+            var project_id = $('#project_id').val();
 
             values = {
                 'project_id': project_id,
@@ -55,16 +62,14 @@ odoo.define('hr_timesheet', function (require) {
             ajax.jsonRpc(action, 'call', values).then(function(result){
                 var response=JSON.parse(result);
 
-                // Add projects
+                // Add tasks
                 $.each(response, function() {
-                    $('#task-datalist').append(
-                        $("<option />").attr('data-value', this.id).val(this.name)
-                    );
+                    var option = new Option(this.name, this.id, true, true);
+                    task.append(option).trigger('change');
                 });
+
             });
         }
-
-        create_project_datalist();
 
         function round(number, increment, offset) {
             return Math.ceil((number - offset) / increment ) * increment + offset;
@@ -82,18 +87,21 @@ odoo.define('hr_timesheet', function (require) {
                 var increment = 5;
                 var rounded = Math.ceil((+minutes + 1) / increment) * increment
 
+                /*
                 console.log(seconds);
                 console.log(minutes);
                 console.log(hours);
                 console.log(rounded);
                 console.log('-');
+                */
 
                 $('#select-minutes').val(rounded);
             },
             repeat: true
         });
 
-        $('#select-project').change(function() {
+        create_task_datalist();
+        $('#project_id').change(function() {
             create_task_datalist();
         });
 

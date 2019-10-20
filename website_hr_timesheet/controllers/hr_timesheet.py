@@ -9,52 +9,69 @@ class WebsiteTimesheetController(http.Controller):
     @http.route(
         ['/my/timesheet'],
         type='http',
-        auth='public',
+        auth='user',
         website=True)
     def my_timesheet(self, **post):
 
-        projects = dict()
-        tasks = dict()
+        analytic_lines = request.env['account.analytic.line'].search([
+            ('user_id', '=', request.env.user.id),
+        ], order='create_date DESC', limit=5)
 
         values = {
-            'projects': projects,
-            'tasks': tasks,
+            'analytic_lines': analytic_lines,
         }
 
         return request.render("website_hr_timesheet.timesheet", values)
 
     @http.route(
-        ['/project/datalist'],
-        type='json',
-        auth='public',
+        ['/my/timesheet/confirm'],
+        type='http',
+        auth='user',
         website=True)
-    def project_datalist(self, **post):
-        ProjectProject = request.env['project.project']
-        ProjectTask = request.env['project.task']
+    def my_timesheet_confirm(self, **post):
 
-        search_domain = list()
+        analytic_line = request.env['account.analytic.line']
+        project_task = request.env['project.task']
+        task_id = int(post.get('task_id'))
+        task = project_task.browse([task_id])
 
-        projects = ProjectProject.search_read(
-            search_domain,
-            ['id', 'name'],
-        )
+        hours = float(post.get('hours', 0))
+        minutes = float(post.get('minutes', 0))
+        unit_amount = hours + minutes/60
 
-        return json.dumps(projects)
+        line_values = {
+            'date': fields.Date.today(),
+            'name': post.get('name', ''),
+            'user_id': request.env.user.id,
+            'task_id': task.id,
+            'project_id': task.project_id.id,
+            'unit_amount': unit_amount,
+        }
+
+        analytic_line.create(line_values)
+
+        return request.redirect("/my/timesheet")
 
     @http.route(
         ['/task/datalist'],
         type='json',
-        auth='public',
+        auth='user',
         website=True)
     def task_datalist(self, **post):
         search_domain = list()
 
         if post.get('project_id'):
-            search_domain.append(('project_id', '=', post.get('project_id')))
+            search_domain.append(
+                ('project_id', '=', int(post.get('project_id')))
+            )
 
-        tasks = request.env['project.task'].search_read(
+        tasks = request.env['project.task'].search(
             search_domain,
-            ['id', 'name'],
         )
 
-        return json.dumps(tasks)
+        tasks_list = []
+        for task in tasks:
+            task_name = '%s / %s' % (task.project_id.name, task.name)
+            tasks_list.append({'id': task.id, 'name': task_name})
+
+        return json.dumps(tasks_list)
