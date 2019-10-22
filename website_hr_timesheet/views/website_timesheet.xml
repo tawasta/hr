@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="website_hr_timesheet.timesheet" name="Timesheet">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container text-center mb64">
+                    <h1>HR timesheet</h1>
+
+                    <form id="timesheet_form" method="post" role="form"
+                          action="/my/timesheet/confirm">
+                        <input type="hidden" name="csrf_token"
+                               t-att-value="request.csrf_token()"/>
+                        <div class="mt16">
+                            <div class="row mt8">
+                                <div class="col-xs-10 col-xs-offset-1">
+                                    <!--<label for="project_id">Project</label>-->
+                                    <select name="project_id"
+                                            id="project_id"
+                                            class="form-control select2">
+                                        <option></option>
+                                        <t t-foreach="request.env['project.project'].sudo().search([])"
+                                           t-as="project">
+                                            <option t-att-value="project.id">
+                                                <span t-field="project.display_name"/>
+                                                <span t-if="project.partner_id"
+                                                      t-field="project.partner_id.name"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt8">
+                                <div class="col-xs-10 col-xs-offset-1">
+                                    <!--<label for="task_id">Task</label>-->
+                                    <select required="true" name="task_id"
+                                            id="task_id"
+                                            class="form-control select2-required">
+                                        <option></option>
+                                        <!-- JS will fill the options -->
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row mt8">
+                                <div class="col-md-2 col-md-offset-3">
+                                    <div id="timer"/>
+                                </div>
+                                <div class="col-md-2">
+                                    <input id="select-hours" type="number"
+                                           name="hours"
+                                           class="form-control col-xs-2"
+                                           title="Select hours"
+                                           placeholder="Select hours"/>
+                                </div>
+                                <div class="col-md-2">
+                                    <input id="select-minutes" type="number"
+                                           name="minutes"
+                                           class="form-control col-xs2"
+                                           title="Select minutes"
+                                           placeholder="Select minutes"/>
+                                </div>
+                            </div>
+                            <div class="row mt8">
+                                <div class="col-xs-10 col-xs-offset-1">
+                                    <input name="name"
+                                           class="form-control"
+                                           type="text"
+                                           title="Description"
+                                           placeholder="Description" />
+                                    </div>
+                            </div>
+
+                            <div class="row mt8">
+                                <div class="col-xs-12">
+                                    <button type="submit"
+                                           value="save"
+                                           id="timesheet-submit-button"
+                                           class="btn btn-primary col-xs-10 col-xs-offset-1">Save
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </form>
+
+                    <div id="latest-records">
+                        <h1>Latest records</h1>
+
+                        <div class="row mt8" style="border-bottom: 1px solid #aaa">
+                            <div class="col-xs-2">Date</div>
+                            <div class="col-xs-2">Project</div>
+                            <div class="col-xs-2">Task</div>
+                            <div class="col-xs-2">Desciption</div>
+                            <div class="col-xs-2">Duration</div>
+                        </div>
+
+                        <div t-foreach="analytic_lines" t-as="analytic_line" class="row mt8" style="border-bottom: 1px solid #aaa">
+                            <div class="col-xs-2"><span t-field="analytic_line.date" /></div>
+                            <div class="col-xs-2"><span t-field="analytic_line.project_id" /></div>
+                            <div class="col-xs-2"><span t-field="analytic_line.task_id" /></div>
+                            <div class="col-xs-2"><span t-field="analytic_line.name" /></div>
+                            <div class="col-xs-2"><span t-field="analytic_line.unit_amount" /></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </t>
+
+        <script type="text/javascript"
+                src="https://cdnjs.cloudflare.com/ajax/libs/timer.jquery/0.9.0/timer.jquery.js"></script>
+        <script type="text/javascript"
+                src="/website_hr_timesheet/static/src/js/hr_timesheet.js"/>
+    </template>
+</odoo>
