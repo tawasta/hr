@@ -1,0 +1,40 @@
+<openerp>
+    <data>
+        <record id="hr_employee_balance_form_view_inherit" model="ir.ui.view">
+            <field name="name">secto.hr.employee.balance.form.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_timesheet_employee_hour_balance.hr_employee_balance_form_view"/>
+            <field name="arch" type="xml">
+                <field name="hour_balance_start" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="hour_balance_start" position="after">
+                    <field name="hour_balance_end"/>
+                </field>
+                <field name="hour_balance" position="attributes">
+                    <attribute name="attrs">{'invisible': ['|', ('show_balance', '=', False), ('weekly_working_time', 'in', ['hour_worker', False])]}</attribute>
+                </field>
+
+
+            </field>
+        </record>
+
+        <record id="hr_employee_balance_tree_view_inherit" model="ir.ui.view">
+            <field name="name">secto.hr.employee.balance.tree.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr_timesheet_employee_hour_balance.view_employee_balance_tree"/>
+            <field name="arch" type="xml">
+                <field name="hour_balance_start" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="hour_balance_start" position="after">
+                    <field name="hour_balance_end"/>
+                </field>
+                <field name="hour_balance" position="attributes">
+                    <attribute name="attrs">{'invisible': [('weekly_working_time', 'in', ['hour_worker', False])]}</attribute>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

@@ -15,7 +15,7 @@
 {
     'name': 'Employee Hour Balance',
     'category': 'HR',
-    'version': '0.1',
+    'version': '8.0.1.0.0',
     'author': 'Vizucom Oy',
     'website': 'http://www.vizucom.com',
     'depends': ['hr_timesheet_sheet'],
@@ -27,5 +27,6 @@ Employee Hour Balance
     """,
     'data': [
         'views/hr_employee.xml',
+        'views/hr_employee_inherit.xml',
     ],
 }

@@ -82,3 +82,24 @@ class Employee(models.Model):
 
     # A helper field that is used to restrict that the user can only see their own hour balance in the employee form view
     show_balance = fields.Boolean('Show Hour Balance', compute=_get_show_balance)
+
+
+    @api.depends('timesheet_ids', 'timesheet_ids.timesheet_ids', 'timesheet_ids.state')
+    @api.one
+    def _get_hour_balance_end(self):
+        ''' Fetch the latest approved timesheet's end date '''
+        timesheet_model = self.env['hr_timesheet_sheet.sheet']
+        latest_timesheet = timesheet_model.search(args=[('user_id', '=', self.user_id.id),
+                                                        ('state', '=', 'done')], order='date_to DESC', limit=1)
+        self.hour_balance_end = latest_timesheet and latest_timesheet[0].date_to or False
+
+    @api.depends('weekly_working_time', 'hour_balance_start', 'timesheet_ids', 'timesheet_ids.timesheet_ids', 'time    sheet_ids.state')
+    @api.one
+    def _get_hour_balance(self):
+        ''' Simple override to add timesheet_ids.state to api.depends list '''
+        return super(Employee, self)._get_hour_balance()
+
+    hour_balance_end = fields.Date('Latest approved timesheet', compute=_get_hour_balance_end, store=True, help="Th    is is the ending date of the user's latest approved timesheet.")
+
+
+
