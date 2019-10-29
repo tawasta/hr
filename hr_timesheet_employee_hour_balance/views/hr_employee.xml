@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="hr_employee_balance_form_view" model="ir.ui.view">
+            <field name="name">hr.employee.balance.form.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <field name="work_phone" position="after">
+                    <group>
+                        <field name="show_balance" invisible="1"/>
+                        <field name="hour_balance" attrs="{'invisible': ['|', ('show_balance', '=', False), '|', ('hour_balance_start', '=', False), ('weekly_working_time', 'in', ['hour_worker', False])]}"/>
+                    </group>
+                </field>
+
+                <page name="hr_settings" position="inside">
+                    <group string="Hour Balances">
+                        <group>
+                            <field name="weekly_working_time"/>
+                            <field name="hour_balance_start"/>
+                        </group>
+                        <group/>
+                    </group>
+                </page>
+            </field>
+        </record>
+
+        <!-- Give HR managers a new menuitem with quick access to view all employees' hour balances -->
+        <record id="view_employee_balance_tree" model="ir.ui.view">
+            <field name="name">hr.employee.balance.tree</field>
+            <field name="model">hr.employee</field>
+            <field name="field_parent">child_ids</field>
+            <field eval="30" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Employee Hour Balances">
+                    <field name="name"/>
+                    <field name="weekly_working_time"/>
+                    <field name="hour_balance_start"/>
+                    <field name="hour_balance" attrs="{'invisible': ['|', ('hour_balance_start', '=', False), ('weekly_working_time', 'in', ['hour_worker', False])]}"/>
+                    </tree>
+            </field>
+        </record>
+
+        <record id="action_employee_balances" model="ir.actions.act_window">
+            <field name="name">Employees' Hour Balances</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" eval="view_employee_balance_tree"/>
+        </record>
+
+        <menuitem action="action_employee_balances" id="menuitem_employee_balances" sequence="10" parent="hr.menu_hr_main" groups="hr_timesheet.group_timesheet_manager"/>
+
+    </data>
+</odoo>
