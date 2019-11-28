@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <record model="ir.ui.menu"
+            id="hr_expense.menu_hr_expense_sheet_my_reports">
+        <field name="sequence" eval="0"/>
+    </record>
+</odoo>
