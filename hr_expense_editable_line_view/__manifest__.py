@@ -23,7 +23,7 @@
     'name': 'Editable Expenses Report Tree View',
     'summary': """Editable Expenses report tree-view and adds Quantity,
                 Unit Price and Product to that same view""",
-    'version': '10.0.1.0.0',
+    'version': '10.0.1.0.1s',
     'category': 'Human Resources',
     'website': 'https://tawasta.fi',
     'author': 'Oy Tawasta Technologies Ltd.',
@@ -34,6 +34,7 @@
         'hr_expense',
     ],
     'data': [
+        'data/ir_ui_menu.xml',
         'views/hr_expense_line.xml',
     ],
 }
