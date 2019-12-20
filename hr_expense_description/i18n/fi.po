@@ -1,0 +1,28 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#       * hr_expense_description
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-12-20 08:04+0000\n"
+"PO-Revision-Date: 2019-12-20 10:07+0200\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
+"Language: en\n"
+"X-Generator: Poedit 2.0.6\n"
+
+#. module: hr_expense_description
+#: model:ir.model,name:hr_expense_description.model_hr_expense_sheet
+msgid "Expense Report"
+msgstr "Kuluraportti"
+
+#. module: hr_expense_description
+#: model:ir.model.fields,field_description:hr_expense_description.field_hr_expense_sheet_expense_description
+msgid "Expense details"
+msgstr "Kulujen yksityiskohtia"
