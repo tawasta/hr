@@ -1,4 +1,4 @@
-from odoo import api, models, fields
+from odoo import  models, fields
 
 
 class HrTimesheetSheet(models.Model):
@@ -14,7 +14,6 @@ class HrTimesheetSheet(models.Model):
     total_hours = fields.Float(
         related='employee_id.calendar_id.total_hours',
         readonly=True,
-        default='_compute_total_remaining',
     )
 
     total_remaining = fields.Float(
@@ -24,5 +23,6 @@ class HrTimesheetSheet(models.Model):
 
     def _compute_total_remaining(self):
         for record in self:
-            record.total_remaining = \
-                record.total_timesheet - record.total_hours
+            if record.total_timesheet and record.total_hours:
+                record.total_remaining = \
+                    record.total_timesheet - record.total_hours
