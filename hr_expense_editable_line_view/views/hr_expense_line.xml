@@ -19,6 +19,7 @@
             <xpath expr="//field[@name='expense_line_ids']/tree/field[@name='name']" position="after">
                 <field name="quantity"/>
                 <field name="unit_amount"/>
+                <field name="account_id" invisible="1"/>
             </xpath>
             <xpath expr="//button[@name='approve_expense_sheets']" position="before">
                 <button name="submit_expenses" states="draft" string="Submit to Manager" type="object" groups="base.group_user" class="oe_highlight o_expense_submit"/>
