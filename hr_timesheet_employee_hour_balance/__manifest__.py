@@ -1,7 +1,7 @@
 ##############################################################################
 #
 #    Author: Oy Tawasta OS Technologies Ltd.
-#    Copyright 2018 Oy Tawasta OS Technologies Ltd. (http://www.tawasta.fi)
+#    Copyright 2018 Oy Tawasta OS Technologies Ltd. (https://tawasta.fi)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,18 +20,11 @@
 
 {
     'name': 'Employee Hour Balance',
-    'summary': """
-Employee Hour Balance
-=====================
- * Shows the hour balance for each employee from a certain date onwards, based
- on their weekly working hours
- * Adds two new groups, one for seeing own balance, and another for seeing all
- employees' balances
-    """,
-    'version': '12.0.1.0.0',
+    'summary': 'Show the hour balance for each employee',
+    'version': '12.0.1.1.0',
     'category': 'HR',
-    'website': 'http://www.tawasta.fi',
-    'author': 'Oy Tawasta Technologies Ltd.',
+    'website': 'https://github.com/Tawasta/hr/',
+    'author': 'Tawasta',
     'license': 'AGPL-3',
     'application': False,
     'installable': True,
@@ -41,5 +34,8 @@ Employee Hour Balance
     ],
     'data': [
         'views/hr_employee.xml',
+        'views/hr_timesheet_sheet.xml',
+        'views/resource_calendar.xml',
+        'views/resource_calendar_attendance.xml',
     ],
 }
