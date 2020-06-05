@@ -1,2 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-tag_editor_perm,tag.editor.perm,hr.model_hr_employee_category,hr_employee_tag_edit_permissions.group_tag_editor,1,1,1,1

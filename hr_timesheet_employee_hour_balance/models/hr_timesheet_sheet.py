@@ -1,4 +1,6 @@
-from odoo import  models, fields
+from odoo import api
+from odoo import fields
+from odoo import models
 
 
 class HrTimesheetSheet(models.Model):
@@ -7,8 +9,9 @@ class HrTimesheetSheet(models.Model):
 
     calendar_id = fields.Many2one(
         comodel_name='resource.calendar',
-        related='employee_id.resource_calendar_id',
-        readonly=True,
+        compute='_compute_calendar_id',
+        store=True,
+        readonly=False,
     )
 
     total_hours = fields.Float(
@@ -17,10 +20,19 @@ class HrTimesheetSheet(models.Model):
     )
 
     total_remaining = fields.Float(
-        string='Total remaining',
+        string='Remaining',
         compute='_compute_total_remaining',
+        store=True
     )
 
+    @api.onchange('employee_id')
+    @api.depends('employee_id')
+    def _compute_calendar_id(self):
+        for record in self:
+            if record.employee_id:
+                record.calendar_id = record.employee_id.resource_calendar_id
+
+    @api.depends('timesheet_ids.unit_amount', 'calendar_id')
     def _compute_total_remaining(self):
         for record in self:
             if record.total_time and record.total_hours:
