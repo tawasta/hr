@@ -19,23 +19,15 @@
 ##############################################################################
 
 {
-    'name': 'Employee Hour Balance',
-    'summary': 'Show the hour balance for each employee',
-    'version': '12.0.1.2.0',
-    'category': 'HR',
-    'website': 'https://github.com/Tawasta/hr/',
-    'author': 'Tawasta',
-    'license': 'AGPL-3',
-    'application': False,
-    'installable': True,
-    'depends': [
-        'hr_timesheet_sheet',
-        'resource',
-    ],
-    'data': [
-        'views/hr_employee.xml',
-        'views/hr_timesheet_sheet.xml',
-        'views/resource_calendar.xml',
-        'views/resource_calendar_attendance.xml',
-    ],
+    "name": "Employee Hour Balance",
+    "summary": "Show the hour balance for each employee",
+    "version": "12.0.1.2.0",
+    "category": "HR",
+    "website": "https://github.com/Tawasta/hr/",
+    "author": "Tawasta",
+    "license": "AGPL-3",
+    "application": False,
+    "installable": True,
+    "depends": ["hr_timesheet_sheet", "resource"],
+    "data": ["views/hr_timesheet_sheet.xml", "views/resource_calendar.xml"],
 }
