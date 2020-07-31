@@ -4,9 +4,9 @@ import datetime
 
 class Employee(models.Model):
 
-    _inherit = 'hr.employee'
+    _inherit = "hr.employee"
 
-    # TODO: refactor this to work with resource.calendar
+    # TODO: REMOVE THIS IN THE NEXT VERSION
 
     def get_hours_worked(self, today):
         """
@@ -17,12 +17,15 @@ class Employee(models.Model):
         that takes into account e.g. public holidays.
         """
 
-        today_str = datetime.datetime.strftime(today, '%Y-%m-%d')
+        today_str = datetime.datetime.strftime(today, "%Y-%m-%d")
 
-        timesheet_line_ids = self.env['account.analytic.line'].\
-            search(args=[('user_id', '=', self.id),
-                         ('date', '>=', self.hour_balance_start),
-                         ('date', '<=', today_str)])
+        timesheet_line_ids = self.env["account.analytic.line"].search(
+            args=[
+                ("user_id", "=", self.id),
+                ("date", ">=", self.hour_balance_start),
+                ("date", "<=", today_str),
+            ]
+        )
 
         hours_worked = sum(
             timesheet_line.unit_amount for timesheet_line in timesheet_line_ids
@@ -52,8 +55,12 @@ class Employee(models.Model):
 
         return hours_needed
 
-    @api.depends('weekly_working_time', 'hour_balance_start', 'timesheet_ids',
-                 'timesheet_ids.timesheet_ids')
+    @api.depends(
+        "weekly_working_time",
+        "hour_balance_start",
+        "timesheet_ids",
+        "timesheet_ids.timesheet_ids",
+    )
     def _compute_hour_balance(self):
         """
         Calculates how many hours the employee has logged from
@@ -66,11 +73,14 @@ class Employee(models.Model):
         not have a fixed weekly working time.
         """
         for record in self:
-            if record.weekly_working_time != 'hour_worker' and \
-                    record.hour_balance_start:
+            if (
+                record.weekly_working_time != "hour_worker"
+                and record.hour_balance_start
+            ):
 
-                date_to_check = datetime.datetime.strptime(str(
-                    record.hour_balance_start), "%Y-%m-%d").date()
+                date_to_check = datetime.datetime.strptime(
+                    str(record.hour_balance_start), "%Y-%m-%d"
+                ).date()
                 today = datetime.datetime.now().date()
                 daily_hours = float(record.weekly_working_time) / 5
 
@@ -85,38 +95,36 @@ class Employee(models.Model):
 
     def _compute_show_balance(self):
         for record in self:
-            record.show_balance = \
-                record.user_id.id == record.env.uid and True or False
+            record.show_balance = record.user_id.id == record.env.uid and True or False
 
     weekly_working_time = fields.Selection(
-        [('30', '30'), ('37.5', '37,5'),
-         ('hour_worker', 'No fixed working time')], 'Weekly working time (h)',
-        default='hour_worker'
+        [("30", "30"), ("37.5", "37,5"), ("hour_worker", "No fixed working time")],
+        "Weekly working time (h)",
+        default="hour_worker",
     )
 
     hour_balance_start = fields.Date(
-        string='Hour Balance Start Date',
-        help=('Date from which onwards the hour balance is calculated. Set '
-              'this as the date when the user started filling out timesheets.')
+        string="Hour Balance Start Date",
+        help=(
+            "Date from which onwards the hour balance is calculated. Set "
+            "this as the date when the user started filling out timesheets."
+        ),
     )
 
     hour_balance = fields.Float(
-        string='Hour Balance',
-        compute=_compute_hour_balance,
-        store=True
+        string="Hour Balance", compute=_compute_hour_balance, store=True
     )
 
     # Fill the existing m2o relation between employees and timesheets so that
     # it can be used in api.depends
     timesheet_ids = fields.One2many(
-        comodel_name='hr_timesheet.sheet',
-        inverse_name='employee_id',
-        string='Timesheets'
+        comodel_name="hr_timesheet.sheet",
+        inverse_name="employee_id",
+        string="Timesheets",
     )
 
     # A helper field that is used to restrict that the user can only see their
     # own hour balance in the employee form view
     show_balance = fields.Boolean(
-        string='Show Hour Balance',
-        compute=_compute_show_balance
+        string="Show Hour Balance", compute=_compute_show_balance
     )

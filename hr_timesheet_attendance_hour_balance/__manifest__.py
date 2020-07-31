@@ -1,7 +1,7 @@
 ##############################################################################
 #
 #    Author: Oy Tawasta OS Technologies Ltd.
-#    Copyright 2018 Oy Tawasta OS Technologies Ltd. (https://tawasta.fi)
+#    Copyright 2020 Oy Tawasta OS Technologies Ltd. (https://tawasta.fi)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,15 +19,15 @@
 ##############################################################################
 
 {
-    "name": "Employee Hour Balance",
-    "summary": "Show the hour balance for each employee",
-    "version": "12.0.1.2.0",
+    "name": "Employee Attendance Hour Balance",
+    "summary": "Show the attendance hour balance for each employee",
+    "version": "12.0.1.0.0",
     "category": "HR",
     "website": "https://github.com/Tawasta/hr/",
     "author": "Tawasta",
     "license": "AGPL-3",
     "application": False,
     "installable": True,
-    "depends": ["hr_timesheet_sheet", "resource"],
-    "data": ["views/hr_timesheet_sheet.xml", "views/resource_calendar.xml"],
+    "depends": ["hr_timesheet_sheet_attendance", "hr_timesheet_employee_hour_balance"],
+    "data": ["views/hr_timesheet_sheet.xml"],
 }
