@@ -29,5 +29,9 @@
     "application": False,
     "installable": True,
     "depends": ["hr_timesheet_sheet", "resource"],
-    "data": ["views/hr_timesheet_sheet.xml", "views/resource_calendar.xml"],
+    "data": [
+        "views/hr_timesheet_sheet.xml",
+        "views/resource_calendar.xml",
+        "views/resource_calendar_attendance.xml",
+    ],
 }
