@@ -8,9 +8,7 @@ class HrTimesheetSheet(models.Model):
     _inherit = "hr_timesheet.sheet"
 
     total_attendance_balance = fields.Float(
-        string="Attendance balance",
-        compute="_compute_total_attendance_balance",
-        store=True,
+        string="Attendance balance", compute="_compute_total_attendance_balance",
     )
 
     @api.depends("timesheet_ids.unit_amount", "calendar_id")
