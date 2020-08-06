@@ -11,6 +11,9 @@
                 <attribute name="edit">false</attribute>
                 <attribute name="create">false</attribute>
             </form>
+            <field name="employee_id" position="attributes">
+                <attribute name="options">{'no_open': 1}</attribute>
+            </field>
         </field>
     </record>
 </odoo>
