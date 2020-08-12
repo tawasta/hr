@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <record id="hr_timesheet_sheet_tree" model="ir.ui.view">
+        <field name="name">hr.timesheet.sheet.tree.color</field>
+        <field name="model">hr_timesheet.sheet</field>
+        <field name="inherit_id" ref="hr_timesheet_attendance_hour_balance.hr_timesheet_sheet_tree" />
+        <field name="arch" type="xml">
+            <field name="total_attendance_balance" position="attributes">
+                <attribute name="options">{"fg_color": "red: total_attendance_balance&lt;0;"}</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>
