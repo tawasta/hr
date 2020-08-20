@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<odoo>
+    <record id="my_attendances" model="res.groups">
+        <field name="name">My attendances</field>
+        <field name="implied_ids" eval="[(4, ref('hr_attendance.group_hr_attendance'))]"/>
+        <field name="category_id" ref="base.module_category_hr_attendance"/>
+    </record>
+</odoo>
