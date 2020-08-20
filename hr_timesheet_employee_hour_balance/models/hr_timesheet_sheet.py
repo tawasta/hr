@@ -14,10 +14,14 @@ class HrTimesheetSheet(models.Model):
         readonly=False,
     )
 
-    total_hours = fields.Float(related="calendar_id.total_hours", readonly=True,)
+    total_hours = fields.Float(related="calendar_id.total_hours", readonly=True)
 
     total_remaining = fields.Float(
         string="Remaining", compute="_compute_total_remaining", store=True
+    )
+
+    cumulative_remaining = fields.Float(
+        string="Cumulative Remaining", compute="_compute_cumulative_remaining",
     )
 
     @api.onchange("employee_id")
@@ -29,6 +33,17 @@ class HrTimesheetSheet(models.Model):
 
     @api.depends("timesheet_ids.unit_amount", "calendar_id")
     def _compute_total_remaining(self):
+        print("RECOMPUTING!")
         for record in self:
-            if record.total_time and record.total_hours:
+            if record.calendar_id:
                 record.total_remaining = record.total_time - record.total_hours
+
+    def _compute_cumulative_remaining(self):
+        for record in self:
+            timesheets = self.search(
+                [
+                    ("employee_id", "=", record.employee_id.id),
+                    ("date_end", "<=", record.date_end),
+                ]
+            )
+            record.cumulative_remaining = sum(timesheets.mapped("total_remaining"))
