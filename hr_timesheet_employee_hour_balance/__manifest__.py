@@ -21,7 +21,7 @@
 {
     "name": "Employee Hour Balance",
     "summary": "Show the hour balance for each employee",
-    "version": "12.0.1.5.0",
+    "version": "12.0.1.5.1",
     "category": "HR",
     "website": "https://github.com/Tawasta/hr/",
     "author": "Tawasta",
