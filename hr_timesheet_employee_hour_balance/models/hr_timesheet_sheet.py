@@ -16,12 +16,18 @@ class HrTimesheetSheet(models.Model):
 
     total_hours = fields.Float(related="calendar_id.total_hours", readonly=True)
 
-    total_remaining = fields.Float(
-        string="Remaining", compute="_compute_total_remaining", store=True
+    total_balance = fields.Float(
+        string="Balance",
+        compute="_compute_total_balance",
+        store=True,
+        help="Current timesheet hour balance",
     )
 
-    cumulative_remaining = fields.Float(
-        string="Cumulative Remaining", compute="_compute_cumulative_remaining",
+    cumulative_balance = fields.Float(
+        string="Cumulative Balance",
+        compute="_compute_cumulative_balance",
+        help="All timesheets hour balance. "
+        "Counts confirmed timesheets and current timesheet",
     )
 
     @api.onchange("employee_id")
@@ -32,18 +38,26 @@ class HrTimesheetSheet(models.Model):
                 record.calendar_id = record.employee_id.resource_calendar_id
 
     @api.depends("timesheet_ids.unit_amount", "calendar_id")
-    def _compute_total_remaining(self):
+    def _compute_total_balance(self):
         for record in self:
             if record.calendar_id:
-                record.total_remaining = record.total_time - record.total_hours
+                record.total_balance = record.total_time - record.total_hours
 
-    def _compute_cumulative_remaining(self):
+    def _compute_cumulative_balance(self):
         for record in self:
-            timesheets = self.search(
-                [
-                    ("employee_id", "=", record.employee_id.id),
-                    ("date_end", "<=", record.date_end),
-                    ("date_end", "<=", record.date_end),
-                ]
-            )
-            record.cumulative_remaining = sum(timesheets.mapped("total_remaining"))
+            domain = [
+                ("employee_id", "=", record.employee_id.id),
+                ("date_end", "<=", record.date_end),
+                "|",
+                ("state", "=", "done"),
+                # Show current draft timesheet balance
+                ("id", "=", record.id),
+            ]
+
+            if record.employee_id.cumulative_balance_start:
+                domain.append(
+                    ("date_start", ">=", record.employee_id.cumulative_balance_start)
+                )
+
+            timesheets = self.search(domain)
+            record.cumulative_balance = sum(timesheets.mapped("total_balance"))
