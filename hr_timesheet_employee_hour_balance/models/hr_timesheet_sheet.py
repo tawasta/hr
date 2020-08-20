@@ -19,7 +19,6 @@ class HrTimesheetSheet(models.Model):
     total_balance = fields.Float(
         string="Balance",
         compute="_compute_total_balance",
-        store=True,
         help="Current timesheet hour balance",
     )
 
