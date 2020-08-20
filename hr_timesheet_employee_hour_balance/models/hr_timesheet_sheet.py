@@ -33,7 +33,6 @@ class HrTimesheetSheet(models.Model):
 
     @api.depends("timesheet_ids.unit_amount", "calendar_id")
     def _compute_total_remaining(self):
-        print("RECOMPUTING!")
         for record in self:
             if record.calendar_id:
                 record.total_remaining = record.total_time - record.total_hours
@@ -43,6 +42,7 @@ class HrTimesheetSheet(models.Model):
             timesheets = self.search(
                 [
                     ("employee_id", "=", record.employee_id.id),
+                    ("date_end", "<=", record.date_end),
                     ("date_end", "<=", record.date_end),
                 ]
             )
