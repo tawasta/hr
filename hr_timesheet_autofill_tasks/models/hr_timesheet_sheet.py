@@ -6,35 +6,32 @@ class HrTimesheetSheet(models.Model):
 
     _inherit = 'hr_timesheet_sheet.sheet'
 
-    @api.model
-    def create(self, values):
-        domain = [
-            ('company_id', '=', values.get('company_id')),
-            ('employee_id', '=', values.get('employee_id')),
-        ]
-        previous_timesheet = self.search(domain, limit=1)
 
-        res = super(HrTimesheetSheet, self).create(values)
-
-        if previous_timesheet and not res.timesheet_ids:
+    def action_autofill_tasks(self):
+        for record in self:
+            timesheet_domain = [
+                ('company_id', '=', record.company_id.id),
+                ('employee_id', '=', record.employee_id.id),
+                ('id', '!=', record.id)
+            ]
+            previous_timesheet = self.search(timesheet_domain, limit=1)
             aal = self.env['account.analytic.line']
-            tasks = []
-            # Create empty lines for the new timesheet
-            for line in previous_timesheet.timesheet_ids:
 
-                if line.task_id in tasks:
-                    # Only create one empty line for each task
-                    continue
-                tasks.append(line.task_id)
+            if previous_timesheet:
+                # Copy tasks from previous timesheets
+                for line in previous_timesheet.timesheet_ids:
+                    if line.task_id in record.timesheet_ids.mapped('task_id'):
+                        # Don't create existing tasks
+                        continue
 
-                new_line = {
-                    'date': res.date_from,
-                    'user_id': res.user_id.id,
-                    'name': '/',
-                    'project_id': line.project_id.id,
-                    'task_id': line.task_id.id,
-                }
+                    # Create empty lines for the new timesheet
+                    new_line = {
+                        'date': record.date_from,
+                        'user_id': record.user_id.id,
+                        'name': '/',
+                        'project_id': line.project_id.id,
+                        'task_id': line.task_id.id,
+                    }
 
-                aal.create(new_line)
+                    aal.create(new_line)
 
-        return res

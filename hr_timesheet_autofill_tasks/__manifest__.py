@@ -22,7 +22,7 @@
 {
     'name': 'Timesheet - Auto-fill projects and tasks from previous timesheet',
     'summary': 'Timesheet - Get projects and tasks from previous timesheet',
-    'version': '10.0.1.0.0',
+    'version': '10.0.1.1.0',
     'category': 'Human Resources',
     'website': 'https://tawasta.fi',
     'author': 'Tawasta',
@@ -37,6 +37,7 @@
         'hr_timesheet_sheet',
     ],
     'data': [
+		'views/hr_timesheet.xml',
     ],
     'demo': [
     ],
