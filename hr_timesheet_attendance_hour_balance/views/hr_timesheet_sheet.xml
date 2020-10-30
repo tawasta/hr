@@ -6,14 +6,14 @@
         <field name="inherit_id" ref="hr_timesheet_employee_hour_balance.hr_timesheet_sheet_form"/>
         <field name="arch" type="xml">
             <field name="cumulative_balance" position="after">
-                <field name="total_attendance_balance" widget="float_time" />
+                <field name="total_attendance_balance" widget="float_time" options="{'fg_color': 'red: total_attendance_balance&lt;0;'}" />
                 <field name="cumulative_attendance_balance" widget="float_time" />
             </field>
 
             <field name="cumulative_balance" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>
-            <field name="total_balance" position="attributes">
+            <field name="total_hours" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>
         </field>
@@ -33,7 +33,7 @@
             <field name="cumulative_balance" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>
-            <field name="total_balance" position="attributes">
+            <field name="total_hours" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>
         </field>
