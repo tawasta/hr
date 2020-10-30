@@ -36,6 +36,15 @@ class HrTimesheetSheet(models.Model):
                 # ("id", "=", record.id),
             ]
 
+            if record.employee_id.cumulative_balance_start:
+                if record.date_start < record.employee_id.cumulative_balance_start:
+                    # No cumulative balance if balance start date is after this timesheet
+                    record.cumulative_balance = 0
+
+                domain.append(
+                    ("date_start", ">=", record.employee_id.cumulative_balance_start)
+                )
+
             timesheets = self.search(domain)
             record.cumulative_attendance_balance = sum(
                 timesheets.mapped("total_attendance_balance")
