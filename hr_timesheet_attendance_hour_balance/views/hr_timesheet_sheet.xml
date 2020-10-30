@@ -3,10 +3,18 @@
     <record id="hr_timesheet_sheet_form" model="ir.ui.view">
         <field name="name">hr.timesheet.sheet.form.attendance</field>
         <field name="model">hr_timesheet.sheet</field>
-        <field name="inherit_id" ref="hr_timesheet_sheet_attendance.hr_timesheet_sheet_form"/>
+        <field name="inherit_id" ref="hr_timesheet_employee_hour_balance.hr_timesheet_sheet_form"/>
         <field name="arch" type="xml">
-            <field name="total_attendance" position="after">
+            <field name="cumulative_balance" position="after">
                 <field name="total_attendance_balance" widget="float_time" />
+                <field name="cumulative_attendance_balance" widget="float_time" />
+            </field>
+
+            <field name="cumulative_balance" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="total_balance" position="attributes">
+                <attribute name="invisible">1</attribute>
             </field>
         </field>
     </record>
@@ -14,11 +22,19 @@
     <record id="hr_timesheet_sheet_tree" model="ir.ui.view">
         <field name="name">hr.timesheet.sheet.tree.attendance</field>
         <field name="model">hr_timesheet.sheet</field>
-        <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_tree"/>
+        <field name="inherit_id" ref="hr_timesheet_employee_hour_balance.hr_timesheet_sheet_tree"/>
         <field name="arch" type="xml">
-            <field name="date_end" position="after">
+            <field name="cumulative_balance" position="after">
                 <field name="total_attendance" widget="float_time" />
                 <field name="total_attendance_balance" widget="float_time" />
+                <field name="cumulative_attendance_balance" widget="float_time" />
+            </field>
+
+            <field name="cumulative_balance" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="total_balance" position="attributes">
+                <attribute name="invisible">1</attribute>
             </field>
         </field>
     </record>
