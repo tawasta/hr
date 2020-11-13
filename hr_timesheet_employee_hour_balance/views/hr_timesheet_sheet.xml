@@ -6,9 +6,14 @@
         <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_form"/>
         <field name="arch" type="xml">
             <field name="department_id" position="after">
+                <field name="calendar_id" groups="hr.group_hr_manager" />
+            </field>
+
+            <field name="department_id" position="after">
                 <field name="total_hours" widget="float_time"/>
                 <field name="total_timesheet" widget="float_time"/>
-                <field name="total_remaining" widget="float_time"/>
+                <field name="total_balance" widget="float_time"/>
+                <field name="cumulative_balance" widget="float_time"/>
             </field>
         </field>
     </record>
@@ -19,9 +24,10 @@
         <field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_tree_simplified"/>
         <field name="arch" type="xml">
             <field name="date_to" position="after">
-                <field name="calendar_id" />
-                <field name="total_hours" widget="float_time"/>
-                <field name="total_remaining" widget="float_time" sum="Total remaining"/>
+                <field name="calendar_id" groups="hr.group_hr_manager" />
+                <field name="total_hours" widget="float_time" string="Target" />
+                <field name="total_balance" widget="float_time" />
+                <field name="cumulative_balance" widget="float_time" />
             </field>
         </field>
     </record>

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 10.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-21 08:44+0000\n"
-"PO-Revision-Date: 2019-12-21 08:44+0000\n"
+"POT-Creation-Date: 2020-11-13 12:04+0000\n"
+"PO-Revision-Date: 2020-11-13 12:04+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,24 +16,45 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: hr_timesheet_employee_hour_balance
-#: selection:hr.employee,weekly_working_time:0
-msgid "30"
-msgstr "30"
+#: model:ir.model.fields,help:hr_timesheet_employee_hour_balance.field_hr_employee_cumulative_balance
+msgid "All timesheet hour balances combined. Counts only confirmed timesheets"
+msgstr "Kokonaistuntikertymä. Laskee vain hyväksytyt tuntikortit"
 
 #. module: hr_timesheet_employee_hour_balance
-#: selection:hr.employee,weekly_working_time:0
-msgid "37,5"
-msgstr "37,5"
+#: model:ir.model.fields,help:hr_timesheet_employee_hour_balance.field_hr_timesheet_sheet_sheet_cumulative_balance
+msgid "All timesheets hour balance. Counts confirmed timesheets and current timesheet"
+msgstr "Kokonaistuntikertymä. Laskee vain hyväksytyt tuntikortit ja tämän tuntikortin"
 
 #. module: hr_timesheet_employee_hour_balance
-#: model:ir.model.fields,help:hr_timesheet_employee_hour_balance.field_hr_employee_hour_balance_start
+#: model:ir.model.fields,field_description:hr_timesheet_employee_hour_balance.field_hr_timesheet_sheet_sheet_total_balance
+msgid "Balance"
+msgstr "Saldo"
+
+#. module: hr_timesheet_employee_hour_balance
+#: model:ir.model.fields,field_description:hr_timesheet_employee_hour_balance.field_hr_timesheet_sheet_sheet_calendar_id
+msgid "Calendar id"
+msgstr "Kalenteri"
+
+#. module: hr_timesheet_employee_hour_balance
+#: model:ir.model.fields,field_description:hr_timesheet_employee_hour_balance.field_hr_employee_cumulative_balance
+#: model:ir.model.fields,field_description:hr_timesheet_employee_hour_balance.field_hr_timesheet_sheet_sheet_cumulative_balance
+msgid "Cumulative Balance"
+msgstr "Kumulatiivinen kertymä"
+
+#. module: hr_timesheet_employee_hour_balance
+#: model:ir.model.fields,field_description:hr_timesheet_employee_hour_balance.field_hr_employee_cumulative_balance_start
+msgid "Cumulative Balance Start Date"
+msgstr "Kumulatiivisen kertymän alkupäivä"
+
+#. module: hr_timesheet_employee_hour_balance
+#: model:ir.model.fields,help:hr_timesheet_employee_hour_balance.field_hr_timesheet_sheet_sheet_total_balance
+msgid "Current timesheet hour balance"
+msgstr "Nykyisen tuntikortin kertymä"
+
+#. module: hr_timesheet_employee_hour_balance
+#: model:ir.model.fields,help:hr_timesheet_employee_hour_balance.field_hr_employee_cumulative_balance_start
 msgid "Date from which onwards the hour balance is calculated. Set this as the date when the user started filling out timesheets."
 msgstr "Päivä josta tuntikertymä lasketaan. Laita tähän se päivä jolloin käyttäjä alkoi täyttää tuntikortteja."
-
-#. module: hr_timesheet_employee_hour_balance
-#: model:ir.model.fields,help:hr_timesheet_employee_hour_balance.field_hr_timesheet_sheet_sheet_calendar_id
-msgid "Define the schedule of resource"
-msgstr "Määrittele resurssin aikataulutus"
 
 #. module: hr_timesheet_employee_hour_balance
 #: model:ir.model,name:hr_timesheet_employee_hour_balance.model_hr_employee
@@ -41,55 +62,19 @@ msgid "Employee"
 msgstr "Työntekijä"
 
 #. module: hr_timesheet_employee_hour_balance
-#: model:ir.ui.view,arch_db:hr_timesheet_employee_hour_balance.view_employee_balance_tree
-msgid "Employee Hour Balances"
-msgstr "Työntekijän tuntikertymä"
-
-#. module: hr_timesheet_employee_hour_balance
-#: model:ir.actions.act_window,name:hr_timesheet_employee_hour_balance.action_employee_balances
-#: model:ir.ui.menu,name:hr_timesheet_employee_hour_balance.menuitem_employee_balances
-msgid "Employees' Hour Balances"
-msgstr "Työntekijän tuntikertymä"
-
-#. module: hr_timesheet_employee_hour_balance
-#: model:ir.model.fields,field_description:hr_timesheet_employee_hour_balance.field_hr_employee_hour_balance
-msgid "Hour Balance"
-msgstr "Tuntikertymä"
-
-#. module: hr_timesheet_employee_hour_balance
-#: model:ir.model.fields,field_description:hr_timesheet_employee_hour_balance.field_hr_employee_hour_balance_start
-msgid "Hour Balance Start Date"
-msgstr "Tuntikertymän alkupäivä"
-
-#. module: hr_timesheet_employee_hour_balance
-#: model:ir.ui.view,arch_db:hr_timesheet_employee_hour_balance.hr_employee_balance_form_view
-msgid "Hour Balances"
-msgstr "Tuntikertymät"
-
-#. module: hr_timesheet_employee_hour_balance
-#: selection:hr.employee,weekly_working_time:0
-msgid "No fixed working time"
-msgstr "Ei kiinteää työaikaa"
-
-#. module: hr_timesheet_employee_hour_balance
 #: model:ir.model,name:hr_timesheet_employee_hour_balance.model_resource_calendar
 msgid "Resource Calendar"
 msgstr "Resurssikalenteri"
 
 #. module: hr_timesheet_employee_hour_balance
-#: model:ir.model.fields,field_description:hr_timesheet_employee_hour_balance.field_hr_employee_show_balance
-msgid "Show Hour Balance"
-msgstr "Näytä tuntisaldo"
+#: model:ir.ui.view,arch_db:hr_timesheet_employee_hour_balance.hr_timesheet_sheet_tree_simplified
+msgid "Target"
+msgstr "Tavoite"
 
 #. module: hr_timesheet_employee_hour_balance
 #: model:ir.model,name:hr_timesheet_employee_hour_balance.model_hr_timesheet_sheet_sheet
 msgid "Timesheet"
 msgstr "Tuntikortti"
-
-#. module: hr_timesheet_employee_hour_balance
-#: model:ir.model.fields,field_description:hr_timesheet_employee_hour_balance.field_hr_employee_timesheet_ids
-msgid "Timesheets"
-msgstr "Tuntikortit"
 
 #. module: hr_timesheet_employee_hour_balance
 #: model:ir.model.fields,field_description:hr_timesheet_employee_hour_balance.field_hr_timesheet_sheet_sheet_total_hours
@@ -104,24 +89,9 @@ msgid "Total hours within the day"
 msgstr "Päivän aikana tehtävät tunnit"
 
 #. module: hr_timesheet_employee_hour_balance
-#: model:ir.model.fields,field_description:hr_timesheet_employee_hour_balance.field_hr_timesheet_sheet_sheet_total_remaining
-msgid "Total remaining"
-msgstr "Yhteensä jäljellä"
-
-#. module: hr_timesheet_employee_hour_balance
-#: model:ir.model.fields,field_description:hr_timesheet_employee_hour_balance.field_hr_employee_weekly_working_time
-msgid "Weekly working time (h)"
-msgstr "Viikottainen työaika (t)"
-
-#. module: hr_timesheet_employee_hour_balance
 #: model:ir.model,name:hr_timesheet_employee_hour_balance.model_resource_calendar_attendance
 msgid "Work Detail"
 msgstr "Työn yksityiskohdat"
-
-#. module: hr_timesheet_employee_hour_balance
-#: model:ir.model.fields,field_description:hr_timesheet_employee_hour_balance.field_hr_timesheet_sheet_sheet_calendar_id
-msgid "Working Time"
-msgstr "Työaika"
 
 #. module: hr_timesheet_employee_hour_balance
 #: model:ir.model.fields,help:hr_timesheet_employee_hour_balance.field_hr_timesheet_sheet_sheet_total_hours

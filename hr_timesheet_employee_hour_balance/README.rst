@@ -6,8 +6,7 @@
 Employee Hour Balance
 =====================
 
-- Shows the hour balance for each employee from a certain date onwards, based on their weekly working hours
-- Adds two new groups, one for seeing own balance, and another for seeing all employees' balances
+- Shows the timesheet hour balance for each employee
 
 Configuration
 =============
