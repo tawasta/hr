@@ -34,19 +34,19 @@ class HrTimesheetSheet(models.Model):
     def _compute_calendar_id(self):
         for record in self:
             if record.employee_id:
-                record.calendar_id = record.employee_id.resource_calendar_id
+                record.calendar_id = record.employee_id.calendar_id
 
     @api.depends("timesheet_ids.unit_amount", "calendar_id")
     def _compute_total_balance(self):
         for record in self:
             if record.calendar_id:
-                record.total_balance = record.total_time - record.total_hours
+                record.total_balance = record.total_timesheet - record.total_hours
 
     def _compute_cumulative_balance(self):
         for record in self:
             domain = [
                 ("employee_id", "=", record.employee_id.id),
-                ("date_end", "<=", record.date_end),
+                ("date_to", "<=", record.date_to),
                 "|",
                 ("state", "=", "done"),
                 # Show current draft timesheet balance
@@ -54,12 +54,12 @@ class HrTimesheetSheet(models.Model):
             ]
 
             if record.employee_id.cumulative_balance_start:
-                if record.date_start < record.employee_id.cumulative_balance_start:
+                if record.date_from < record.employee_id.cumulative_balance_start:
                     # No cumulative balance if balance start date is after this timesheet
                     record.cumulative_balance = 0
 
                 domain.append(
-                    ("date_start", ">=", record.employee_id.cumulative_balance_start)
+                    ("date_from", ">=", record.employee_id.cumulative_balance_start)
                 )
 
             timesheets = self.search(domain)
