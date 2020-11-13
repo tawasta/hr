@@ -30,5 +30,5 @@ class Employee(models.Model):
             if record.cumulative_balance_start:
                 domain.append(("date_start", ">=", record.cumulative_balance_start))
 
-            timesheets = self.env["hr_timesheet.sheet"].search(domain)
+            timesheets = self.env["hr_timesheet_sheet.sheet"].search(domain)
             record.cumulative_balance = sum(timesheets.mapped("total_balance"))
