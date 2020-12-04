@@ -21,7 +21,7 @@
 {
     "name": "HR Employee tasks",
     "summary": "Show tasks related to the employee",
-    "version": "12.0.1.0.0",
+    "version": "12.0.1.0.1",
     "category": "HR",
     "website": "https://github.com/Tawasta/hr/",
     "author": "Tawasta",

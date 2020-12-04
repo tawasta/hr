@@ -7,7 +7,10 @@ class User(models.Model):
     _inherit = "res.users"
 
     user_task_ids = fields.One2many(
-        string="User tasks", comodel_name="project.task", inverse_name="user_id"
+        string="User tasks",
+        comodel_name="project.task",
+        inverse_name="user_id",
+        domain=[("stage_id.folded", "!=", True)],
     )
     user_task_count = fields.Integer(
         string="User task count", compute="_compute_user_task_count"
