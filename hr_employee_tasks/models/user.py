@@ -10,7 +10,7 @@ class User(models.Model):
         string="User tasks",
         comodel_name="project.task",
         inverse_name="user_id",
-        domain=[("stage_id.folded", "!=", True)],
+        domain=[("stage_id.fold", "!=", True)],
     )
     user_task_count = fields.Integer(
         string="User task count", compute="_compute_user_task_count"
