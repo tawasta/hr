@@ -51,11 +51,6 @@ class HrTimesheetSheet(models.Model):
             start = datetime.combine(record.date_start, datetime.min.time())
             end = datetime.combine(record.date_end, datetime.max.time())
 
-            print(
-                record.employee_id.get_work_days_data(
-                    start, end, True, record.calendar_id
-                )
-            )
             record.total_hours = record.employee_id.get_work_days_data(
                 start, end, True, record.calendar_id
             )["hours"]
