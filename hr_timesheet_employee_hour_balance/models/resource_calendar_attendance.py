@@ -5,7 +5,9 @@ class ResourceCalendarAttendance(models.Model):
 
     _inherit = "resource.calendar.attendance"
 
-    total_hours = fields.Float(string="Total hours", help="Total hours within the day")
+    total_hours = fields.Float(
+        string="Total hours", help="Total hours within the day", readonly=True
+    )
 
     @api.onchange("hour_from", "hour_to")
     def _compute_total_hours(self):
