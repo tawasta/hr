@@ -28,6 +28,6 @@
     "license": "AGPL-3",
     "application": False,
     "installable": True,
-    "depends": ["hr_timesheet_sheet_attendance", "hr_timesheet_employee_hour_balance"],
+    "depends": ["hr_timesheet_sheet_attendance", "hr_timesheet_employee_hour_balance",],
     "data": ["views/hr_timesheet_sheet.xml"],
 }
