@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_employee_form" model="ir.ui.view">
+        <field name="name">hr.employee.form.tasks.timesheet</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+
+            <field name="notes" position="before">
+                <group>
+                    <group name="workload" string="Current workload">
+                        <field name="employee_hours_current_week" widget="float_time" />
+                        <field name="user_task_planned_hours_current_week" widget="float_time" string="Planned"/>
+                        <field name="user_task_effective_hours_current_week" widget="float_time" string="Effective"/>
+                        <field name="user_task_remaining_hours_current_week" widget="float_time" string="Remaining"/>
+                        <field name="employee_utilization_current_week" string="Utilization" widget="progressbar" />
+
+                        <separator />
+
+                        <field name="employee_hours_30_days" widget="float_time" />
+                        <field name="user_task_planned_hours_30_days" widget="float_time" string="Planned"/>
+                        <field name="user_task_effective_hours_30_days" widget="float_time" string="Effective"/>
+                        <field name="user_task_remaining_hours_30_days" widget="float_time" string="Remaining"/>
+                        <field name="employee_utilization_30_days" string="Utilization" widget="progressbar" />
+
+                    </group>
+                    <group name="total_workload" string="Total workload">
+                        <field name="user_task_planned_hours" widget="float_time" string="Planned" />
+                        <field name="user_task_effective_hours" widget="float_time" string="Effective" />
+                        <field name="user_task_remaining_hours" widget="float_time" string="Remaining" />
+                    </group>
+                </group>
+            </field>
+
+        </field>
+    </record>
+
+    <record id="view_employee_tree" model="ir.ui.view">
+        <field name="name">hr.employee.tree.tasks.timesheet</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <field name="parent_id" position="after">
+                <field name="employee_utilization_current_week" string="Utilization" widget="progressbar" />
+            </field>
+        </field>
+    </record>
+
+</odoo>
+
