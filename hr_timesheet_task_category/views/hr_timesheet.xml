@@ -20,7 +20,7 @@
                 <field name="task_type_id" />
             </field>
 
-            <filter position="after">
+            <filter name="groupby_task" position="after">
                 <filter string="Task type" name="groupby_task_type" domain="[]" context="{'group_by':'task_type_id'}"/>
             </filter>
         </field>

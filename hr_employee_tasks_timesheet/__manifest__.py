@@ -1,7 +1,7 @@
 ##############################################################################
 #
 #    Author: Oy Tawasta OS Technologies Ltd.
-#    Copyright 2018 Oy Tawasta OS Technologies Ltd. (https://tawasta.fi)
+#    Copyright 2020 Oy Tawasta OS Technologies Ltd. (https://tawasta.fi)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,23 +19,14 @@
 ##############################################################################
 
 {
-    'name': 'Employee Hour Balance',
-    'summary': 'Show the hour balance for each employee',
-    'version': '10.0.1.2.0',
-    'category': 'HR', 
-    'website': 'https://github.com/Tawasta/hr/',
-    'author': 'Oy Tawasta Technologies Ltd.',
-    'license': 'AGPL-3',
-    'application': False,
-    'installable': True,
-    'depends': [
-        'hr_timesheet_sheet',
-        'resource',
-    ],
-    'data': [
-        'views/hr_employee.xml',
-        'views/hr_timesheet_sheet.xml',
-        'views/resource_calendar.xml',
-        'views/resource_calendar_attendance.xml',
-    ],
+    "name": "Employee task workload",
+    "summary": "Add task planning information (workload) employees",
+    "version": "12.0.1.0.0",
+    "category": "HR",
+    "website": "https://github.com/Tawasta/hr/",
+    "author": "Tawasta",
+    "license": "AGPL-3",
+    "depends": ["hr_timesheet", "hr_employee_tasks", "project_task_stage_folded"],
+    "data": ["views/hr_employee.xml", "views/project_task.xml"],
+    "installable": True,
 }
