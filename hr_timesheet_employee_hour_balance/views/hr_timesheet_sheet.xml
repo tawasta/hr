@@ -7,9 +7,7 @@
         <field name="arch" type="xml">
             <field name="department_id" position="after">
                 <field name="calendar_id" groups="hr.group_hr_manager" />
-            </field>
 
-            <field name="department_id" position="after">
                 <field name="total_hours" widget="float_time"/>
                 <field name="total_time" widget="float_time"/>
                 <field name="total_balance" widget="float_time"/>

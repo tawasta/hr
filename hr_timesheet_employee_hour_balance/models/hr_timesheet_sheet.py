@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from odoo import api
 from odoo import fields
 from odoo import models
@@ -14,7 +16,11 @@ class HrTimesheetSheet(models.Model):
         readonly=False,
     )
 
-    total_hours = fields.Float(related="calendar_id.total_hours", readonly=True)
+    total_hours = fields.Float(
+        compute="_compute_total_hours",
+        string="Target",
+        help="Target hours for this timesheet",
+    )
 
     total_balance = fields.Float(
         string="Balance",
@@ -35,6 +41,19 @@ class HrTimesheetSheet(models.Model):
         for record in self:
             if record.employee_id:
                 record.calendar_id = record.employee_id.resource_calendar_id
+
+    def _compute_total_hours(self):
+        for record in self:
+            if not record.calendar_id:
+                record.total_hours = 0
+                continue
+
+            start = datetime.combine(record.date_start, datetime.min.time())
+            end = datetime.combine(record.date_end, datetime.max.time())
+
+            record.total_hours = record.employee_id.get_work_days_data(
+                start, end, True, record.calendar_id
+            )["hours"]
 
     @api.depends("timesheet_ids.unit_amount", "calendar_id")
     def _compute_total_balance(self):

@@ -32,7 +32,6 @@
     "data": [
         "views/hr_employee.xml",
         "views/hr_timesheet_sheet.xml",
-        "views/resource_calendar.xml",
         "views/resource_calendar_attendance.xml",
     ],
 }

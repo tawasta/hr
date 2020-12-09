@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_task_form2" model="ir.ui.view">
+        <field name="name">project.task.form</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+
+            <header position="after">
+                <div class="alert alert-warning" role="alert" style="margin-bottom: 0px;" attrs="{'invisible': [('employee_resource_overload','=',False)]}">
+                    <strong>Assigned employee is overloaded!</strong> Please see if some tasks could be assigned to someone else or delayed.
+                </div>
+            </header>
+
+
+            <field name="employee_id" position="after">
+                <field name="employee_resource_hours" attrs="{'invisible': [('employee_id', '=', False)]}" />
+                <field name="employee_workload_percentage" widget="progressbar" attrs="{'invisible': [('employee_id', '=', False)]}" />
+                <field name="employee_resource_overload" invisible="1" />
+            </field>
+
+        </field>
+    </record>
+
+    <record id="view_task_tree2" model="ir.ui.view">
+        <field name="name">project.task.tree</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="arch" type="xml">
+            <field name="date_deadline" position="before">
+                <field name="employee_workload_percentage" widget="progressbar" />
+            </field>
+        </field>
+    </record>
+
+</odoo>
+

@@ -13,9 +13,6 @@
             <field name="cumulative_balance" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>
-            <field name="total_hours" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </field>
         </field>
     </record>
 
@@ -31,9 +28,6 @@
             </field>
 
             <field name="cumulative_balance" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </field>
-            <field name="total_hours" position="attributes">
                 <attribute name="invisible">1</attribute>
             </field>
         </field>

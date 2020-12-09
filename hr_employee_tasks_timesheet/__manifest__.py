@@ -19,15 +19,14 @@
 ##############################################################################
 
 {
-    "name": "Employee Attendance Hour Balance",
-    "summary": "Show the attendance hour balance for each employee",
-    "version": "12.0.1.2.0",
+    "name": "Employee task workload",
+    "summary": "Add task planning information (workload) employees",
+    "version": "12.0.1.0.0",
     "category": "HR",
     "website": "https://github.com/Tawasta/hr/",
     "author": "Tawasta",
     "license": "AGPL-3",
-    "application": False,
+    "depends": ["hr_timesheet", "hr_employee_tasks", "project_task_stage_folded"],
+    "data": ["views/hr_employee.xml", "views/project_task.xml"],
     "installable": True,
-    "depends": ["hr_timesheet_sheet_attendance", "hr_timesheet_employee_hour_balance",],
-    "data": ["views/hr_timesheet_sheet.xml"],
 }
