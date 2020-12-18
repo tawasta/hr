@@ -35,16 +35,7 @@ class ProjectTask(models.Model):
             if not record.date_deadline:
                 continue
 
-            deadline = record.date_deadline
-            week_start = deadline - timedelta(days=deadline.weekday())
-            week_end = week_start + timedelta(days=6)
-
-            time_start = datetime.combine(week_start, datetime.min.time())
-            time_end = datetime.combine(week_end, datetime.max.time())
-
-            workload = record.employee_id.get_work_days_data(
-                time_start, time_end, True, record.employee_id.resource_calendar_id
-            )["hours"]
+            workload = record.employee_id.resource_calendar_id.total_hours
             workload_percentage = record.planned_hours / workload * 100
 
             record.employee_resource_hours = workload

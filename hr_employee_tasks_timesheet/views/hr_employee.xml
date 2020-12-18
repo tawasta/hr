@@ -15,14 +15,6 @@
                         <field name="user_task_remaining_hours_current_week" widget="float_time" string="Remaining"/>
                         <field name="employee_utilization_current_week" string="Utilization" widget="progressbar" />
 
-                        <separator />
-
-                        <field name="employee_hours_30_days" widget="float_time" />
-                        <field name="user_task_planned_hours_30_days" widget="float_time" string="Planned"/>
-                        <field name="user_task_effective_hours_30_days" widget="float_time" string="Effective"/>
-                        <field name="user_task_remaining_hours_30_days" widget="float_time" string="Remaining"/>
-                        <field name="employee_utilization_30_days" string="Utilization" widget="progressbar" />
-
                     </group>
                     <group name="total_workload" string="Total workload">
                         <field name="user_task_planned_hours" widget="float_time" string="Planned" />
