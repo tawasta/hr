@@ -10,7 +10,7 @@ class HrEmployee(models.Model):
 
     def action_show_tasks(self):
         self.ensure_one()
-        action = self.env.ref("project.project_task_action_from_partner").read()[0]
+        action = self.env.ref("project.action_view_task").read()[0]
         action["domain"] = [("user_id", "=", self.user_id.id)]
 
         return action
