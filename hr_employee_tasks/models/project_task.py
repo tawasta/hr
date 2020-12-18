@@ -7,6 +7,7 @@ class ProjectTask(models.Model):
     _inherit = "project.task"
 
     employee_id = fields.Many2one(
+        string="Employee",
         comodel_name="hr.employee",
         domain=[("user_id", "!=", False)],
         compute="_compute_employee_id",
@@ -20,7 +21,7 @@ class ProjectTask(models.Model):
             # Force using the correct employee
             values["employee_id"] = self._get_employee_id(values.get("user_id"))
 
-        return super().create(values)
+        return super(ProjectTask, self).create(values)
 
     @api.multi
     def write(self, values):
@@ -28,7 +29,7 @@ class ProjectTask(models.Model):
             # Force using the correct employee
             values["employee_id"] = self._get_employee_id(values.get("user_id"))
 
-        return super().write(values)
+        return super(ProjectTask, self).write(values)
 
     def _get_employee_id(self, user_id):
         if not user_id:
