@@ -42,7 +42,7 @@ class ProjectTask(models.Model):
     def _compute_employee_id(self):
         for record in self:
             record.employee_id = self.env["hr.employee"].search(
-                [("user_id", "=", record.user_id.id)]
+                [("user_id", "=", record.user_id.id)], limit=1
             )
 
     @api.onchange("employee_id")
