@@ -35,7 +35,7 @@ class ProjectTask(models.Model):
             if not record.date_deadline:
                 continue
 
-            workload = record.employee_id.resource_calendar_id.total_hours
+            workload = record.employee_id.calendar_id.total_hours
             workload_percentage = record.planned_hours / workload * 100
 
             record.employee_resource_hours = workload
