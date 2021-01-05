@@ -1,6 +1,3 @@
-from datetime import datetime
-from datetime import timedelta
-
 from odoo import api
 from odoo import fields
 from odoo import models

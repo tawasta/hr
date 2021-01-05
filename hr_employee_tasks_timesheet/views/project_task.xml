@@ -6,16 +6,17 @@
         <field name="inherit_id" ref="hr_employee_tasks.view_task_form2"/>
         <field name="arch" type="xml">
 
+            <!-- This doesn't really work without get_work_days_data()
             <header position="after">
                 <div class="alert alert-warning" role="alert" style="margin-bottom: 0px;" attrs="{'invisible': [('employee_resource_overload','=',False)]}">
                     <strong>Assigned employee is overloaded!</strong> Please see if some tasks could be assigned to someone else or delayed.
                 </div>
             </header>
-
+            -->
 
             <field name="employee_id" position="after">
-                <field name="employee_resource_hours" attrs="{'invisible': [('employee_id', '=', False)]}" />
-                <field name="employee_workload_percentage" widget="progressbar" attrs="{'invisible': [('employee_id', '=', False)]}" />
+                <field name="employee_resource_hours" attrs="{'invisible': ['|', ('employee_id', '=', False), ('date_deadline', '=', False)]}" />
+                <field name="employee_workload_percentage" widget="progressbar" attrs="{'invisible': ['|', ('employee_id', '=', False), ('date_deadline', '=', False)]}" />
                 <field name="employee_resource_overload" invisible="1" />
             </field>
 

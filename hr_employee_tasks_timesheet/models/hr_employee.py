@@ -88,12 +88,8 @@ class HrEmployee(models.Model):
             )
 
             if record.calendar_id:
-                start = datetime.combine(week_start, datetime.min.time())
-                end = datetime.combine(week_end, datetime.max.time())
-
-                record.employee_hours_current_week = record.get_work_days_data(
-                    start, end, True, record.calendar_id
-                )["hours"]
+                # This is done better in v12, where the hours depend on the date range
+                record.employee_hours_current_week = record.calendar_id.total_hours
 
                 if record.user_task_planned_hours_current_week:
                     record.employee_utilization_current_week = (
