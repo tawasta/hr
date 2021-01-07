@@ -33,7 +33,9 @@ class ProjectTask(models.Model):
                 continue
 
             workload = record.employee_id.calendar_id.total_hours
-            workload_percentage = record.planned_hours / workload * 100
+            workload_percentage = 0
+            if workload:
+                workload_percentage = record.planned_hours / workload * 100
 
             record.employee_resource_hours = workload
             record.employee_workload_percentage = workload_percentage
