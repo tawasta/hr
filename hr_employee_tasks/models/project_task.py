@@ -35,7 +35,10 @@ class ProjectTask(models.Model):
         if not user_id:
             employee = False
         else:
-            employee = self.env["hr.employee"].search([("user_id", "=", user_id)]).id
+            employee = self.env["hr.employee"].search([("user_id", "=", user_id)], limit=1)
+
+        if employee:
+            employee = employee.id
 
         return employee
 
