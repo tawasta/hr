@@ -35,9 +35,9 @@ class ProjectTask(models.Model):
         if not user_id:
             employee = False
         else:
-            employee = self.env["hr.employee"].search([("user_id", "=", user_id)])
+            employee = self.env["hr.employee"].search([("user_id", "=", user_id)]).id
 
-        return employee.id
+        return employee
 
     def _compute_employee_id(self):
         for record in self:
