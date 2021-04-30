@@ -38,17 +38,7 @@ class ResCompany(models.Model):
     _inherit = 'res.company'
 
     # 2. Fields declaration
-    timesheet_sheet_review_policy = fields.Selection(
-        string='Timesheet Sheet Review Policy',
-        selection=[
-            ('hr', 'By HR Officers'),
-            ('hr_manager', 'By HR Managers'),
-            ('timesheet_manager', 'By Timesheets Managers'),
-            ('employee_manager', 'By Employee Manager'),
-        ],
-        default='hr',
-        help='How Timesheet Sheets review is performed.',
-    )
+    timesheet_sheet_review_policy = fields.Selection(selection_add=[("employee_manager", "By Employee Manager")])
 
     # 3. Default methods
 

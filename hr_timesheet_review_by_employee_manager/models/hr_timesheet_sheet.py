@@ -48,17 +48,9 @@ class Sheet(models.Model):
     # 6. CRUD methods
     @api.multi
     def _get_possible_reviewers(self):
-        self.ensure_one()
-        res = self.env['res.users'].browse(SUPERUSER_ID)
-        if self.review_policy == 'hr':
-            res |= self.env.ref('hr.group_hr_user').users
-        elif self.review_policy == 'hr_manager':
-            res |= self.env.ref('hr.group_hr_manager').users
-        elif self.review_policy == 'timesheet_manager':
-            res |= self.env.ref('hr_timesheet.group_timesheet_manager').users
-        elif self.review_policy == 'employee_manager':
-            if self.employee_id.parent_id.user_id:
-                res |= self.employee_id.parent_id.user_id
+        res = super()._get_possible_reviewers()
+        if self.review_policy == 'employee_manager' and self.employee_id.parent_id.user_id:
+            res |= self.employee_id.parent_id.user_id
         return res
 
     # 7. Action methods
