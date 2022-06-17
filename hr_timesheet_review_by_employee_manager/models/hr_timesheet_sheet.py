@@ -23,7 +23,7 @@
 # 2. Known third party imports:
 
 # 3. Odoo imports (openerp):
-from odoo import fields, models, api, SUPERUSER_ID
+from odoo import models
 
 # 4. Imports from Odoo modules:
 
@@ -35,7 +35,7 @@ from odoo import fields, models, api, SUPERUSER_ID
 class Sheet(models.Model):
 
     # 1. Private attributes
-    _inherit = 'hr_timesheet.sheet'
+    _inherit = "hr_timesheet.sheet"
 
     # 2. Fields declaration
 
@@ -48,7 +48,10 @@ class Sheet(models.Model):
     # 6. CRUD methods
     def _get_possible_reviewers(self):
         res = super()._get_possible_reviewers()
-        if self.review_policy == 'employee_manager' and self.employee_id.parent_id.user_id:
+        if (
+            self.review_policy == "employee_manager"
+            and self.employee_id.parent_id.user_id
+        ):
             res |= self.employee_id.parent_id.user_id
         return res
 

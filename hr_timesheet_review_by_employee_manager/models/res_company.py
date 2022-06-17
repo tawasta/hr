@@ -35,10 +35,12 @@ from odoo import fields, models
 class ResCompany(models.Model):
 
     # 1. Private attributes
-    _inherit = 'res.company'
+    _inherit = "res.company"
 
     # 2. Fields declaration
-    timesheet_sheet_review_policy = fields.Selection(selection_add=[("employee_manager", "By Employee Manager")])
+    timesheet_sheet_review_policy = fields.Selection(
+        selection_add=[("employee_manager", "By Employee Manager")]
+    )
 
     # 3. Default methods
 
