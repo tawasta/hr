@@ -37,6 +37,8 @@ class HrTimesheetSheet(models.Model):
         for record in self:
             if record.employee_id:
                 record.calendar_id = record.employee_id.resource_calendar_id
+            else:
+                record.calendar_id = False
 
     def _compute_total_hours(self):
         for record in self:
@@ -56,6 +58,8 @@ class HrTimesheetSheet(models.Model):
         for record in self:
             if record.calendar_id:
                 record.total_balance = record.total_time - record.total_hours
+            else:
+                record.total_balance = 0
 
     def _compute_cumulative_balance(self):
         for record in self:
