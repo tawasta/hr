@@ -1,9 +1,9 @@
 from odoo import fields, models
 
 
-class Employee(models.Model):
+class EmployeeBase(models.Model):
 
-    _inherit = "hr.employee"
+    _inherit = "hr.employee.base"
 
     cumulative_balance = fields.Float(
         compute="_compute_cumulative_balance",
