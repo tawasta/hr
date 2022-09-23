@@ -1,7 +1,7 @@
 from odoo import fields, models
 
 
-class EmployeeBase(models.Model):
+class EmployeeBase(models.AbstractModel):
 
     _inherit = "hr.employee.base"
 
