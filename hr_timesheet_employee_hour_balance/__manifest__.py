@@ -21,7 +21,7 @@
 {
     "name": "HR Timesheet Employee Hour Balance",
     "summary": "Show the hour balance for each employee",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "category": "HR",
     "website": "https://gitlab.com/tawasta/odoo/hr",
     "author": "Tawasta",
