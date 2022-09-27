@@ -5,10 +5,10 @@
         <field name="model">hr.employee</field>
         <field name="inherit_id" ref="hr.view_employee_form" />
         <field name="arch" type="xml">
-            <field name="resource_calendar_id" position="after">
+            <xpath expr="//field[@name='resource_calendar_id']/.." position="after">
                 <field name="cumulative_balance" />
                 <field name="cumulative_balance_start" groups="hr.group_hr_manager" />
-            </field>
+            </xpath>
         </field>
     </record>
 
