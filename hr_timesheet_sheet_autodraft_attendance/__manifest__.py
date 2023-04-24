@@ -21,7 +21,7 @@
 {
     "name": "Automatically create timesheet sheets",
     "summary": "Automatically create timesheet sheets",
-    "version": "14.0.1.0.0",
+    "version": "14.0.1.0.1",
     "category": "HR",
     "website": "https://gitlab.com/tawasta/odoo/hr",
     "author": "Tawasta",
