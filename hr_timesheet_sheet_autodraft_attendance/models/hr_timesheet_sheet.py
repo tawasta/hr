@@ -28,7 +28,8 @@ class HrTimesheetSheet(models.Model):
             )
 
             # Create timesheets if not already created
-            sheet = dummy._determine_sheet()
+            dummy._determine_sheet()
 
             dummy.unlink()
-            return sheet
+
+        return
