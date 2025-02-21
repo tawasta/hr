@@ -13,5 +13,6 @@ addon | version | maintainers | summary
 [hr_expense_hide_mobile_app](hr_expense_hide_mobile_app/) | 17.0.1.0.0 |  | Don't show mobile app suggestion (as it doesn't work on CE)
 [hr_timesheet_employee_hour_balance](hr_timesheet_employee_hour_balance/) | 17.0.1.0.0 |  | Show the hour balance for each employee
 [hr_timesheet_review_by_employee_manager](hr_timesheet_review_by_employee_manager/) | 17.0.1.0.0 |  | New timesheet review policy: "By Employee Manager"
+[hr_timesheet_sheet_table_transparency_fix](hr_timesheet_sheet_table_transparency_fix/) | 17.0.1.0.0 |  | Fix header/footer transparency in timesheet filling view
 
 [//]: # (end addons)
