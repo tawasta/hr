@@ -23,7 +23,7 @@
     "summary": "Show the hour balance for each employee",
     "version": "17.0.1.0.0",
     "category": "HR",
-    "website": "https://gitlab.com/tawasta/odoo/hr",
+    "website": "https://github.com/tawasta/hr",
     "author": "Tawasta",
     "license": "AGPL-3",
     "application": False,
