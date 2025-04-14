@@ -23,7 +23,7 @@
     "summary": "Don't show mobile app suggestion (as it doesn't work on CE)",
     "version": "17.0.1.0.0",
     "category": "Human Resources",
-    "website": "https://gitlab.com/tawasta/odoo/hr",
+    "website": "https://github.com/tawasta/hr",
     "author": "Futural",
     "license": "AGPL-3",
     "application": False,
