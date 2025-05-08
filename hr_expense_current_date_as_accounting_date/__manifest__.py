@@ -1,7 +1,7 @@
 ##############################################################################
 #
 #    Author: Futural Oy
-#    Copyright 2019 Futural Oy (https://futural.fi)
+#    Copyright 2025 Futural Oy (https://futural.fi)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,8 +19,8 @@
 ##############################################################################
 
 {
-    "name": "Expenses: hide mobile app suggestion",
-    "summary": "Don't show mobile app suggestion (as it doesn't work on CE)",
+    "name": "Expenses: use current date as accounting date",
+    "summary": "When confirming expense sheet, use current date as accounting date",
     "version": "17.0.1.0.0",
     "category": "Human Resources",
     "website": "https://github.com/tawasta/hr",
@@ -31,5 +31,5 @@
     "depends": [
         "hr_expense",
     ],
-    "data": ["views/hr_expense.xml"],
+    "data": [],
 }

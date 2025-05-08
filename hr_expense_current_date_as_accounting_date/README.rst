@@ -2,11 +2,11 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-====================================
-Expenses: hide mobile app suggestion
-====================================
+=============================================
+Expenses: use current date as accounting date
+=============================================
 
-Don't show mobile app suggestion (as it doesn't work on CE)
+When confirming expense sheet, use current date as accounting date
 
 Credits
 =======
@@ -19,7 +19,7 @@ Contributors
 Maintainer
 ----------
 
-.. image:: https://futural.fi/templates/tawastrap/images/logo.png
+.. image:: https://futural.fi/web/image/website/1/logo/
    :alt: Futural Oy
    :target: https://futural.fi/
 
