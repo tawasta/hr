@@ -15,5 +15,6 @@ addon | version | maintainers | summary
 [hr_timesheet_review_by_employee_manager](hr_timesheet_review_by_employee_manager/) | 17.0.1.0.0 |  | New timesheet review policy: "By Employee Manager"
 [hr_timesheet_sheet_table_transparency_fix](hr_timesheet_sheet_table_transparency_fix/) | 17.0.1.0.0 |  | Fix header/footer transparency in timesheet filling view
 [hr_timesheet_sheet_total_time_button](hr_timesheet_sheet_total_time_button/) | 17.0.1.0.0 |  | Adds Total time -button to HR timesheet form view
+[hr_timesheet_sheet_tree_view_sort_by_date_start](hr_timesheet_sheet_tree_view_sort_by_date_start/) | 17.0.1.0.0 |  | Sort sheets by Date From field in tree view
 
 [//]: # (end addons)

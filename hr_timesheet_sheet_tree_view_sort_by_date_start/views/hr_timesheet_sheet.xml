@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+	<record id="hr_timesheet_sheet_tree" model="ir.ui.view">
+		<field name="name">hr_timesheet.sheet.tree.sort.by.date.start</field>
+		<field name="model">hr_timesheet.sheet</field>
+		<field name="inherit_id" ref="hr_timesheet_sheet.hr_timesheet_sheet_tree" />
+		<field name="arch" type="xml">
+            <tree position="attributes">
+                <attribute name="default_order">date_start desc</attribute>
+		    </tree>
+		</field>
+	</record>
+</odoo>
