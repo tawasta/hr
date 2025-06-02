@@ -23,7 +23,7 @@
     "summary": "Sort sheets by Date From field in tree view",
     "version": "17.0.1.0.0",
     "category": "Timesheets",
-    "website": "https://gitlab.com/tawasta/odoo/hr",
+    "website": "https://github.com/tawasta/hr",
     "author": "Futural",
     "license": "AGPL-3",
     "application": False,
