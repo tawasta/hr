@@ -1,7 +1,7 @@
 ##############################################################################
 #
 #    Author: Futural Oy
-#    Copyright 2019 Futural Oy (https://futural.fi)
+#    Copyright 2025 Futural Oy (https://futural.fi)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,17 +19,19 @@
 ##############################################################################
 
 {
-    "name": "Expenses: hide mobile app suggestion",
-    "summary": "Don't show mobile app suggestion (as it doesn't work on CE)",
+    "name": "HR Timesheet Sheet – Sort sheets by Date From field in tree view",
+    "summary": "Sort sheets by Date From field in tree view",
     "version": "17.0.1.0.0",
-    "category": "Human Resources",
+    "category": "Timesheets",
     "website": "https://github.com/tawasta/hr",
     "author": "Futural",
     "license": "AGPL-3",
     "application": False,
     "installable": True,
     "depends": [
-        "hr_expense",
+        "hr_timesheet_sheet",
     ],
-    "data": ["views/hr_expense.xml"],
+    "data": [
+        "views/hr_timesheet_sheet.xml",
+    ],
 }
