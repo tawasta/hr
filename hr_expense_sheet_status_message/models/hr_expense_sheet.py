@@ -1,4 +1,5 @@
-from odoo import models
+from odoo import models, _
+from odoo.exceptions import UserError
 
 
 class HrExpenseSheet(models.Model):
@@ -11,7 +12,7 @@ class HrExpenseSheet(models.Model):
         subtype_id = self.env["ir.model.data"]._xmlid_to_res_id("mail.mt_comment")
 
         for sheet in self:
-            sheet.sudo().message_post_with_source(
+            sheet.message_post_with_source(
                 "hr_expense_sheet_status_message.hr_expense_template_submit_message",
                 subtype_id=subtype_id,
                 render_values={"name": sheet.name},
@@ -25,10 +26,26 @@ class HrExpenseSheet(models.Model):
         subtype_id = self.env["ir.model.data"]._xmlid_to_res_id("mail.mt_comment")
 
         for sheet in self:
-            sheet.sudo().message_post_with_source(
+            sheet.message_post_with_source(
                 "hr_expense_sheet_status_message.hr_expense_template_approve_message",
                 subtype_id=subtype_id,
                 render_values={"name": sheet.name},
             )
 
         return res
+
+    def _do_refuse(self, reason):
+        """Same function as in code, but here it just uses a different mail template"""
+        if self.account_move_ids:
+            raise UserError(
+                _("You cannot cancel an expense sheet linked to a journal entry")
+            )
+        self.approval_state = "cancel"
+        subtype_id = self.env["ir.model.data"]._xmlid_to_res_id("mail.mt_comment")
+        for sheet in self:
+            sheet.message_post_with_source(
+                "hr_expense_sheet_status_message.hr_expense_template_message_refuse",
+                subtype_id=subtype_id,
+                render_values={"reason": reason, "name": sheet.name},
+            )
+        self.activity_update()
