@@ -19,9 +19,9 @@
 ##############################################################################
 
 {
-    "name": "Send a message after Submitted and Approved states from Expenses",
-    "summary": "Send a message after Submitted and Approved states from Expenses",
-    "version": "17.0.1.0.0",
+    "name": "Send a message after Submitted, Approved and Refused states from Expenses",
+    "summary": "Send messages after Submitted, Approved and Refused states from Expenses",
+    "version": "17.0.1.1.0",
     "category": "Expenses",
     "website": "https://github.com/tawasta/hr",
     "author": "Futural",

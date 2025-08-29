@@ -2,12 +2,12 @@
    :target: http://www.gnu.org/licenses/agpl-3.0-standalone.html
    :alt: License: AGPL-3
 
-================================================================
-Send a message after Submitted and Approved states from Expenses
-================================================================
+=========================================================================
+Send a message after Submitted, Approved and Refused states from Expenses
+=========================================================================
 
-"Submit to Manager" -button sends a customized message and "Approve" -button
-also sends one.
+"Submit to Manager" -button sends a customized message. "Approve" and "Refuse" -buttons
+also send one.
 
 Messages are modifiable from mail templates.
 
@@ -17,7 +17,8 @@ Modify mail templates as you see fit.
 
 Usage
 =====
-Go to Expenses and select an expense report to submit and approve it.
+Go to Expenses and select an expense report to submit and approve it. Refusing
+an expense also sends a message.
 
 Known issues / Roadmap
 ======================
