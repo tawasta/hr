@@ -12,7 +12,7 @@ addon | version | maintainers | summary
 --- | --- | --- | ---
 [hr_expense_current_date_as_accounting_date](hr_expense_current_date_as_accounting_date/) | 17.0.1.0.0 |  | When confirming expense sheet, use current date as accounting date
 [hr_expense_hide_mobile_app](hr_expense_hide_mobile_app/) | 17.0.1.0.0 |  | Don't show mobile app suggestion (as it doesn't work on CE)
-[hr_expense_sheet_status_message](hr_expense_sheet_status_message/) | 17.0.1.1.1 |  | Send messages after Submitted, Approved and Refused states from Expenses
+[hr_expense_sheet_status_message](hr_expense_sheet_status_message/) | 17.0.1.1.2 |  | Send messages after Submitted, Approved and Refused states from Expenses
 [hr_timesheet_employee_hour_balance](hr_timesheet_employee_hour_balance/) | 17.0.1.0.0 |  | Show the hour balance for each employee
 [hr_timesheet_review_by_employee_manager](hr_timesheet_review_by_employee_manager/) | 17.0.1.0.0 |  | New timesheet review policy: "By Employee Manager"
 [hr_timesheet_sheet_table_transparency_fix](hr_timesheet_sheet_table_transparency_fix/) | 17.0.1.0.0 |  | Fix header/footer transparency in timesheet filling view
