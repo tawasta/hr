@@ -27,7 +27,7 @@ class HrExpenseSheet(models.Model):
 
         for sheet in self:
             sheet.message_post_with_source(
-                "hr_expense_sheet_status_message.hr_expense_template_approve_message",
+                "hr_expense_sheet_status_message.hr_expense_template_message_approve",
                 subtype_id=subtype_id,
                 render_values={"name": sheet.name},
             )
