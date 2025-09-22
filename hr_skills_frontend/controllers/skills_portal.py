@@ -57,6 +57,15 @@ class HrSkillPortal(CustomerPortal):
                 seen.add(vid)
         return out
 
+    def _group_key(self, rec, gfield):
+        """
+        Compute the grouping key id for a record given a (possibly dotted) field name.
+        """
+        cur = rec
+        for part in gfield.split("."):
+            cur = getattr(cur, part)
+        return cur.id if cur else 0
+
     def _group_records(self, records, groupby):
         """
         Group records by the configured groupby key while preserving order.
@@ -68,16 +77,10 @@ class HrSkillPortal(CustomerPortal):
         if not gfield:
             return [records] if records else []
 
-        def _key(rec):
-            cur = rec
-            for part in gfield.split("."):
-                cur = getattr(cur, part)
-            return cur and cur.id or 0
-
         buckets = {}
         ordered_keys = []
         for r in records:
-            k = _key(r)
+            k = self._group_key(r, gfield)
             if k not in buckets:
                 buckets[k] = request.env["hr.employee.skill"]
                 ordered_keys.append(k)
