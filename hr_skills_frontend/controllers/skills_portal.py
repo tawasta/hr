@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collections import OrderedDict
 from operator import itemgetter
 
@@ -25,7 +24,7 @@ class HrSkillPortal(CustomerPortal):
         if not term:
             return []
         raw = []
-        for sep in [',', ';', '|']:
+        for sep in [",", ";", "|"]:
             if sep in term:
                 raw = [p.strip() for p in term.split(sep)]
                 break
@@ -71,7 +70,7 @@ class HrSkillPortal(CustomerPortal):
 
         def _key(rec):
             cur = rec
-            for part in gfield.split('.'):
+            for part in gfield.split("."):
                 cur = getattr(cur, part)
             return cur and cur.id or 0
 
@@ -80,26 +79,10 @@ class HrSkillPortal(CustomerPortal):
         for r in records:
             k = _key(r)
             if k not in buckets:
-                buckets[k] = request.env['hr.employee.skill']
+                buckets[k] = request.env["hr.employee.skill"]
                 ordered_keys.append(k)
             buckets[k] |= r
         return [buckets[k] for k in ordered_keys]
-
-    # -------------------------
-    # Portal counters / searchbar config
-    # -------------------------
-
-    def _prepare_home_portal_values(self, counters):
-        """
-        Build extra counters for the portal home.
-        - Adds 'hr_employee_skill_count' if requested in `counters`.
-        - Respects access rights: returns 0 if the user cannot read hr.employee.skill.
-        """
-        values = super()._prepare_home_portal_values(counters)
-        if 'hr_employee_skill_count' in counters:
-            can_read = request.env['hr.employee.skill'].check_access_rights('read', raise_exception=False)
-            values['hr_employee_skill_count'] = request.env['hr.employee.skill'].search_count([]) if can_read else 0
-        return values
 
     def _skill_searchbar_sortings(self):
         """
@@ -108,10 +91,22 @@ class HrSkillPortal(CustomerPortal):
         - 'sequence' controls display order in the UI.
         """
         return {
-            'date': {'label': _('Newest'), 'order': 'create_date desc', 'sequence': 1},
-            'employee': {'label': _('Employee'), 'order': 'employee_id, skill_type_id, skill_id', 'sequence': 2},
-            'skill': {'label': _('Skill'), 'order': 'skill_type_id, skill_id, skill_level_id', 'sequence': 3},
-            'level': {'label': _('Level'), 'order': 'skill_level_id desc', 'sequence': 4},
+            "date": {"label": _("Newest"), "order": "create_date desc", "sequence": 1},
+            "employee": {
+                "label": _("Employee"),
+                "order": "employee_id, skill_type_id, skill_id",
+                "sequence": 2,
+            },
+            "skill": {
+                "label": _("Skill"),
+                "order": "skill_type_id, skill_id, skill_level_id",
+                "sequence": 3,
+            },
+            "level": {
+                "label": _("Level"),
+                "order": "skill_level_id desc",
+                "sequence": 4,
+            },
         }
 
     def _skill_searchbar_groupby(self):
@@ -121,12 +116,12 @@ class HrSkillPortal(CustomerPortal):
         - Actual field mapping is handled by _groupby_mapping().
         """
         return {
-            'none': {'input': 'none', 'label': _('None'), 'order': 1},
-            'employee': {'input': 'employee', 'label': _('Employee'), 'order': 2},
-            'department': {'input': 'department', 'label': _('Department'), 'order': 3},
-            'type': {'input': 'type', 'label': _('Skill Type'), 'order': 4},
-            'skill': {'input': 'skill', 'label': _('Skill'), 'order': 5},
-            'level': {'input': 'level', 'label': _('Level'), 'order': 6},
+            "none": {"input": "none", "label": _("None"), "order": 1},
+            "employee": {"input": "employee", "label": _("Employee"), "order": 2},
+            "department": {"input": "department", "label": _("Department"), "order": 3},
+            "type": {"input": "type", "label": _("Skill Type"), "order": 4},
+            "skill": {"input": "skill", "label": _("Skill"), "order": 5},
+            "level": {"input": "level", "label": _("Level"), "order": 6},
         }
 
     def _skill_searchbar_inputs(self):
@@ -135,12 +130,20 @@ class HrSkillPortal(CustomerPortal):
         - Keep labels concise; order controls display order.
         """
         return {
-            'all': {'input': 'all', 'label': _('Search in All'), 'order': 1},
-            'employee': {'input': 'employee', 'label': _('Search in Employee'), 'order': 2},
-            'department': {'input': 'department', 'label': _('Search in Department'), 'order': 3},
-            'skill': {'input': 'skill', 'label': _('Search in Skill'), 'order': 4},
-            'type': {'input': 'type', 'label': _('Search in Skill Type'), 'order': 5},
-            'level': {'input': 'level', 'label': _('Search in Level'), 'order': 6},
+            "all": {"input": "all", "label": _("Search in All"), "order": 1},
+            "employee": {
+                "input": "employee",
+                "label": _("Search in Employee"),
+                "order": 2,
+            },
+            "department": {
+                "input": "department",
+                "label": _("Search in Department"),
+                "order": 3,
+            },
+            "skill": {"input": "skill", "label": _("Search in Skill"), "order": 4},
+            "type": {"input": "type", "label": _("Search in Skill Type"), "order": 5},
+            "level": {"input": "level", "label": _("Search in Level"), "order": 6},
         }
 
     def _groupby_mapping(self):
@@ -148,11 +151,11 @@ class HrSkillPortal(CustomerPortal):
         Map group-by keys to actual model fields.
         """
         return {
-            'employee': 'employee_id',
-            'department': 'department_id',
-            'type': 'skill_type_id',
-            'skill': 'skill_id',
-            'level': 'skill_level_id',
+            "employee": "employee_id",
+            "department": "department_id",
+            "type": "skill_type_id",
+            "skill": "skill_id",
+            "level": "skill_level_id",
         }
 
     def _order_with_groupby(self, order, groupby):
@@ -171,16 +174,16 @@ class HrSkillPortal(CustomerPortal):
         - Uses ilike on human-readable names for better UX.
         """
         parts = []
-        if search_in in ('all', 'employee'):
-            parts.append([('employee_id.name', 'ilike', term)])
-        if search_in in ('all', 'department'):
-            parts.append([('department_id.name', 'ilike', term)])
-        if search_in in ('all', 'skill'):
-            parts.append([('skill_id.name', 'ilike', term)])
-        if search_in in ('all', 'type'):
-            parts.append([('skill_type_id.name', 'ilike', term)])
-        if search_in in ('all', 'level'):
-            parts.append([('skill_level_id.name', 'ilike', term)])
+        if search_in in ("all", "employee"):
+            parts.append([("employee_id.name", "ilike", term)])
+        if search_in in ("all", "department"):
+            parts.append([("department_id.name", "ilike", term)])
+        if search_in in ("all", "skill"):
+            parts.append([("skill_id.name", "ilike", term)])
+        if search_in in ("all", "type"):
+            parts.append([("skill_type_id.name", "ilike", term)])
+        if search_in in ("all", "level"):
+            parts.append([("skill_level_id.name", "ilike", term)])
         return OR(parts) if parts else []
 
     # -------------------------
@@ -195,113 +198,141 @@ class HrSkillPortal(CustomerPortal):
         - NOTE: At this stage we DO NOT filter by sidebar selections yet.
         """
         values = self._prepare_portal_layout_values()
-        Skill = request.env['hr.employee.skill']
+        Skill = request.env["hr.employee.skill"]
 
         # Respect access rules
         domain = []
-        if Skill.check_access_rights('read'):
-            domain = AND([domain, request.env['ir.rule']._compute_domain(Skill._name, 'read')])
+        if Skill.check_access_rights("read"):
+            domain = AND(
+                [domain, request.env["ir.rule"]._compute_domain(Skill._name, "read")]
+            )
         SkillSudo = Skill.sudo()
 
-        # Sidebar selected ids (for display only for now)
-        #selected_type_ids = self._get_multi_ids('type_ids')
-        selected_skill_ids = self._get_multi_ids('skill_ids')
+        selected_skill_ids = self._get_multi_ids("skill_ids")
+        selected_level_ids = self._get_multi_ids("level_ids")
 
         # Searchbar config
-        searchbar_sortings = dict(sorted(self._skill_searchbar_sortings().items(), key=lambda i: i[1]['sequence']))
+        searchbar_sortings = dict(
+            sorted(
+                self._skill_searchbar_sortings().items(), key=lambda i: i[1]["sequence"]
+            )
+        )
         searchbar_inputs = self._skill_searchbar_inputs()
         searchbar_groupby = self._skill_searchbar_groupby()
 
         # Defaults
-        sortby = sortby if sortby in searchbar_sortings else 'date'
-        groupby = groupby if groupby in searchbar_groupby else 'employee'
-        order = self._order_with_groupby(searchbar_sortings[sortby]['order'], groupby)
+        sortby = sortby if sortby in searchbar_sortings else "date"
+        groupby = groupby if groupby in searchbar_groupby else "employee"
+        order = self._order_with_groupby(searchbar_sortings[sortby]["order"], groupby)
 
         # Free text search
         if search:
-            domain = AND([domain, self._build_basic_search_domain(search_in or 'all', search)])
-        
-        #if selected_type_ids:
-        #    domain = AND([domain, [('skill_type_id', 'in', selected_type_ids)]])
+            domain = AND(
+                [domain, self._build_basic_search_domain(search_in or "all", search)]
+            )
+
         if selected_skill_ids:
             # Etsi työntekijät, joilla on KAIKKI valitut skillit
             rg_rows = SkillSudo.read_group(
-                domain=AND([domain, [('skill_id', 'in', selected_skill_ids)]]),
-                fields=['employee_id', 'skill_id'],
-                groupby=['employee_id', 'skill_id'],
+                domain=AND([domain, [("skill_id", "in", selected_skill_ids)]]),
+                fields=["employee_id", "skill_id"],
+                groupby=["employee_id", "skill_id"],
                 lazy=False,
             )
             emp2skills = {}
             for row in rg_rows:
-                emp_id = row['employee_id'] and row['employee_id'][0]
-                skl_id = row['skill_id'] and row['skill_id'][0]
+                emp_id = row["employee_id"] and row["employee_id"][0]
+                skl_id = row["skill_id"] and row["skill_id"][0]
                 if emp_id and skl_id:
                     emp2skills.setdefault(emp_id, set()).add(skl_id)
 
             required = set(selected_skill_ids)
-            ok_emp_ids = [e for e, sset in emp2skills.items() if required.issubset(sset)]
+            ok_emp_ids = [
+                e for e, sset in emp2skills.items() if required.issubset(sset)
+            ]
 
             # Näytä vain:
             #  - ne työntekijät, joilla ON kaikki valitut skillit (AND)
             #  - ja rivit rajataan valittuihin skilleihin (selkeä näkymä)
-            domain = AND([
-                domain,
-                [('employee_id', 'in', ok_emp_ids or [0])],
-                [('skill_id', 'in', selected_skill_ids)],
-            ])
+            domain = AND(
+                [
+                    domain,
+                    [("employee_id", "in", ok_emp_ids or [0])],
+                    [("skill_id", "in", selected_skill_ids)],
+                ]
+            )
 
         # Fetch page of records
         total = SkillSudo.search_count(domain)
         pager = portal_pager(
             url="/all/skills",
             url_args={
-                'sortby': sortby,
-                'groupby': groupby,
-                'search_in': search_in,
-                'search': search,
+                "sortby": sortby,
+                "groupby": groupby,
+                "search_in": search_in,
+                "search": search,
                 # keep raw selections in URL so sidebar stays checked
-                #'type_ids': ','.join(map(str, selected_type_ids)) if selected_type_ids else '',
-                'skill_ids': ','.join(map(str, selected_skill_ids)) if selected_skill_ids else '',
+                "skill_ids": ",".join(map(str, selected_skill_ids))
+                if selected_skill_ids
+                else "",
+                "level_ids": ",".join(map(str, selected_level_ids))
+                if selected_level_ids
+                else "",
             },
             total=total,
             page=page,
             step=self._items_per_page,
         )
-        records = SkillSudo.search(domain, order=order, limit=self._items_per_page, offset=pager['offset'])
+        records = SkillSudo.search(
+            domain, order=order, limit=self._items_per_page, offset=pager["offset"]
+        )
         grouped_records = self._group_records(records, groupby)
 
-        # Sidebar lists (no filtering logic yet, just show)
-        SkillType = request.env['hr.skill.type'].sudo()
-        SkillM = request.env['hr.skill'].sudo()
-        skill_types = SkillType.search([])
+        # Sidebar lists
+        SkillM = request.env["hr.skill"].sudo()
+        LevelM = request.env["hr.skill.level"].sudo()
         skills = SkillM.search([])
+        levels = LevelM.search([])
 
-        values.update({
-            'page_name': 'hr_employee_skill',
-            'default_url': '/all/skills',
-            'grouped_records': grouped_records,
-            'pager': pager,
-            'searchbar_sortings': searchbar_sortings,
-            'searchbar_groupby': OrderedDict(sorted(searchbar_groupby.items(), key=lambda i: i[1]['order'])),
-            'searchbar_inputs': OrderedDict(sorted(searchbar_inputs.items(), key=lambda i: i[1]['order'])),
-            'search_in': search_in or 'all',
-            'search': search,
-            'sortby': sortby,
-            'groupby': groupby,
-            # sidebar data + current selections
-            'skill_types': skill_types,
-            'skills': skills,
-            #'selected_type_ids': selected_type_ids,
-            'selected_skill_ids': selected_skill_ids,
-        })
+        values.update(
+            {
+                "page_name": "hr_employee_skill",
+                "default_url": "/all/skills",
+                "grouped_records": grouped_records,
+                "pager": pager,
+                "searchbar_sortings": searchbar_sortings,
+                "searchbar_groupby": OrderedDict(
+                    sorted(searchbar_groupby.items(), key=lambda i: i[1]["order"])
+                ),
+                "searchbar_inputs": OrderedDict(
+                    sorted(searchbar_inputs.items(), key=lambda i: i[1]["order"])
+                ),
+                "search_in": search_in or "all",
+                "search": search,
+                "sortby": sortby,
+                "groupby": groupby,
+                # sidebar data + current selections
+                "skills": skills,
+                "levels": levels,
+                "selected_skill_ids": selected_skill_ids,
+                "selected_level_ids": selected_level_ids,
+            }
+        )
         return values
 
     # -------------------------
     # Routes
     # -------------------------
 
-    @http.route(['/all/skills', '/all/skills/page/<int:page>'], type='http', auth="user", website=True)
-    def portal_all_skills(self, page=1, sortby=None, search=None, search_in='all', groupby=None, **kw):
+    @http.route(
+        ["/all/skills", "/all/skills/page/<int:page>"],
+        type="http",
+        auth="user",
+        website=True,
+    )
+    def portal_all_skills(
+        self, page=1, sortby=None, search=None, search_in="all", groupby=None, **kw
+    ):
         """
         Route: render the skill listing page with a sidebar (initially display-only).
         - Supports pagination via /all/skills/page/<int:page>.
