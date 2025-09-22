@@ -84,6 +84,10 @@ class HrSkillPortal(CustomerPortal):
             buckets[k] |= r
         return [buckets[k] for k in ordered_keys]
 
+    # -------------------------
+    # Searchbar config
+    # -------------------------
+
     def _skill_searchbar_sortings(self):
         """
         Define sorting options for the searchbar.
@@ -187,6 +191,123 @@ class HrSkillPortal(CustomerPortal):
         return OR(parts) if parts else []
 
     # -------------------------
+    # Core filter helper for skills & levels (AND logic)
+    # -------------------------
+
+    def _apply_skill_level_filters(
+        self, SkillSudo, base_domain, selected_skill_ids, selected_level_ids
+    ):
+        """
+        Apply AND filters for selected skills and/or levels onto base_domain and return a new domain.
+        AND semantics:
+        - skills + levels: employee must have EACH selected skill at ANY of the selected levels (at least one allowed level per skill).
+          Result rows are then limited to those skills and those levels.
+        - skills only: employee must have EACH selected skill (any level). Rows limited to selected skills.
+        - levels only: employee must have EACH selected level (with any skill). Rows limited to selected levels.
+        - none selected: base_domain unchanged.
+        """
+        domain = list(base_domain) if base_domain else []
+
+        if selected_skill_ids and selected_level_ids:
+            rg_rows = SkillSudo.read_group(
+                domain=AND(
+                    [
+                        domain,
+                        [
+                            ("skill_id", "in", selected_skill_ids),
+                            ("skill_level_id", "in", selected_level_ids),
+                        ],
+                    ]
+                ),
+                fields=["employee_id", "skill_id", "skill_level_id"],
+                groupby=["employee_id", "skill_id", "skill_level_id"],
+                lazy=False,
+            )
+            emp_to_ok_skills = {}
+            for row in rg_rows:
+                emp_id = row["employee_id"] and row["employee_id"][0]
+                skl_id = row["skill_id"] and row["skill_id"][0]
+                lvl_id = row["skill_level_id"] and row["skill_level_id"][0]
+                if not (emp_id and skl_id and lvl_id):
+                    continue
+                # mark the skill as present at an allowed level
+                emp_to_ok_skills.setdefault(emp_id, set()).add(skl_id)
+
+            must_have = set(selected_skill_ids)
+            ok_emp_ids = [
+                e for e, sset in emp_to_ok_skills.items() if must_have.issubset(sset)
+            ]
+
+            domain = AND(
+                [
+                    domain,
+                    [("employee_id", "in", ok_emp_ids or [0])],
+                    [("skill_id", "in", selected_skill_ids)],
+                    [("skill_level_id", "in", selected_level_ids)],
+                ]
+            )
+            return domain
+
+        if selected_skill_ids:
+            rg_rows = SkillSudo.read_group(
+                domain=AND([domain, [("skill_id", "in", selected_skill_ids)]]),
+                fields=["employee_id", "skill_id"],
+                groupby=["employee_id", "skill_id"],
+                lazy=False,
+            )
+            emp_to_skills = {}
+            for row in rg_rows:
+                emp_id = row["employee_id"] and row["employee_id"][0]
+                skl_id = row["skill_id"] and row["skill_id"][0]
+                if emp_id and skl_id:
+                    emp_to_skills.setdefault(emp_id, set()).add(skl_id)
+
+            must_have = set(selected_skill_ids)
+            ok_emp_ids = [
+                e for e, sset in emp_to_skills.items() if must_have.issubset(sset)
+            ]
+
+            domain = AND(
+                [
+                    domain,
+                    [("employee_id", "in", ok_emp_ids or [0])],
+                    [("skill_id", "in", selected_skill_ids)],
+                ]
+            )
+            return domain
+
+        if selected_level_ids:
+            rg_rows = SkillSudo.read_group(
+                domain=AND([domain, [("skill_level_id", "in", selected_level_ids)]]),
+                fields=["employee_id", "skill_level_id"],
+                groupby=["employee_id", "skill_level_id"],
+                lazy=False,
+            )
+            emp_to_levels = {}
+            for row in rg_rows:
+                emp_id = row["employee_id"] and row["employee_id"][0]
+                lvl_id = row["skill_level_id"] and row["skill_level_id"][0]
+                if emp_id and lvl_id:
+                    emp_to_levels.setdefault(emp_id, set()).add(lvl_id)
+
+            must_have_lvls = set(selected_level_ids)
+            ok_emp_ids = [
+                e for e, lset in emp_to_levels.items() if must_have_lvls.issubset(lset)
+            ]
+
+            domain = AND(
+                [
+                    domain,
+                    [("employee_id", "in", ok_emp_ids or [0])],
+                    [("skill_level_id", "in", selected_level_ids)],
+                ]
+            )
+            return domain
+
+        # nothing selected
+        return domain
+
+    # -------------------------
     # Value preparation
     # -------------------------
 
@@ -194,13 +315,12 @@ class HrSkillPortal(CustomerPortal):
         """
         Collect all values required by the template.
         - Applies record rules to the domain (respects security).
-        - Adds sidebar data (skill_types, skills) and shows current selections.
-        - NOTE: At this stage we DO NOT filter by sidebar selections yet.
+        - Adds sidebar data (skills, levels) and shows current selections.
+        - Applies AND logic for selected skills/levels via _apply_skill_level_filters().
         """
         values = self._prepare_portal_layout_values()
         Skill = request.env["hr.employee.skill"]
 
-        # Respect access rules
         domain = []
         if Skill.check_access_rights("read"):
             domain = AND(
@@ -208,6 +328,7 @@ class HrSkillPortal(CustomerPortal):
             )
         SkillSudo = Skill.sudo()
 
+        # Read selections from query
         selected_skill_ids = self._get_multi_ids("skill_ids")
         selected_level_ids = self._get_multi_ids("level_ids")
 
@@ -231,36 +352,10 @@ class HrSkillPortal(CustomerPortal):
                 [domain, self._build_basic_search_domain(search_in or "all", search)]
             )
 
-        if selected_skill_ids:
-            # Etsi työntekijät, joilla on KAIKKI valitut skillit
-            rg_rows = SkillSudo.read_group(
-                domain=AND([domain, [("skill_id", "in", selected_skill_ids)]]),
-                fields=["employee_id", "skill_id"],
-                groupby=["employee_id", "skill_id"],
-                lazy=False,
-            )
-            emp2skills = {}
-            for row in rg_rows:
-                emp_id = row["employee_id"] and row["employee_id"][0]
-                skl_id = row["skill_id"] and row["skill_id"][0]
-                if emp_id and skl_id:
-                    emp2skills.setdefault(emp_id, set()).add(skl_id)
-
-            required = set(selected_skill_ids)
-            ok_emp_ids = [
-                e for e, sset in emp2skills.items() if required.issubset(sset)
-            ]
-
-            # Näytä vain:
-            #  - ne työntekijät, joilla ON kaikki valitut skillit (AND)
-            #  - ja rivit rajataan valittuihin skilleihin (selkeä näkymä)
-            domain = AND(
-                [
-                    domain,
-                    [("employee_id", "in", ok_emp_ids or [0])],
-                    [("skill_id", "in", selected_skill_ids)],
-                ]
-            )
+        # Apply skill/level AND-filters using a single helper
+        domain = self._apply_skill_level_filters(
+            SkillSudo, domain, selected_skill_ids, selected_level_ids
+        )
 
         # Fetch page of records
         total = SkillSudo.search_count(domain)
@@ -271,7 +366,6 @@ class HrSkillPortal(CustomerPortal):
                 "groupby": groupby,
                 "search_in": search_in,
                 "search": search,
-                # keep raw selections in URL so sidebar stays checked
                 "skill_ids": ",".join(map(str, selected_skill_ids))
                 if selected_skill_ids
                 else "",
@@ -334,9 +428,9 @@ class HrSkillPortal(CustomerPortal):
         self, page=1, sortby=None, search=None, search_in="all", groupby=None, **kw
     ):
         """
-        Route: render the skill listing page with a sidebar (initially display-only).
+        Route: render the skill listing page with a sidebar (skills + levels).
         - Supports pagination via /all/skills/page/<int:page>.
-        - Accepts sortby, search, search_in, groupby, type_ids, skill_ids.
+        - Accepts sortby, search, search_in, groupby, skill_ids, level_ids.
         """
         values = self._prepare_skill_values(page, sortby, search, search_in, groupby)
         return request.render("hr_skills_frontend.portal_all_skills", values)
