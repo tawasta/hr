@@ -35,5 +35,11 @@
     "data": [
         "data/website_menu.xml",
         "views/skills_portal.xml",
+        "views/skills_profile_modal.xml",
     ],
+    "assets": {
+        "web.assets_frontend": [
+            "/hr_skills_frontend/static/src/js/main.esm.js",
+        ],
+    },
 }
