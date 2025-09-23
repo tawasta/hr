@@ -1,7 +1,7 @@
 /** @odoo-module **/
 
 import publicWidget from "@web/legacy/js/public/public_widget";
-import { jsonrpc } from "@web/core/network/rpc_service";
+import {jsonrpc} from "@web/core/network/rpc_service";
 
 /**
  * Portal-modaali "My skills"
@@ -21,10 +21,10 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
     },
 
     async _onOpen() {
-        const modalBody   = document.getElementById("hrEmpSkillsContent");
-        const formEl      = document.getElementById("hrEmpSkillsForm");
-        const saveBtn     = document.getElementById("hrEmpSkillsSaveBtn");
-        const sectionKey  = document.getElementById("hrEmpSkills_section_key");
+        const modalBody = document.getElementById("hrEmpSkillsContent");
+        const formEl = document.getElementById("hrEmpSkillsForm");
+        const saveBtn = document.getElementById("hrEmpSkillsSaveBtn");
+        const sectionKey = document.getElementById("hrEmpSkills_section_key");
         const deleteInput = document.getElementById("hrEmpSkills_delete_payload");
         if (!modalBody || !formEl || !saveBtn || !sectionKey || !deleteInput) return;
 
@@ -39,7 +39,9 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
             <span class="visually-hidden">Loading...</span>
           </div>`;
         try {
-            const resp = await fetch("/my/skills_modal/body", { credentials: "same-origin" });
+            const resp = await fetch("/my/skills_modal/body", {
+                credentials: "same-origin",
+            });
             modalBody.innerHTML = await resp.text();
         } catch {
             modalBody.innerHTML = `<div class="alert alert-danger m-3">Failed to load modal content.</div>`;
@@ -62,7 +64,7 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
             btn.addEventListener("click", () => {
                 this._hideAllAddBlocks(modalBody);
                 sectionKey.value = "";
-                if (!Object.values(this._pendingDeletions).some(s => s && s.size)) {
+                if (!Object.values(this._pendingDeletions).some((s) => s && s.size)) {
                     saveBtn.setAttribute("disabled", "disabled");
                 }
             });
@@ -86,10 +88,13 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
                 const ok = this._validateRequired(visible);
                 if (!ok) {
                     ev.preventDefault();
-                    this._showAlert(modalBody, "Fill the required fields before saving.");
+                    this._showAlert(
+                        modalBody,
+                        "Fill the required fields before saving."
+                    );
                 }
             } else if (!Object.keys(payload).length) {
-                // ei lisäystä eikä poistoja
+                // Ei lisäystä eikä poistoja
                 ev.preventDefault();
                 this._showAlert(modalBody, "No changes to save.");
             }
@@ -104,9 +109,15 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
                 const id = parseInt(cb.dataset.id || "0");
                 if (!section || !id) return;
 
-                if (!this._pendingDeletions[section]) this._pendingDeletions[section] = new Set();
-                cb.checked ? this._pendingDeletions[section].add(id)
-                           : this._pendingDeletions[section].delete(id);
+                if (!this._pendingDeletions[section]) {
+                    this._pendingDeletions[section] = new Set();
+                }
+
+                if (cb.checked) {
+                    this._pendingDeletions[section].add(id);
+                } else {
+                    this._pendingDeletions[section].delete(id);
+                }
 
                 // Kevyt visuaalinen vihje poistosta
                 const tr = cb.closest("tr");
@@ -116,11 +127,16 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
                 }
 
                 // Save on aktiivinen jos on poistoja TAI jokin addblock käytössä
-                const hasAnyDeletion = Object.values(this._pendingDeletions).some((s) => s && s.size > 0);
-                const hasSectionKey = !!(sectionKeyEl && sectionKeyEl.value);
-                hasAnyDeletion || hasSectionKey
-                    ? saveBtn.removeAttribute("disabled")
-                    : saveBtn.setAttribute("disabled", "disabled");
+                const hasAnyDeletion = Object.values(this._pendingDeletions).some(
+                    (s) => s && s.size > 0
+                );
+                const hasSectionKey = Boolean(sectionKeyEl && sectionKeyEl.value);
+
+                if (hasAnyDeletion || hasSectionKey) {
+                    saveBtn.removeAttribute("disabled");
+                } else {
+                    saveBtn.setAttribute("disabled", "disabled");
+                }
             });
         });
     },
@@ -141,7 +157,12 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
             if (!show) {
                 el.classList.remove("is-invalid");
                 const next = el.nextElementSibling;
-                if (next && next.classList && next.classList.contains("invalid-feedback")) next.remove();
+                if (
+                    next &&
+                    next.classList &&
+                    next.classList.contains("invalid-feedback")
+                )
+                    next.remove();
             }
         });
 
@@ -154,24 +175,32 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
                 el.required = false;
                 el.classList.remove("is-invalid");
                 const next = el.nextElementSibling;
-                if (next && next.classList && next.classList.contains("invalid-feedback")) next.remove();
+                if (
+                    next &&
+                    next.classList &&
+                    next.classList.contains("invalid-feedback")
+                )
+                    next.remove();
             });
         });
     },
 
     _hideAllAddBlocks(root) {
-        root.querySelectorAll("[id^='addblock-']")
-            .forEach((b) => this._toggleAddBlock(root, b.id.replace("addblock-", ""), false));
+        root.querySelectorAll("[id^='addblock-']").forEach((b) =>
+            this._toggleAddBlock(root, b.id.replace("addblock-", ""), false)
+        );
     },
 
     // --- Riippuvuudet: Skill Type -> (Skill, Level) ---
     _wireDependencies(root) {
-        const typeSel  = root.querySelector('select[name="skills__skill_type_id"]');
+        const typeSel = root.querySelector('select[name="skills__skill_type_id"]');
         const skillSel = root.querySelector('select[name="skills__skill_id"]');
         const levelSel = root.querySelector('select[name="skills__skill_level_id"]');
         if (!typeSel || !skillSel || !levelSel) return;
 
-        const reset = (el) => { el.innerHTML = "<option value=''></option>"; };
+        const reset = (el) => {
+            el.innerHTML = "<option value=''></option>";
+        };
 
         // Aluksi tyhjät listat child-kentille
         reset(skillSel);
@@ -184,7 +213,7 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
             const typeId = typeSel.value ? parseInt(typeSel.value, 10) : null;
             if (!typeId) return;
 
-            const ctx = { skill_type_id: typeId };
+            const ctx = {skill_type_id: typeId};
             try {
                 // Hae kumpikin lista samanaikaisesti
                 const [skills, levels] = await Promise.all([
@@ -202,17 +231,19 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
 
                 (skills || []).forEach(([id, name]) => {
                     const o = document.createElement("option");
-                    o.value = id; o.textContent = name;
+                    o.value = id;
+                    o.textContent = name;
                     skillSel.appendChild(o);
                 });
 
                 (levels || []).forEach(([id, name]) => {
                     const o = document.createElement("option");
-                    o.value = id; o.textContent = name;
+                    o.value = id;
+                    o.textContent = name;
                     levelSel.appendChild(o);
                 });
             } catch {
-                // jätetään tyhjäksi virhetilanteessa
+                // Jätetään tyhjäksi virhetilanteessa
             }
         });
     },
@@ -223,7 +254,9 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
         const block = container.querySelector("[id^='addblock-']:not(.d-none)");
         if (!block) return true;
 
-        block.querySelectorAll(".is-invalid").forEach((el) => el.classList.remove("is-invalid"));
+        block
+            .querySelectorAll(".is-invalid")
+            .forEach((el) => el.classList.remove("is-invalid"));
         block.querySelectorAll(".invalid-feedback").forEach((el) => el.remove());
 
         block.querySelectorAll("select").forEach((el) => {

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from odoo import http, _
 from odoo.http import request
 from odoo.osv.expression import AND
@@ -10,6 +9,7 @@ _logger = logging.getLogger(__name__)
 
 # ---------- Apufunktiot ----------
 
+
 def _employee_of_current_user():
     """Palauta kirjautuneen käyttäjän työntekijä (hr.employee) tai False.
     - Käyttää user.employee_id:tä
@@ -18,16 +18,21 @@ def _employee_of_current_user():
     user = request.env.user.sudo()
     emp = user.employee_id
     if not emp:
-        emp = request.env['hr.employee'].sudo().search([('user_id', '=', user.id)], limit=1)
+        emp = (
+            request.env["hr.employee"]
+            .sudo()
+            .search([("user_id", "=", user.id)], limit=1)
+        )
     return emp
 
 
 def _restrict_to_employee(emp):
     """Domain, joka rajaa hakua vain tiettyyn työntekijään."""
-    return [('employee_id', '=', emp.id)]
+    return [("employee_id", "=", emp.id)]
 
 
 # ---------- Kontrolleri ----------
+
 
 class PortalSkillProfileController(http.Controller):
     """
@@ -39,53 +44,56 @@ class PortalSkillProfileController(http.Controller):
 
     # ---- SKEEMA: kuvaa modaalin osiot, listan kolumnit ja input-kentät ----
     def _schema(self, employee):
-        return [{
-            "key": "skills",
-            "title": _("Skills"),
-            "model": "hr.employee.skill",
-            "defaults": {"employee_id": employee.id},
-            "list_columns": [
-                {"name": "skill_type_id", "label": _("Skill Type"), "type": "m2o"},
-                {"name": "skill_id", "label": _("Skill"), "type": "m2o"},
-                {"name": "skill_level_id", "label": _("Level"), "type": "m2o"},
-                {"name": "level_progress", "label": _("Progress (%)")},
-            ],
-            "fields": [
-                {
-                    "name": "skill_type_id",
-                    "label": _("Skill Type"),
-                    "type": "many2one",
-                    "comodel": "hr.skill.type",
-                    "required": True,
-                },
-                {
-                    "name": "skill_id",
-                    "label": _("Skill"),
-                    "type": "many2one",
-                    "comodel": "hr.skill",
-                    "required": True,
-                    "depends_on": "skill_type_id",
-                },
-                {
-                    "name": "skill_level_id",
-                    "label": _("Level"),
-                    "type": "many2one",
-                    "comodel": "hr.skill.level",
-                    "required": True,
-                    "depends_on": "skill_type_id",
-                },
-            ],
-        }]
+        return [
+            {
+                "key": "skills",
+                "title": _("Skills"),
+                "model": "hr.employee.skill",
+                "defaults": {"employee_id": employee.id},
+                "list_columns": [
+                    {"name": "skill_type_id", "label": _("Skill Type"), "type": "m2o"},
+                    {"name": "skill_id", "label": _("Skill"), "type": "m2o"},
+                    {"name": "skill_level_id", "label": _("Level"), "type": "m2o"},
+                    {"name": "level_progress", "label": _("Progress (%)")},
+                ],
+                "fields": [
+                    {
+                        "name": "skill_type_id",
+                        "label": _("Skill Type"),
+                        "type": "many2one",
+                        "comodel": "hr.skill.type",
+                        "required": True,
+                    },
+                    {
+                        "name": "skill_id",
+                        "label": _("Skill"),
+                        "type": "many2one",
+                        "comodel": "hr.skill",
+                        "required": True,
+                        "depends_on": "skill_type_id",
+                    },
+                    {
+                        "name": "skill_level_id",
+                        "label": _("Level"),
+                        "type": "many2one",
+                        "comodel": "hr.skill.level",
+                        "required": True,
+                        "depends_on": "skill_type_id",
+                    },
+                ],
+            }
+        ]
 
     # ---- GET: Rakenna modal-body (lista + initial options) ----
     @http.route(
-        "/my/skills_modal/body",
-        type="http", auth="user", website=True, methods=["GET"]
+        "/my/skills_modal/body", type="http", auth="user", website=True, methods=["GET"]
     )
     def skills_modal_body(self, **kw):
         emp = _employee_of_current_user()
         if not emp:
-            return request.render("hr_skills_frontend.portal_skills_modal_body_error", {})
+            return request.render(
+                "hr_skills_frontend.portal_skills_modal_body_error", {}
+            )
 
         schema = self._schema(emp)
 
@@ -99,7 +107,9 @@ class PortalSkillProfileController(http.Controller):
                 row = {"id": r.id}
                 for col in sec["list_columns"]:
                     val = getattr(r, col["name"])
-                    row[col["name"]] = (val.display_name if col.get("type") == "m2o" else val) or ""
+                    row[col["name"]] = (
+                        val.display_name if col.get("type") == "m2o" else val
+                    ) or ""
                 rows.append(row)
             section_rows[sec["key"]] = rows
 
@@ -125,7 +135,10 @@ class PortalSkillProfileController(http.Controller):
     # ---- JSON: Palauta riippuvaisen many2one-kentän vaihtoehdot ----
     @http.route(
         "/my/skills_modal/m2o_options",
-        type="json", auth="user", website=True, methods=["POST"]
+        type="json",
+        auth="user",
+        website=True,
+        methods=["POST"],
     )
     def m2o_options(self, section_key=None, field_name=None, context_values=None):
         """Käyttö JS:stä. context_values = {'skill_type_id': <id>}."""
@@ -139,8 +152,12 @@ class PortalSkillProfileController(http.Controller):
             return []
 
         fdef = next(
-            (x for x in sec["fields"] if x["name"] == field_name and x["type"] == "many2one"),
-            None
+            (
+                x
+                for x in sec["fields"]
+                if x["name"] == field_name and x["type"] == "many2one"
+            ),
+            None,
         )
         if not fdef:
             return []
@@ -193,22 +210,31 @@ class PortalSkillProfileController(http.Controller):
                 continue
             try:
                 Model = request.env[sec["model"]].sudo()
-                recs = Model.search(AND([_restrict_to_employee(employee), [("id", "in", id_list)]]))
+                recs = Model.search(
+                    AND([_restrict_to_employee(employee), [("id", "in", id_list)]])
+                )
                 if recs:
                     recs.unlink()
             except Exception as e:
-                _logger.warning("Delete failed for %s ids=%s: %s", sec and sec["model"], id_list, e)
+                _logger.warning(
+                    "Delete failed for %s ids=%s: %s", sec and sec["model"], id_list, e
+                )
                 request.env.cr.rollback()
 
     # ---- POST: Luo uuden ja/tai poista valitut ----
     @http.route(
         "/my/skills_modal/create",
-        type="http", auth="user", website=True, methods=["POST"]
+        type="http",
+        auth="user",
+        website=True,
+        methods=["POST"],
     )
     def create(self, **post):
         emp = _employee_of_current_user()
         if not emp:
-            return request.redirect((request.httprequest.referrer or "/my/home") + "?err=no_employee")
+            return request.redirect(
+                (request.httprequest.referrer or "/my/home") + "?err=no_employee"
+            )
 
         # Poistot payloadista
         delete_payload_raw = post.get("delete_payload") or ""
@@ -243,7 +269,9 @@ class PortalSkillProfileController(http.Controller):
         # Required-tarkistus
         for f in sec["fields"]:
             if f.get("required") and not vals.get(f["name"]):
-                return request.redirect((request.httprequest.referrer or "/my/home") + "?err=required")
+                return request.redirect(
+                    (request.httprequest.referrer or "/my/home") + "?err=required"
+                )
 
         # Luo rivi
         try:
@@ -251,6 +279,8 @@ class PortalSkillProfileController(http.Controller):
         except Exception as e:
             _logger.warning("Create failed for %s: %s", sec["model"], e)
             request.env.cr.rollback()
-            return request.redirect((request.httprequest.referrer or "/my/home") + "?err=create")
+            return request.redirect(
+                (request.httprequest.referrer or "/my/home") + "?err=create"
+            )
 
         return request.redirect(request.httprequest.referrer or "/my/home")
