@@ -5,10 +5,25 @@
 ==================
 HR Skills Frontend
 ==================
+Provides a modern portal-style listing of employee skills (hr.employee.skill) on the website.
+Includes search, sorting, grouping, and sidebar filters for skills and levels.
 
+Configuration
+=============
+-/
 
-Credits
-=======
+Usage
+=====
+Install this module from Apps.  
+Navigate to **Website → Skills** or open ``/all/skills`` in your browser.
+
+Features
+--------
+* Search bar with **search in**, **sort by**, and **group by** options.
+* Sidebar filters for multiple skills and/or levels.
+* AND semantics for filters: employees must match all selected skills/levels.
+* Paginated results with employee, department, skill type, skill, level and progress.
+
 
 Contributors
 ------------
