@@ -1,0 +1,289 @@
+/** @odoo-module **/
+
+import publicWidget from "@web/legacy/js/public/public_widget";
+import {jsonrpc} from "@web/core/network/rpc_service";
+
+/**
+ * Portal-modaali "My skills"
+ * - Lataa body palvelimelta avattaessa
+ * - Kytkee riippuvuudet: Skill Type -> (Skill, Level)
+ * - Rakennaa delete_payloadin ja kevyt validointi ennen submit
+ */
+publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
+    selector: "#oOpenHrEmpSkillsModal",
+
+    // Muistissa: { skills: Set([id, ...]) }
+    _pendingDeletions: {},
+
+    start() {
+        this.$el.on("click", this._onOpen.bind(this));
+        return this._super(...arguments);
+    },
+
+    async _onOpen() {
+        const modalBody = document.getElementById("hrEmpSkillsContent");
+        const formEl = document.getElementById("hrEmpSkillsForm");
+        const saveBtn = document.getElementById("hrEmpSkillsSaveBtn");
+        const sectionKey = document.getElementById("hrEmpSkills_section_key");
+        const deleteInput = document.getElementById("hrEmpSkills_delete_payload");
+        if (!modalBody || !formEl || !saveBtn || !sectionKey || !deleteInput) return;
+
+        // Resetoi tila
+        this._pendingDeletions = {};
+        saveBtn.setAttribute("disabled", "disabled");
+
+        // Lataa modal body palvelimelta
+        modalBody.innerHTML = `
+          <div class="d-flex align-items-center justify-content-center py-5">
+            <div class="spinner-border" role="status" aria-hidden="true"></div>
+            <span class="visually-hidden">Loading...</span>
+          </div>`;
+        try {
+            const resp = await fetch("/my/skills_modal/body", {
+                credentials: "same-origin",
+            });
+            modalBody.innerHTML = await resp.text();
+        } catch {
+            modalBody.innerHTML = `<div class="alert alert-danger m-3">Failed to load modal content.</div>`;
+            return;
+        }
+
+        // "Add skill" -> näyttää addblockin ja kytkee riippuvuudet
+        modalBody.querySelectorAll("[data-add]").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const key = btn.dataset.add; // "skills"
+                this._toggleAddBlock(modalBody, key, true);
+                sectionKey.value = key;
+                saveBtn.removeAttribute("disabled");
+                this._wireDependencies(modalBody);
+            });
+        });
+
+        // "Cancel" -> piilota addblock, tyhjennä section_key, disabloi Save jos ei poistoja
+        modalBody.querySelectorAll("[data-cancel]").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                this._hideAllAddBlocks(modalBody);
+                sectionKey.value = "";
+                if (!Object.values(this._pendingDeletions).some((s) => s && s.size)) {
+                    saveBtn.setAttribute("disabled", "disabled");
+                }
+            });
+        });
+
+        // Poistocheckboxit
+        this._initDeletionSelection(modalBody, saveBtn, sectionKey);
+
+        // Submit: lisää delete_payload ja validoi pakolliset
+        formEl.addEventListener("submit", (ev) => {
+            // 1) delete_payload JSON
+            const payload = {};
+            Object.entries(this._pendingDeletions).forEach(([k, set]) => {
+                if (set && set.size) payload[k] = Array.from(set);
+            });
+            deleteInput.value = JSON.stringify(payload);
+
+            // 2) kelpoisuus
+            const visible = modalBody.querySelector("[id^='addblock-']:not(.d-none)");
+            if (visible) {
+                const ok = this._validateRequired(visible);
+                if (!ok) {
+                    ev.preventDefault();
+                    this._showAlert(
+                        modalBody,
+                        "Fill the required fields before saving."
+                    );
+                }
+            } else if (!Object.keys(payload).length) {
+                // Ei lisäystä eikä poistoja
+                ev.preventDefault();
+                this._showAlert(modalBody, "No changes to save.");
+            }
+        });
+    },
+
+    // --- Poistojen hallinta ---
+    _initDeletionSelection(root, saveBtn, sectionKeyEl) {
+        root.querySelectorAll("[data-delcheck]").forEach((cb) => {
+            cb.addEventListener("change", () => {
+                const section = cb.dataset.section; // "skills"
+                const id = parseInt(cb.dataset.id || "0");
+                if (!section || !id) return;
+
+                if (!this._pendingDeletions[section]) {
+                    this._pendingDeletions[section] = new Set();
+                }
+
+                if (cb.checked) {
+                    this._pendingDeletions[section].add(id);
+                } else {
+                    this._pendingDeletions[section].delete(id);
+                }
+
+                // Kevyt visuaalinen vihje poistosta
+                const tr = cb.closest("tr");
+                if (tr) {
+                    tr.classList.toggle("table-warning", cb.checked);
+                    tr.style.opacity = cb.checked ? "0.6" : "";
+                }
+
+                // Save on aktiivinen jos on poistoja TAI jokin addblock käytössä
+                const hasAnyDeletion = Object.values(this._pendingDeletions).some(
+                    (s) => s && s.size > 0
+                );
+                const hasSectionKey = Boolean(sectionKeyEl && sectionKeyEl.value);
+
+                if (hasAnyDeletion || hasSectionKey) {
+                    saveBtn.removeAttribute("disabled");
+                } else {
+                    saveBtn.setAttribute("disabled", "disabled");
+                }
+            });
+        });
+    },
+
+    // --- Addblock show/hide ---
+    _toggleAddBlock(root, key, show) {
+        const block = root.querySelector(`#addblock-${key}`);
+        if (!block) return;
+
+        block.classList.toggle("d-none", !show);
+
+        // Enable vain näkyvässä, required niille joilla *-merkki
+        block.querySelectorAll("input, select, textarea").forEach((el) => {
+            el.disabled = !show;
+            const col = el.closest(".col");
+            const isReq = Boolean(col && col.querySelector("label .text-danger"));
+            el.required = show && isReq;
+            if (!show) {
+                el.classList.remove("is-invalid");
+                const next = el.nextElementSibling;
+                if (
+                    next &&
+                    next.classList &&
+                    next.classList.contains("invalid-feedback")
+                )
+                    next.remove();
+            }
+        });
+
+        // Piilota muut addblockit + nollaa niiden virheet/required/disabled
+        root.querySelectorAll("[id^='addblock-']").forEach((other) => {
+            if (other === block) return;
+            other.classList.add("d-none");
+            other.querySelectorAll("input, select, textarea").forEach((el) => {
+                el.disabled = true;
+                el.required = false;
+                el.classList.remove("is-invalid");
+                const next = el.nextElementSibling;
+                if (
+                    next &&
+                    next.classList &&
+                    next.classList.contains("invalid-feedback")
+                )
+                    next.remove();
+            });
+        });
+    },
+
+    _hideAllAddBlocks(root) {
+        root.querySelectorAll("[id^='addblock-']").forEach((b) =>
+            this._toggleAddBlock(root, b.id.replace("addblock-", ""), false)
+        );
+    },
+
+    // --- Riippuvuudet: Skill Type -> (Skill, Level) ---
+    _wireDependencies(root) {
+        const typeSel = root.querySelector('select[name="skills__skill_type_id"]');
+        const skillSel = root.querySelector('select[name="skills__skill_id"]');
+        const levelSel = root.querySelector('select[name="skills__skill_level_id"]');
+        if (!typeSel || !skillSel || !levelSel) return;
+
+        const reset = (el) => {
+            el.innerHTML = "<option value=''></option>";
+        };
+
+        // Aluksi tyhjät listat child-kentille
+        reset(skillSel);
+        reset(levelSel);
+
+        typeSel.addEventListener("change", async () => {
+            reset(skillSel);
+            reset(levelSel);
+
+            const typeId = typeSel.value ? parseInt(typeSel.value, 10) : null;
+            if (!typeId) return;
+
+            const ctx = {skill_type_id: typeId};
+            try {
+                // Hae kumpikin lista samanaikaisesti
+                const [skills, levels] = await Promise.all([
+                    jsonrpc("/my/skills_modal/m2o_options", {
+                        section_key: "skills",
+                        field_name: "skill_id",
+                        context_values: ctx,
+                    }),
+                    jsonrpc("/my/skills_modal/m2o_options", {
+                        section_key: "skills",
+                        field_name: "skill_level_id",
+                        context_values: ctx,
+                    }),
+                ]);
+
+                (skills || []).forEach(([id, name]) => {
+                    const o = document.createElement("option");
+                    o.value = id;
+                    o.textContent = name;
+                    skillSel.appendChild(o);
+                });
+
+                (levels || []).forEach(([id, name]) => {
+                    const o = document.createElement("option");
+                    o.value = id;
+                    o.textContent = name;
+                    levelSel.appendChild(o);
+                });
+            } catch {
+                // Jätetään tyhjäksi virhetilanteessa
+            }
+        });
+    },
+
+    // --- Kevyt required-validointi näkyvässä addblockissa ---
+    _validateRequired(container) {
+        let ok = true;
+        const block = container.querySelector("[id^='addblock-']:not(.d-none)");
+        if (!block) return true;
+
+        block
+            .querySelectorAll(".is-invalid")
+            .forEach((el) => el.classList.remove("is-invalid"));
+        block.querySelectorAll(".invalid-feedback").forEach((el) => el.remove());
+
+        block.querySelectorAll("select").forEach((el) => {
+            if (el.disabled || !el.required) return;
+            const val = (el.value || "").trim();
+            if (!val) {
+                ok = false;
+                el.classList.add("is-invalid");
+                const fb = document.createElement("div");
+                fb.className = "invalid-feedback";
+                fb.textContent = "Required field";
+                el.insertAdjacentElement("afterend", fb);
+            }
+        });
+        if (!ok) {
+            const first = block.querySelector(".is-invalid");
+            if (first) first.focus();
+        }
+        return ok;
+    },
+
+    _showAlert(root, msg) {
+        root.querySelectorAll(".portal-schema-alert").forEach((a) => a.remove());
+        const el = document.createElement("div");
+        el.className = "alert alert-danger portal-schema-alert";
+        el.setAttribute("role", "alert");
+        el.innerHTML = `<i class="fa fa-exclamation-triangle me-2"></i>${msg}`;
+        root.prepend(el);
+    },
+});
