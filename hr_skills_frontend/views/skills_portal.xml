@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+  <template id="portal_all_skills" name="All Skills (sidebar lists)">
+    <t t-call="portal.portal_layout">
+      <t t-set="breadcrumbs_searchbar" t-value="True" />
+
+      <!-- Top searchbar -->
+      <t t-call="portal.portal_searchbar">
+        <t t-set="title">Skills</t>
+        <t t-set="searchbar_inputs" t-value="searchbar_inputs" />
+        <t t-set="search_in" t-value="search_in" />
+        <t t-set="search" t-value="search" />
+        <t t-set="groupby" t-value="groupby" />
+        <t t-set="sortby" t-value="sortby" />
+        <t t-set="searchbar_groupby" t-value="searchbar_groupby" />
+        <t t-set="searchbar_sortings" t-value="searchbar_sortings" />
+        <t t-set="use_pager" t-value="True" />
+      </t>
+
+      <div class="row g-4">
+        <!-- SIDEBAR (display-only for now) -->
+        <aside class="col-12 col-lg-3">
+          <div class="card border-0 shadow-sm rounded-4">
+            <div class="card-header bg-200 rounded-top-4">
+              <strong>Filters (display only)</strong>
+            </div>
+            <div class="card-body">
+              <form id="skill-filters" action="/all/skills" method="get">
+                <!-- Preserve current searchbar state -->
+                <input type="hidden" name="sortby" t-att-value="sortby or ''" />
+                <input type="hidden" name="groupby" t-att-value="groupby or ''" />
+                <input type="hidden" name="search_in" t-att-value="search_in or ''" />
+                <input type="hidden" name="search" t-att-value="search or ''" />
+
+                <!-- Skills -->
+                <div class="mb-3">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-2">Skills</h6>
+                    <span class="badge text-bg-light" t-esc="len(skills)" />
+                  </div>
+                  <div class="vstack gap-2">
+                    <t t-foreach="skills" t-as="sk">
+                      <div class="form-check">
+                        <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    name="skill_ids"
+                                                    t-att-value="sk.id"
+                                                    t-att-checked="'checked' if sk.id in selected_skill_ids else None"
+                                                    onchange="this.form.submit()"
+                                                />
+                        <label class="form-check-label">
+                          <t t-esc="sk.name" />
+                          <t t-if="sk.skill_type_id">
+                            <small class="text-muted"> · <t
+                                                                t-esc="sk.skill_type_id.name"
+                                                            /></small>
+                          </t>
+                        </label>
+                      </div>
+                    </t>
+                    <t t-if="not skills">
+                      <small class="text-muted">No skills.</small>
+                    </t>
+                  </div>
+                </div>
+
+                <!-- Levels -->
+                <div class="mb-4">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <h6 class="mb-2">Levels</h6>
+                    <span class="badge text-bg-light" t-esc="len(levels)" />
+                  </div>
+                  <div class="vstack gap-2">
+                    <t t-foreach="levels" t-as="lv">
+                      <div class="form-check">
+                        <input
+                                                    class="form-check-input"
+                                                    type="checkbox"
+                                                    name="level_ids"
+                                                    t-att-value="lv.id"
+                                                    t-att-checked="'checked' if lv.id in selected_level_ids else None"
+                                                    onchange="this.form.submit()"
+                                                />
+                        <label class="form-check-label">
+                          <t t-esc="lv.name" />
+                          <small
+                                                        class="text-muted"
+                                                        t-if="lv.level_progress is not None"
+                                                    >
+                            · <t t-esc="lv.level_progress" />%
+                          </small>
+                        </label>
+                      </div>
+                    </t>
+                    <t t-if="not levels">
+                      <small class="text-muted">No levels.</small>
+                    </t>
+                  </div>
+                </div>
+
+                <!-- Reset (display only) -->
+                <div class="d-grid">
+                    <a
+                                        t-attf-href="/all/skills?{{ keep_query(sortby=sortby or '', groupby=groupby or '', search_in=search_in or '', search=search or '') }}"
+                                        class="btn btn-light"
+                                    >
+                        Reset selections
+                    </a>
+
+                </div>
+              </form>
+            </div>
+          </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <section class="col-12 col-lg-9">
+          <t t-if="not grouped_records">
+            <div class="alert alert-warning" role="alert">
+              No skills found.
+            </div>
+          </t>
+
+          <t t-if="grouped_records">
+            <div class="o_skill_groups d-flex flex-column gap-4">
+              <t t-foreach="grouped_records" t-as="records">
+                <div class="card shadow-sm border-0 rounded-4">
+                  <div class="card-header bg-200 rounded-top-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <div class="d-flex align-items-center gap-2">
+                        <t t-if="groupby == 'employee'">
+                          <img
+                                                        t-if="records[0].employee_id"
+                                                        class="rounded-circle o_avatar"
+                                                        t-att-src="image_data_uri(records[0].employee_id.avatar_128)"
+                                                    />
+                          <strong><span
+                                                            t-esc="records[0].employee_id and records[0].employee_id.name or '—'"
+                                                        /></strong>
+                          <span
+                                                        class="text-muted"
+                                                        t-if="records[0].employee_id.department_id"
+                                                    >·
+                            <t t-esc="records[0].employee_id.department_id.name" />
+                          </span>
+                        </t>
+                        <t t-if="groupby == 'department'">
+                          <i class="fa fa-building-o" />
+                          <strong><span
+                                                            t-esc="records[0].department_id and records[0].department_id.name or 'No Department'"
+                                                        /></strong>
+                        </t>
+                        <t t-if="groupby == 'type'">
+                          <i class="fa fa-tags" />
+                          <strong><span
+                                                            t-esc="records[0].skill_type_id and records[0].skill_type_id.name or '—'"
+                                                        /></strong>
+                        </t>
+                        <t t-if="groupby == 'skill'">
+                          <i class="fa fa-code" />
+                          <strong><span
+                                                            t-esc="records[0].skill_id and records[0].skill_id.name or '—'"
+                                                        /></strong>
+                        </t>
+                        <t t-if="groupby == 'level'">
+                          <i class="fa fa-signal" />
+                          <strong><span
+                                                            t-esc="records[0].skill_level_id and records[0].skill_level_id.name or '—'"
+                                                        /></strong>
+                        </t>
+                        <t t-if="groupby == 'none'">
+                          <strong>All skills</strong>
+                        </t>
+                      </div>
+                      <span class="badge text-bg-light">
+                        <t t-esc="len(records)" /> items
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="card-body">
+                    <div class="table-responsive">
+                      <table class="table align-middle">
+                        <thead class="table-light">
+                          <tr>
+                            <th>#</th>
+                            <th>Employee</th>
+                            <th>Department</th>
+                            <th>Skill Type</th>
+                            <th>Skill</th>
+                            <th class="text-end">Level</th>
+                            <th>Progress</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <t t-foreach="records" t-as="rec">
+                            <tr>
+                              <td><span class="text-muted">#<t
+                                                                        t-esc="rec.id"
+                                                                    /></span></td>
+                              <td>
+                                <div class="d-flex align-items-center gap-2">
+                                  <img
+                                                                        t-if="rec.employee_id"
+                                                                        class="rounded-circle o_avatar"
+                                                                        t-att-src="image_data_uri(rec.employee_id.avatar_128)"
+                                                                    />
+                                  <span
+                                                                        t-esc="rec.employee_id and rec.employee_id.name or '—'"
+                                                                    />
+                                </div>
+                              </td>
+                              <td><span
+                                                                    t-esc="rec.department_id and rec.department_id.name or '—'"
+                                                                /></td>
+                              <td><span
+                                                                    class="badge text-bg-secondary fw-normal"
+                                                                    t-esc="rec.skill_type_id and rec.skill_type_id.name or '—'"
+                                                                /></td>
+                              <td><span
+                                                                    t-esc="rec.skill_id and rec.skill_id.name or '—'"
+                                                                /></td>
+                              <td class="text-end">
+                                <span
+                                                                    class="badge rounded-pill"
+                                                                    t-attf-class="badge text-bg-{{ 'success' if rec.level_progress &gt;= 80 else 'warning' if rec.level_progress &gt;= 40 else 'secondary' }}"
+                                                                >
+                                  <t
+                                                                        t-esc="rec.skill_level_id and rec.skill_level_id.name or '—'"
+                                                                    />
+                                </span>
+                              </td>
+                              <td>
+                                <div class="progress rounded-pill">
+                                  <div
+                                                                        class="progress-bar"
+                                                                        role="progressbar"
+                                                                        t-attf-style="width: {{ int(rec.level_progress or 0) }}%;"
+                                                                        t-att-aria-valuenow="int(rec.level_progress or 0)"
+                                                                        aria-valuemin="0"
+                                                                        aria-valuemax="100"
+                                                                    >
+                                    <small class="ms-2"><t
+                                                                                t-esc="int(rec.level_progress or 0)"
+                                                                            />%</small>
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          </t>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </t>
+            </div>
+
+            <!-- SINGLE pager -->
+            <div class="mt-3">
+              <t t-call="portal.pager" />
+            </div>
+          </t>
+        </section>
+      </div>
+    </t>
+  </template>
+</odoo>
