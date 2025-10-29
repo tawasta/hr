@@ -1,7 +1,7 @@
 /** @odoo-module **/
 
 import publicWidget from "@web/legacy/js/public/public_widget";
-import { jsonrpc } from "@web/core/network/rpc_service";
+import {jsonrpc} from "@web/core/network/rpc_service";
 
 publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
     selector: "#oOpenHrEmpSkillsModal",
@@ -24,7 +24,7 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
 
         // Resetoi tila
         this._pendingDeletions = {};
-        sectionKey.value = ""; // ei oletusta
+        sectionKey.value = ""; // Ei oletusta
         saveBtn.setAttribute("disabled", "disabled");
 
         // Lataa modal body palvelimelta
@@ -44,7 +44,9 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
         }
 
         // --- Profiilikentät: aina näkyvissä. Muutos -> section_key=profile + Save enabled
-        const profileInputs = modalBody.querySelectorAll('input[name^="profile__"], textarea[name^="profile__"]');
+        const profileInputs = modalBody.querySelectorAll(
+            'input[name^="profile__"], textarea[name^="profile__"]'
+        );
         const markProfileChanged = () => {
             sectionKey.value = "profile";
             saveBtn.removeAttribute("disabled");
@@ -71,8 +73,11 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
                 if (sectionKey.value === "skills") {
                     sectionKey.value = "";
                 }
-                const hasAnyDeletion = Object.values(this._pendingDeletions).some((s) => s && s.size);
-                const hasProfileChange = profileInputs && sectionKey.value === "profile";
+                const hasAnyDeletion = Object.values(this._pendingDeletions).some(
+                    (s) => s && s.size
+                );
+                const hasProfileChange =
+                    profileInputs && sectionKey.value === "profile";
                 if (!hasAnyDeletion && !hasProfileChange) {
                     saveBtn.setAttribute("disabled", "disabled");
                 }
@@ -92,12 +97,17 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
             deleteInput.value = JSON.stringify(payload);
 
             // 2) kelpoisuus
-            const skillsBlock = modalBody.querySelector("#addblock-skills:not(.d-none)");
+            const skillsBlock = modalBody.querySelector(
+                "#addblock-skills:not(.d-none)"
+            );
             if (skillsBlock && sectionKey.value === "skills") {
                 const ok = this._validateRequired(skillsBlock);
                 if (!ok) {
                     ev.preventDefault();
-                    this._showAlert(modalBody, "Fill the required fields before saving.");
+                    this._showAlert(
+                        modalBody,
+                        "Fill the required fields before saving."
+                    );
                     return;
                 }
             }
@@ -142,7 +152,11 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
                 const hasAnyDeletion = Object.values(this._pendingDeletions).some(
                     (s) => s && s.size > 0
                 );
-                if (hasAnyDeletion || sectionKeyEl.value === "profile" || sectionKeyEl.value === "skills") {
+                if (
+                    hasAnyDeletion ||
+                    sectionKeyEl.value === "profile" ||
+                    sectionKeyEl.value === "skills"
+                ) {
                     saveBtn.removeAttribute("disabled");
                 } else {
                     saveBtn.setAttribute("disabled", "disabled");
@@ -168,7 +182,11 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
             if (!show) {
                 el.classList.remove("is-invalid");
                 const next = el.nextElementSibling;
-                if (next && next.classList && next.classList.contains("invalid-feedback")) {
+                if (
+                    next &&
+                    next.classList &&
+                    next.classList.contains("invalid-feedback")
+                ) {
                     next.remove();
                 }
             }
@@ -183,7 +201,11 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
                 el.required = false;
                 el.classList.remove("is-invalid");
                 const next = el.nextElementSibling;
-                if (next && next.classList && next.classList.contains("invalid-feedback")) {
+                if (
+                    next &&
+                    next.classList &&
+                    next.classList.contains("invalid-feedback")
+                ) {
                     next.remove();
                 }
             });
@@ -218,7 +240,7 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
             const typeId = typeSel.value ? parseInt(typeSel.value, 10) : null;
             if (!typeId) return;
 
-            const ctx = { skill_type_id: typeId };
+            const ctx = {skill_type_id: typeId};
             try {
                 const [skills, levels] = await Promise.all([
                     jsonrpc("/my/skills_modal/m2o_options", {
@@ -256,7 +278,9 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
     _validateRequired(container) {
         let ok = true;
 
-        container.querySelectorAll(".is-invalid").forEach((el) => el.classList.remove("is-invalid"));
+        container
+            .querySelectorAll(".is-invalid")
+            .forEach((el) => el.classList.remove("is-invalid"));
         container.querySelectorAll(".invalid-feedback").forEach((el) => el.remove());
 
         container.querySelectorAll("select").forEach((el) => {

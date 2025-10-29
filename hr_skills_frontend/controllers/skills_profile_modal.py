@@ -8,6 +8,7 @@ _logger = logging.getLogger(__name__)
 
 # ---------- Apufunktiot ----------
 
+
 def _employee_of_current_user():
     """Palauta kirjautuneen käyttäjän työntekijä (hr.employee) tai False."""
     user = request.env.user.sudo()
@@ -20,11 +21,14 @@ def _employee_of_current_user():
         )
     return emp
 
+
 def _restrict_to_employee(emp):
     """Domain, joka rajaa hakua vain tiettyyn työntekijään."""
     return [("employee_id", "=", emp.id)]
 
+
 # ---------- Kontrolleri ----------
+
 
 class PortalSkillProfileController(http.Controller):
     """
@@ -76,8 +80,16 @@ class PortalSkillProfileController(http.Controller):
                 "title": _("Profile"),
                 "model": "hr.employee",
                 "fields": [
-                    {"name": "consulting_since", "label": _("Consulting since"), "type": "date"},
-                    {"name": "strategy_since", "label": _("Strategy work since"), "type": "date"},
+                    {
+                        "name": "consulting_since",
+                        "label": _("Consulting since"),
+                        "type": "date",
+                    },
+                    {
+                        "name": "strategy_since",
+                        "label": _("Strategy work since"),
+                        "type": "date",
+                    },
                     {"name": "bio", "label": _("About me"), "type": "text"},
                 ],
             },
@@ -127,8 +139,12 @@ class PortalSkillProfileController(http.Controller):
 
         # 3) Profile-osion valmiit arvot + johdetut vuodet näyttöä varten
         profile_values = {
-            "consulting_since": emp.sudo().consulting_since and emp.sudo().consulting_since.isoformat() or "",
-            "strategy_since": emp.sudo().strategy_since and emp.sudo().strategy_since.isoformat() or "",
+            "consulting_since": emp.sudo().consulting_since
+            and emp.sudo().consulting_since.isoformat()
+            or "",
+            "strategy_since": emp.sudo().strategy_since
+            and emp.sudo().strategy_since.isoformat()
+            or "",
             "bio": emp.sudo().bio or "",
             "consulting_years": emp.sudo().consulting_years,
             "strategy_years": emp.sudo().strategy_years,
@@ -215,7 +231,12 @@ class PortalSkillProfileController(http.Controller):
 
         for key, id_list in delete_map.items():
             sec = key2sec.get(key)
-            if not sec or key != "skills" or not isinstance(id_list, list) or not id_list:
+            if (
+                not sec
+                or key != "skills"
+                or not isinstance(id_list, list)
+                or not id_list
+            ):
                 continue
             try:
                 Model = request.env[sec["model"]].sudo()

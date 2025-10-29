@@ -1,6 +1,7 @@
 from odoo import api, fields, models
 from datetime import date
 
+
 class HrEmployee(models.Model):
     _inherit = "hr.employee"
 
@@ -28,11 +29,13 @@ class HrEmployee(models.Model):
     @api.depends("consulting_since", "strategy_since")
     def _compute_years(self):
         today = date.today()
+
         def yearfrac(d):
             if not d:
                 return 0.0
             days = (today - d).days
             return round(days / 365.25, 1)
+
         for rec in self:
             rec.consulting_years = yearfrac(rec.consulting_since)
             rec.strategy_years = yearfrac(rec.strategy_since)
