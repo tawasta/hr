@@ -6,15 +6,10 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-
 # ---------- Apufunktiot ----------
 
-
 def _employee_of_current_user():
-    """Palauta kirjautuneen käyttäjän työntekijä (hr.employee) tai False.
-    - Käyttää user.employee_id:tä
-    - Fallback: etsi user_id:llä
-    """
+    """Palauta kirjautuneen käyttäjän työntekijä (hr.employee) tai False."""
     user = request.env.user.sudo()
     emp = user.employee_id
     if not emp:
@@ -25,24 +20,18 @@ def _employee_of_current_user():
         )
     return emp
 
-
 def _restrict_to_employee(emp):
     """Domain, joka rajaa hakua vain tiettyyn työntekijään."""
     return [("employee_id", "=", emp.id)]
 
-
 # ---------- Kontrolleri ----------
-
 
 class PortalSkillProfileController(http.Controller):
     """
-    Portal: "My skills" -modaali
-      - Listaa nykyisen työntekijän hr.employee.skill -rivit
-      - Filtroi riippuvat M2O-kentät (skill_type -> skills & levels)
-      - Tekee luonnin ja poiston samassa lomakkeessa
+    Portal: "My skills" -modaali + "Profile" -osio
     """
 
-    # ---- SKEEMA: kuvaa modaalin osiot, listan kolumnit ja input-kentät ----
+    # ---- SKEEMA: kuvaa modaalin osiot ----
     def _schema(self, employee):
         return [
             {
@@ -81,10 +70,20 @@ class PortalSkillProfileController(http.Controller):
                         "depends_on": "skill_type_id",
                     },
                 ],
-            }
+            },
+            {
+                "key": "profile",
+                "title": _("Profile"),
+                "model": "hr.employee",
+                "fields": [
+                    {"name": "consulting_since", "label": _("Consulting since"), "type": "date"},
+                    {"name": "strategy_since", "label": _("Strategy work since"), "type": "date"},
+                    {"name": "bio", "label": _("About me"), "type": "text"},
+                ],
+            },
         ]
 
-    # ---- GET: Rakenna modal-body (lista + initial options) ----
+    # ---- GET: Rakenna modal-body (lista + initial options + profile values) ----
     @http.route(
         "/my/skills_modal/body", type="http", auth="user", website=True, methods=["GET"]
     )
@@ -97,9 +96,11 @@ class PortalSkillProfileController(http.Controller):
 
         schema = self._schema(emp)
 
-        # 1) Listaa olemassa olevat rivit (näytetään taulussa)
+        # 1) Listaa olemassa olevat skill-rivit tauluun
         section_rows = {}
         for sec in schema:
+            if sec["key"] != "skills":
+                continue
             Model = request.env[sec["model"]].sudo()
             recs = Model.search(_restrict_to_employee(emp), order="id desc", limit=200)
             rows = []
@@ -113,14 +114,25 @@ class PortalSkillProfileController(http.Controller):
                 rows.append(row)
             section_rows[sec["key"]] = rows
 
-        # 2) Alkuperäiset M2O-optiot VAIN ei-riippuvaisille kentille (type)
+        # 2) Alkuperäiset M2O-optiot VAIN skills-osion ei-riippuvaisille kentille
         initial_options = {}
         for sec in schema:
+            if sec["key"] != "skills":
+                continue
             sec_opts = {}
             for f in sec["fields"]:
-                if f["type"] == "many2one" and not f.get("depends_on"):
+                if f.get("type") == "many2one" and not f.get("depends_on"):
                     sec_opts[f["name"]] = self._m2o_options(emp, f, {})
             initial_options[sec["key"]] = sec_opts
+
+        # 3) Profile-osion valmiit arvot + johdetut vuodet näyttöä varten
+        profile_values = {
+            "consulting_since": emp.sudo().consulting_since and emp.sudo().consulting_since.isoformat() or "",
+            "strategy_since": emp.sudo().strategy_since and emp.sudo().strategy_since.isoformat() or "",
+            "bio": emp.sudo().bio or "",
+            "consulting_years": emp.sudo().consulting_years,
+            "strategy_years": emp.sudo().strategy_years,
+        }
 
         return request.render(
             "hr_skills_frontend.portal_skills_modal_body",
@@ -128,11 +140,12 @@ class PortalSkillProfileController(http.Controller):
                 "schema": schema,
                 "section_rows": section_rows,
                 "initial_options": initial_options,
+                "profile_values": profile_values,
                 "csrf_token": request.csrf_token(),
             },
         )
 
-    # ---- JSON: Palauta riippuvaisen many2one-kentän vaihtoehdot ----
+    # ---- JSON: Palauta riippuvaisen many2one-kentän vaihtoehdot (skills) ----
     @http.route(
         "/my/skills_modal/m2o_options",
         type="json",
@@ -165,11 +178,7 @@ class PortalSkillProfileController(http.Controller):
         return self._m2o_options(emp, fdef, context_values or {})
 
     def _m2o_options(self, employee, fdef, ctx_vals):
-        """Palauta (id, display_name) M2O:lle. Suodatus tehdään suoraan Pythonissa.
-        - Jos kentällä on depends_on=skill_type_id ja arvo puuttuu → []
-        - Muutoin domain [('skill_type_id', '=', <ctx arvo>)] + ('active','=',True) jos kenttä on
-        - Kontekstiliput: hr.skill → from_skill_dropdown, hr.skill.level → from_skill_level_dropdown
-        """
+        """Palauta (id, display_name) M2O:lle."""
         Model = request.env[fdef["comodel"]].sudo()
         domain = []
 
@@ -195,7 +204,7 @@ class PortalSkillProfileController(http.Controller):
         recs = Model.with_context(**ctx).search(domain, limit=200)
         return [(r.id, r.display_name) for r in recs]
 
-    # ---- Poistot (unlink), vain omat rivit ----
+    # ---- Poistot (unlink), vain omat skill-rivit ----
     def _apply_deletions(self, employee, delete_map):
         """delete_map: {'skills': [id, id, ...]}"""
         if not delete_map or not isinstance(delete_map, dict):
@@ -206,7 +215,7 @@ class PortalSkillProfileController(http.Controller):
 
         for key, id_list in delete_map.items():
             sec = key2sec.get(key)
-            if not sec or not isinstance(id_list, list) or not id_list:
+            if not sec or key != "skills" or not isinstance(id_list, list) or not id_list:
                 continue
             try:
                 Model = request.env[sec["model"]].sudo()
@@ -221,7 +230,7 @@ class PortalSkillProfileController(http.Controller):
                 )
                 request.env.cr.rollback()
 
-    # ---- POST: Luo uuden ja/tai poista valitut ----
+    # ---- POST: Luo uuden skill-rivin TAI päivitä profiilikentät ----
     @http.route(
         "/my/skills_modal/create",
         type="http",
@@ -244,43 +253,71 @@ class PortalSkillProfileController(http.Controller):
             _logger.warning("Delete payload parse failed: %s", e)
             delete_map = {}
 
-        # Aja poistot aina ensin
+        # Aja poistot aina ensin (koskee vain skills-osiota)
         self._apply_deletions(emp, delete_map)
 
-        # Luonti vain jos section_key=skills
+        # Sektion valinta
         section_key = (post.get("section_key") or "").strip()
         schema = self._schema(emp)
         sec = next((s for s in schema if s["key"] == section_key), None)
         if not sec:
             return request.redirect(request.httprequest.referrer or "/my/home")
 
-        # Salli vain skeemassa sallitut kentät
-        allowed = {f["name"]: f for f in sec["fields"]}
-        vals = dict(sec.get("defaults", {}))
-
-        # Lomakkeen m2o-arvot → int-id
-        for name in allowed:
-            raw = post.get(f"{section_key}__{name}")
-            vals[name] = int(raw) if raw else False
-
-        # Turva: pakota employee_id (vaikka joku yrittäisi peukaloida lomakkeen)
-        vals["employee_id"] = emp.id
-
-        # Required-tarkistus
-        for f in sec["fields"]:
-            if f.get("required") and not vals.get(f["name"]):
+        # --- PROFILE: kirjoita suoraan employeeen ---
+        if section_key == "profile":
+            allowed = {f["name"] for f in sec["fields"]}
+            vals = {}
+            for name in allowed:
+                raw = post.get(f"profile__{name}")
+                # Päivämäärät: 'YYYY-MM-DD' -> arvo tai False
+                if name.endswith("_since"):
+                    vals[name] = raw or False
+                elif name == "bio":
+                    vals[name] = raw or ""
+                else:
+                    vals[name] = raw
+            try:
+                emp.sudo().write(vals)
+            except Exception as e:
+                _logger.warning("Profile update failed: %s", e)
+                request.env.cr.rollback()
                 return request.redirect(
-                    (request.httprequest.referrer or "/my/home") + "?err=required"
+                    (request.httprequest.referrer or "/my/home") + "?err=profile_save"
+                )
+            return request.redirect(request.httprequest.referrer or "/my/home")
+
+        # --- SKILLS: luonti kuten ennen ---
+        if section_key == "skills":
+            # Salli vain skeemassa sallitut kentät
+            allowed = {f["name"]: f for f in sec["fields"]}
+            vals = dict(sec.get("defaults", {}))
+
+            # Lomakkeen m2o-arvot → int-id
+            for name in allowed:
+                raw = post.get(f"{section_key}__{name}")
+                vals[name] = int(raw) if raw else False
+
+            # Turva: pakota employee_id
+            vals["employee_id"] = emp.id
+
+            # Required-tarkistus
+            for f in sec["fields"]:
+                if f.get("required") and not vals.get(f["name"]):
+                    return request.redirect(
+                        (request.httprequest.referrer or "/my/home") + "?err=required"
+                    )
+
+            # Luo rivi
+            try:
+                request.env[sec["model"]].sudo().create(vals)
+            except Exception as e:
+                _logger.warning("Create failed for %s: %s", sec["model"], e)
+                request.env.cr.rollback()
+                return request.redirect(
+                    (request.httprequest.referrer or "/my/home") + "?err=create"
                 )
 
-        # Luo rivi
-        try:
-            request.env[sec["model"]].sudo().create(vals)
-        except Exception as e:
-            _logger.warning("Create failed for %s: %s", sec["model"], e)
-            request.env.cr.rollback()
-            return request.redirect(
-                (request.httprequest.referrer or "/my/home") + "?err=create"
-            )
+            return request.redirect(request.httprequest.referrer or "/my/home")
 
+        # Jos sektion avain ei täsmää, paluu kotiin
         return request.redirect(request.httprequest.referrer or "/my/home")

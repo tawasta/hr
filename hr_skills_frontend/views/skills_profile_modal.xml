@@ -4,85 +4,44 @@
   <template id="portal_my_skills_extend" inherit_id="portal.portal_my_home">
     <xpath expr="//div[@class='o_portal_my_home']" position="inside">
       <button
-                type="button"
-                class="btn btn-primary mt-3"
-                data-bs-toggle="modal"
-                data-bs-target="#hrEmpSkillsModal"
-                id="oOpenHrEmpSkillsModal"
-            >
-        <i class="fa fa-graduation-cap me-1" /> My skills
+        type="button"
+        class="btn btn-primary mt-3"
+        data-bs-toggle="modal"
+        data-bs-target="#hrEmpSkillsModal"
+        id="oOpenHrEmpSkillsModal">
+        <i class="fa fa-graduation-cap me-1"/> My skills &amp; profile
       </button>
 
-      <div
-                class="modal fade"
-                id="hrEmpSkillsModal"
-                tabindex="-1"
-                aria-hidden="true"
-                aria-labelledby="hrEmpSkillsTitle"
-            >
-        <div
-                    class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable"
-                >
-          <form
-                        class="modal-content"
-                        id="hrEmpSkillsForm"
-                        action="/my/skills_modal/create"
-                        method="post"
-                    >
-            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
-            <input
-                            type="hidden"
-                            name="section_key"
-                            id="hrEmpSkills_section_key"
-                            value=""
-                        />
-            <input
-                            type="hidden"
-                            name="delete_payload"
-                            id="hrEmpSkills_delete_payload"
-                            value="{}"
-                        />
+      <div class="modal fade" id="hrEmpSkillsModal" tabindex="-1" aria-hidden="true" aria-labelledby="hrEmpSkillsTitle">
+        <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+          <form class="modal-content" id="hrEmpSkillsForm" action="/my/skills_modal/create" method="post">
+            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+            <input type="hidden" name="section_key" id="hrEmpSkills_section_key" value=""/>
+            <input type="hidden" name="delete_payload" id="hrEmpSkills_delete_payload" value="{}"/>
 
             <!-- Header -->
             <div class="modal-header position-sticky top-0 bg-white" style="z-index:1;">
               <h5 class="modal-title d-flex align-items-center" id="hrEmpSkillsTitle">
-                <i class="fa fa-id-badge me-2" /> Manage my skills
+                <i class="fa fa-id-badge me-2"/> Manage my skills &amp; profile
               </h5>
-              <button
-                                type="button"
-                                class="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                            />
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"/>
             </div>
 
             <!-- Body: ladataan GET-reitiltä -->
             <div class="modal-body" id="hrEmpSkillsContent">
               <div class="d-flex align-items-center justify-content-center py-5">
-                <div class="spinner-border" role="status" aria-hidden="true" />
+                <div class="spinner-border" role="status" aria-hidden="true"/>
                 <span class="visually-hidden">Loading...</span>
               </div>
             </div>
 
             <!-- Footer -->
-            <div
-                            class="modal-footer d-flex justify-content-between position-sticky bottom-0 bg-white"
-                            style="z-index:1;"
-                        >
-              <button
-                                type="button"
-                                class="btn btn-outline-secondary"
-                                data-bs-dismiss="modal"
-                            >
-                <i class="fa fa-times me-1" /> Close
+            <div class="modal-footer d-flex justify-content-between position-sticky bottom-0 bg-white" style="z-index:1;">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                <i class="fa fa-times me-1"/> Close
               </button>
-              <button
-                                type="submit"
-                                class="btn btn-primary"
-                                id="hrEmpSkillsSaveBtn"
-                                disabled="disabled"
-                            >
-                <i class="fa fa-save me-1" /> Save
+              <button type="submit" class="btn btn-primary" id="hrEmpSkillsSaveBtn" disabled="disabled">
+                <i class="fa fa-save me-1"/> Save
               </button>
             </div>
           </form>
@@ -92,166 +51,137 @@
   </template>
 
   <!-- Modal body (server-rendered) -->
-  <template id="portal_skills_modal_body" name="Employee Skills Modal Body">
-    <t t-foreach="schema" t-as="sec">
-      <div class="mb-4">
-        <!-- Otsikko + count -->
-        <div class="d-flex align-items-center mb-2">
-          <h6 class="mb-0 me-2"><t t-esc="sec['title']" /></h6>
-          <span class="badge bg-secondary">
-            <t
-                            t-esc="(len(section_rows.get(sec['key'], [])) if section_rows.get(sec['key']) else 0)"
-                        /> items
-          </span>
-        </div>
-
-        <!-- Lista olemassa olevista riveistä -->
-        <t t-set="rows" t-value="section_rows.get(sec['key'], [])" />
-        <t t-if="rows">
-          <div class="table-responsive">
-            <table class="table table-sm table-striped table-hover align-middle">
-              <thead class="table-light">
-                <tr>
-                  <th scope="col" class="fw-semibold" style="width:2rem;">Del</th>
-                  <t t-foreach="sec['list_columns']" t-as="col">
-                    <th scope="col" class="fw-semibold"><t t-esc="col['label']" /></th>
-                  </t>
-                </tr>
-              </thead>
-              <tbody>
-                <t t-foreach="rows" t-as="row">
-                  <tr t-att-data-row-id="row.get('id')">
-                    <td>
-                      <input
-                                                type="checkbox"
-                                                class="form-check-input"
-                                                t-att-data-delcheck="1"
-                                                t-att-data-section="sec['key']"
-                                                t-att-data-id="row.get('id')"
-                                            />
-                    </td>
-                    <t t-foreach="sec['list_columns']" t-as="col">
-                      <td><t t-esc="row[col['name']]" /></td>
-                    </t>
-                  </tr>
-                </t>
-              </tbody>
-            </table>
-          </div>
-        </t>
-        <t t-if="not rows">
-          <div class="alert alert-light border mb-2" role="alert">
-            <i class="fa fa-info-circle me-2" /> No skills yet.
-          </div>
-        </t>
-
-        <!-- Add block: kolme M2O-kenttää -->
-        <div
-                    class="card shadow-sm d-none mb-2"
-                    t-att-id="'addblock-'+sec['key']"
-                    aria-live="polite"
-                >
-          <div class="card-body">
-            <div class="mb-2 text-muted small">
-              Select type, then skill and level. Press <strong>Save</strong>.
-            </div>
-
-            <div class="row row-cols-1 row-cols-md-2 g-3">
-              <!-- skill_type -->
-              <div class="col">
-                <label class="form-label mb-1">
-                  <t t-esc="sec['fields'][0]['label']" /><span
-                                        class="text-danger"
-                                    >*</span>
-                </label>
-                <select
-                                    class="form-select"
-                                    t-att-name="sec['key'] + '__' + sec['fields'][0]['name']"
-                                    disabled="disabled"
-                                >
-                  <option value="" />
-                  <t
-                                        t-set="opts_t"
-                                        t-value="initial_options.get(sec['key'], {}).get('skill_type_id', [])"
-                                    />
-                  <t t-foreach="opts_t" t-as="opt">
-                    <option t-att-value="opt[0]"><t t-esc="opt[1]" /></option>
-                  </t>
-                </select>
-              </div>
-
-              <!-- skill (riippuu skill_type_id:stä) -->
-              <div class="col">
-                <label class="form-label mb-1">
-                  <t t-esc="sec['fields'][1]['label']" /><span
-                                        class="text-danger"
-                                    >*</span>
-                </label>
-                <select
-                                    class="form-select"
-                                    t-att-name="sec['key'] + '__' + sec['fields'][1]['name']"
-                                    t-att-data-section="sec['key']"
-                                    t-att-data-depends-on="sec['fields'][1]['depends_on']"
-                                    disabled="disabled"
-                                >
-                  <option value="" />
-                </select>
-              </div>
-
-              <!-- level (riippuu skill_type_id:stä) -->
-              <div class="col">
-                <label class="form-label mb-1">
-                  <t t-esc="sec['fields'][2]['label']" /><span
-                                        class="text-danger"
-                                    >*</span>
-                </label>
-                <select
-                                    class="form-select"
-                                    t-att-name="sec['key'] + '__' + sec['fields'][2]['name']"
-                                    t-att-data-section="sec['key']"
-                                    t-att-data-depends-on="sec['fields'][2]['depends_on']"
-                                    disabled="disabled"
-                                >
-                  <option value="" />
-                </select>
-              </div>
-            </div>
-
-            <div class="mt-3 d-flex align-items-center gap-2">
-              <button
-                                type="button"
-                                class="btn btn-link p-0"
-                                data-cancel="1"
-                            >Cancel</button>
-              <span
-                                class="text-muted small"
-                            >Your changes won’t be saved until you click <strong
-                                >Save</strong>.</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Lisää rivi -painike -->
-        <button
-                    type="button"
-                    class="btn btn-outline-primary btn-sm"
-                    t-att-data-add="sec['key']"
-                >
-          <i class="fa fa-plus me-1" /> Add skill
-        </button>
+  <template id="portal_skills_modal_body" name="Employee Skills &amp; Profile Modal Body">
+    <!-- PROFILE-OSIO: aina näkyvä, ei erillistä edit-tilaa, EI years-yhteenvetoa -->
+    <div class="mb-4">
+      <div class="d-flex align-items-center mb-2">
+        <h6 class="mb-0 me-2">Profile</h6>
       </div>
-    </t>
+
+      <div class="card shadow-sm mb-2" id="profile-block" aria-live="polite">
+        <div class="card-body">
+          <div class="row row-cols-1 row-cols-md-2 g-3">
+            <div class="col">
+              <label class="form-label mb-1">Consulting since</label>
+              <input class="form-control" type="date" name="profile__consulting_since"
+                     t-att-value="profile_values.get('consulting_since') or ''"/>
+            </div>
+            <div class="col">
+              <label class="form-label mb-1">Strategy work since</label>
+              <input class="form-control" type="date" name="profile__strategy_since"
+                     t-att-value="profile_values.get('strategy_since') or ''"/>
+            </div>
+            <div class="col-12">
+              <label class="form-label mb-1">About me</label>
+              <textarea class="form-control" rows="4" name="profile__bio"><t t-esc="profile_values.get('bio') or ''"/></textarea>
+            </div>
+          </div>
+
+          <div class="mt-2 text-muted small">
+            Your changes won’t be saved until you click <strong>Save</strong>.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SKILLS-OSIO (lista + add-lohko kuten ennen) -->
+    <t t-set="rows" t-value="section_rows.get('skills', [])"/>
+    <div class="mb-4">
+      <div class="d-flex align-items-center mb-2">
+        <h6 class="mb-0 me-2">Skills</h6>
+        <span class="badge bg-secondary">
+          <t t-esc="(len(rows) if rows else 0)"/> items
+        </span>
+      </div>
+
+      <t t-if="rows">
+        <div class="table-responsive">
+          <table class="table table-sm table-striped table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th scope="col" class="fw-semibold" style="width:2rem;">Del</th>
+                <th scope="col" class="fw-semibold">Skill Type</th>
+                <th scope="col" class="fw-semibold">Skill</th>
+                <th scope="col" class="fw-semibold">Level</th>
+                <th scope="col" class="fw-semibold">Progress (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <t t-foreach="rows" t-as="row">
+                <tr t-att-data-row-id="row.get('id')">
+                  <td>
+                    <input type="checkbox" class="form-check-input" t-att-data-delcheck="1" data-section="skills" t-att-data-id="row.get('id')"/>
+                  </td>
+                  <td><t t-esc="row['skill_type_id']"/></td>
+                  <td><t t-esc="row['skill_id']"/></td>
+                  <td><t t-esc="row['skill_level_id']"/></td>
+                  <td><t t-esc="row['level_progress']"/></td>
+                </tr>
+              </t>
+            </tbody>
+          </table>
+        </div>
+      </t>
+      <t t-if="not rows">
+        <div class="alert alert-light border mb-2" role="alert">
+          <i class="fa fa-info-circle me-2"/> No skills yet.
+        </div>
+      </t>
+
+      <!-- Add skill -lohko -->
+      <div class="card shadow-sm d-none mb-2" id="addblock-skills" aria-live="polite">
+        <div class="card-body">
+          <div class="mb-2 text-muted small">
+            Select type, then skill and level. Press <strong>Save</strong>.
+          </div>
+
+          <div class="row row-cols-1 row-cols-md-2 g-3">
+            <div class="col">
+              <label class="form-label mb-1">
+                Skill Type<span class="text-danger">*</span>
+              </label>
+              <select class="form-select" name="skills__skill_type_id" disabled="disabled">
+                <option value=""/>
+                <t t-foreach="(initial_options.get('skills', {}) or {}).get('skill_type_id', [])" t-as="opt">
+                  <option t-att-value="opt[0]"><t t-esc="opt[1]"/></option>
+                </t>
+              </select>
+            </div>
+            <div class="col">
+              <label class="form-label mb-1">
+                Skill<span class="text-danger">*</span>
+              </label>
+              <select class="form-select" name="skills__skill_id" data-section="skills" data-depends-on="skill_type_id" disabled="disabled">
+                <option value=""/>
+              </select>
+            </div>
+            <div class="col">
+              <label class="form-label mb-1">
+                Level<span class="text-danger">*</span>
+              </label>
+              <select class="form-select" name="skills__skill_level_id" data-section="skills" data-depends-on="skill_type_id" disabled="disabled">
+                <option value=""/>
+              </select>
+            </div>
+          </div>
+
+          <div class="mt-3 d-flex align-items-center gap-2">
+            <button type="button" class="btn btn-link p-0" data-cancel="1">Cancel</button>
+            <span class="text-muted small">Your changes won’t be saved until you click <strong>Save</strong>.</span>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-outline-primary btn-sm" data-add="skills">
+        <i class="fa fa-plus me-1"/> Add skill
+      </button>
+    </div>
   </template>
 
   <!-- Virhetila: jos employee puuttuu -->
-  <template
-        id="portal_skills_modal_body_error"
-        name="Employee Skills Modal Body (no employee)"
-    >
+  <template id="portal_skills_modal_body_error" name="Employee Skills Modal Body (no employee)">
     <div class="alert alert-warning m-0" role="alert">
-      <i
-                class="fa fa-exclamation-triangle me-2"
-            /> No related employee found for your user. Please contact an administrator.
+      <i class="fa fa-exclamation-triangle me-2"/> No related employee found for your user. Please contact an administrator.
     </div>
   </template>
 </odoo>
