@@ -1,6 +1,17 @@
 from odoo import models, _
 from odoo.exceptions import UserError
 
+from odoo.addons.hr_expense.models.hr_expense_sheet import HrExpenseSheet
+from odoo.addons.mail.models.mail_thread import MailThread
+
+
+# Disables messages of hr_expense module
+def _track_subtype(self, init_values):
+    return MailThread._track_subtype(self, init_values)
+
+
+HrExpenseSheet._track_subtype = _track_subtype
+
 
 class HrExpenseSheet(models.Model):
     _name = "hr.expense.sheet"
