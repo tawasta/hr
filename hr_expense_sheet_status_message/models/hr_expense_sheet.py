@@ -5,7 +5,7 @@ from odoo.addons.hr_expense.models.hr_expense_sheet import HrExpenseSheet
 from odoo.addons.mail.models.mail_thread import MailThread
 
 
-# Disables messages of hr_timesheet module
+# Disables messages of hr_expense module
 def _track_subtype(self, init_values):
     return MailThread._track_subtype(self, init_values)
 
