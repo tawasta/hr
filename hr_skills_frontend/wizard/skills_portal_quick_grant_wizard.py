@@ -27,13 +27,19 @@ class HrSkillsPortalQuickGrantWizard(models.TransientModel):
         if self.days <= 0:
             raise UserError(_("Duration (days) must be greater than zero."))
 
-        start = fields.Datetime.now() if (self.start_now or not self.date_start) else self.date_start
+        start = (
+            fields.Datetime.now()
+            if (self.start_now or not self.date_start)
+            else self.date_start
+        )
         end = fields.Datetime.add(start, days=self.days)
 
-        self.env["hr.skills.portal.access"].sudo().create({
-            "user_id": self.user_id.id,
-            "date_start": start,
-            "date_end": end,
-            "active": True,
-        })
+        self.env["hr.skills.portal.access"].sudo().create(
+            {
+                "user_id": self.user_id.id,
+                "date_start": start,
+                "date_end": end,
+                "active": True,
+            }
+        )
         return {"type": "ir.actions.act_window_close"}

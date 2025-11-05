@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 <odoo>
   <record id="ir_cron_archive_expired_skills_access" model="ir.cron">
     <field name="name">Archive expired Skills portal grants</field>
-    <field name="model_id" ref="model_hr_skills_portal_access"/>
+    <field name="model_id" ref="model_hr_skills_portal_access" />
     <field name="state">code</field>
     <field name="code">model._cron_archive_expired_access()</field>
     <field name="interval_type">minutes</field>

@@ -266,7 +266,7 @@
       </div>
       <t t-else="">
         <div class="alert alert-warning d-flex align-items-center" role="alert">
-          <i class="fa fa-lock me-2" aria-hidden="true"></i>
+          <i class="fa fa-lock me-2" aria-hidden="true" />
           <span>
             Viewing skills on this page is currently restricted for your account.
             If you need access, please contact your administrator or HR representative.
