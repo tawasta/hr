@@ -11,38 +11,54 @@ Also adds a **“My skills”** portal modal where employees can manage their ow
 
 Configuration
 =============
-No special configuration is required.  
-Simply install the module and make sure the **HR Skills** core module is installed and configured.
+The module includes an optional **timed access** control for the Skills portal page.
+
+Access management is controlled by the system parameter:
+
+  ``hr_skills_portal_access.enable``
+
+* **0** or missing → All portal users with access to the website may view skills
+* **1** → Access requires a valid **timed grant**
+
+Timed grants are configured in Odoo via:
+
+**Settings → Users → Skills Portal → Timed Grants**
+
+* Grants specify a **start** and **end** timestamp
+* Access is automatically revoked when the grant expires
+* A scheduled job periodically archives expired entries
+* A **Quick Grant** wizard on the user form allows rapid creation of accesses
+
+If timed access is not enabled, no further configuration is required.
 
 Usage
 =====
 Install this module from Apps.  
-Navigate to **Website → Skills** or open ``/all/skills`` in your browser.
+Open ``/all/skills`` in your browser or use the **Skills** link in the website menu.
 
-**On the skills listing page:**
-- Use the **search bar** to filter, sort and group records.
-- Use the **sidebar** to select one or more **Skills** and/or **Levels**.  
-  Filters use **AND semantics**, meaning employees must match all selected skills/levels.
-- Results are displayed with pagination, and grouped according to the chosen grouping.
+**On the Skills listing page:**
+- Use the **search bar** to filter, sort and group results
+- Use the sidebar to filter by **Skills** and **Levels**
+- Filters use **AND semantics** — employees must match all selected criteria
+- Results are paginated and can be grouped by employee, department, type, skill or level
 
 **On the portal home:**
-- Click the **My skills** button to open a modal.
-- Add a new skill by choosing a **Skill Type**. The dependent **Skill** and **Level** fields will update automatically.
-- Remove existing skills by ticking the checkboxes and saving.
-- Only the current user’s own employee record is affected.
+- Click the **My skills** button to open a management modal
+- Add new skills with dependent dropdowns (Skill Type → Skill, Level)
+- Remove existing skill entries by checking and saving
+- Only the current user's own employee record can be updated
 
 Features
 --------
-* Search bar with **search in**, **sort by**, and **group by** options.
-* Sidebar filters for multiple skills and/or levels.
-* **AND semantics** for filters: employees must match all selected skills/levels.
-* Paginated results with employee, department, skill type, skill, level, and progress.
-* Portal modal for end-users to add or remove their own skills, with dependent dropdowns (Skill Type → Skill, Level).
-
+* Modern website listing for employee skills
+* Search, sort, and group options with a dynamic search bar
+* Sidebar filtering with **AND** matching logic
+* Paginated tables with employee, department, skill and progress info
+* Portal modal for self-service skill management
+* Optional timed access restriction for deployments where HR wants controlled visibility
 
 Contributors
 ------------
-
 * Valtteri Lattu <valtteri.lattu@futural.fi>
 
 Maintainer
