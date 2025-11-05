@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_skills_portal_access_admin,hr_skills_portal_access_admin,model_hr_skills_portal_access,base.group_system,1,1,1,1
+access_hr_skills_portal_access_hr,hr_skills_portal_access_hr,model_hr_skills_portal_access,hr.group_hr_manager,1,1,1,1
+access_hr_skills_portal_quick_grant_wizard,access_hr_skills_portal_quick_grant_wizard,model_hr_skills_portal_quick_grant_wizard,hr.group_hr_manager,1,1,1,1

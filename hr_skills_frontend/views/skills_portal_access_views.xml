@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_hr_skills_portal_access_tree" model="ir.ui.view">
+    <field name="name">hr.skills.portal.access.tree</field>
+    <field name="model">hr.skills.portal.access</field>
+    <field name="arch" type="xml">
+      <tree string="Timed Grants" default_order="date_start desc">
+        <field name="user_id"/>
+        <field name="date_start"/>
+        <field name="date_end"/>
+        <field name="state" widget="badge"/>
+        <field name="active"/>
+        <field name="notes"/>
+      </tree>
+    </field>
+  </record>
+
+  <record id="view_hr_skills_portal_access_form" model="ir.ui.view">
+    <field name="name">hr.skills.portal.access.form</field>
+    <field name="model">hr.skills.portal.access</field>
+    <field name="arch" type="xml">
+        <form string="Timed Grant">
+        <!-- HEADER -->
+        <header>
+            <!-- Statusbar headeriin -->
+            <field name="state" widget="statusbar" statusbar_visible="future,active,expired" readonly="1"/>
+        </header>
+        <sheet>
+            <div class="oe_title">
+            <h1><field name="user_id" class="oe_inline"/></h1>
+            </div>
+
+            <group>
+            <group string="Access Window">
+                <field name="date_start" string="Start"/>
+                <field name="date_end" string="End"/>
+                <field name="active"/>
+            </group>
+            <group string="Notes">
+                <field name="notes" placeholder="Optional notes (why granted, ticket link, etc.)" nolabel="1"/>
+            </group>
+            </group>
+        </sheet>
+        </form>
+    </field>
+    </record>
+
+
+  <record id="action_hr_skills_portal_access" model="ir.actions.act_window">
+    <field name="name">Skills Portal Grants</field>
+    <field name="res_model">hr.skills.portal.access</field>
+    <field name="view_mode">tree,form</field>
+    <field name="help" type="html">
+      <p class="o_view_nocontent_smiling_face">
+        Create a timed grant to allow a user to view the Skills portal page.
+      </p>
+    </field>
+  </record>
+
+  <!-- Menu under Settings / Users (adjust parent as desired) -->
+  <menuitem id="menu_hr_skills_portal_access_root" name="Skills Portal" parent="base.menu_users" sequence="90"/>
+  <menuitem id="menu_hr_skills_portal_access" name="Timed Grants" parent="menu_hr_skills_portal_access_root" action="action_hr_skills_portal_access" sequence="10"/>
+
+  <!-- Smart button on res.users -->
+  <record id="view_users_form_inherit_skills_access" model="ir.ui.view">
+    <field name="name">res.users.form.inherit.skills.access</field>
+    <field name="model">res.users</field>
+    <field name="inherit_id" ref="base.view_users_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//header" position="inside">
+        <button name="%(action_hr_skills_portal_access)d" type="action" string="Skills Grants"
+                class="oe_stat_button" icon="fa-graduation-cap"
+                context="{'search_default_user_id': active_id, 'default_user_id': active_id}"/>
+      </xpath>
+    </field>
+  </record>
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="view_quick_grant_wizard" model="ir.ui.view">
+    <field name="name">hr.skills.portal.quick.grant.wizard.form</field>
+    <field name="model">hr.skills.portal.quick.grant.wizard</field>
+    <field name="arch" type="xml">
+      <form string="Grant Skills Access">
+        <group>
+          <field name="user_id"/>
+          <field name="days"/>
+          <field name="start_now"/>
+          <field name="date_start" invisible="not start_now"/>
+        </group>
+        <footer>
+          <button string="Grant" name="action_grant" type="object" class="btn-primary"/>
+          <button string="Cancel" special="cancel"/>
+        </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="action_quick_grant_wizard" model="ir.actions.act_window">
+    <field name="name">Grant Skills Access</field>
+    <field name="res_model">hr.skills.portal.quick.grant.wizard</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+    <field name="context">{}</field>
+  </record>
+
+
+  <!-- Lisätään toinen nappi Users-lomakkeeseen -->
+  <record id="view_users_form_inherit_skills_access_wizard" model="ir.ui.view">
+    <field name="name">res.users.form.inherit.skills.access.wizard</field>
+    <field name="model">res.users</field>
+    <field name="inherit_id" ref="base.view_users_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//header" position="inside">
+        <button name="%(action_quick_grant_wizard)d" type="action" string="Quick Grant"
+                class="oe_stat_button" icon="fa-clock-o"/>
+      </xpath>
+    </field>
+  </record>
+</odoo>

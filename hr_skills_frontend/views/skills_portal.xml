@@ -17,7 +17,7 @@
         <t t-set="use_pager" t-value="True" />
       </t>
 
-      <div class="row g-4">
+      <div class="row g-4" t-if="has_access">
         <!-- SIDEBAR (display-only for now) -->
         <aside class="col-12 col-lg-3">
           <div class="card border-0 shadow-sm rounded-4">
@@ -264,6 +264,15 @@
           </t>
         </section>
       </div>
+      <t t-else="">
+        <div class="alert alert-warning d-flex align-items-center" role="alert">
+          <i class="fa fa-lock me-2" aria-hidden="true"></i>
+          <span>
+            Viewing skills on this page is currently restricted for your account.
+            If you need access, please contact your administrator or HR representative.
+          </span>
+        </div>
+      </t>
     </t>
   </template>
 </odoo>
