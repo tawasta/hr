@@ -324,6 +324,10 @@ class HrSkillPortal(CustomerPortal):
         values = self._prepare_portal_layout_values()
         Skill = request.env["hr.employee.skill"]
 
+        Access = request.env["hr.skills.portal.access"]
+        user = request.env.user
+        has_access = Access.user_has_portal_skills_access(user)
+
         domain = []
         if Skill.check_access_rights("read"):
             domain = AND(
@@ -413,6 +417,7 @@ class HrSkillPortal(CustomerPortal):
                 "levels": levels,
                 "selected_skill_ids": selected_skill_ids,
                 "selected_level_ids": selected_level_ids,
+                "has_access": has_access,
             }
         )
         return values

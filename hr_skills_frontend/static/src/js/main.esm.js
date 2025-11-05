@@ -3,12 +3,6 @@
 import publicWidget from "@web/legacy/js/public/public_widget";
 import {jsonrpc} from "@web/core/network/rpc_service";
 
-/**
- * Portal-modaali "My skills"
- * - Lataa body palvelimelta avattaessa
- * - Kytkee riippuvuudet: Skill Type -> (Skill, Level)
- * - Rakennaa delete_payloadin ja kevyt validointi ennen submit
- */
 publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
     selector: "#oOpenHrEmpSkillsModal",
 
@@ -30,6 +24,7 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
 
         // Resetoi tila
         this._pendingDeletions = {};
+        sectionKey.value = ""; // Ei oletusta
         saveBtn.setAttribute("disabled", "disabled");
 
         // Lataa modal body palvelimelta
@@ -48,32 +43,51 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
             return;
         }
 
-        // "Add skill" -> näyttää addblockin ja kytkee riippuvuudet
-        modalBody.querySelectorAll("[data-add]").forEach((btn) => {
+        // --- Profiilikentät: aina näkyvissä. Muutos -> section_key=profile + Save enabled
+        const profileInputs = modalBody.querySelectorAll(
+            'input[name^="profile__"], textarea[name^="profile__"]'
+        );
+        const markProfileChanged = () => {
+            sectionKey.value = "profile";
+            saveBtn.removeAttribute("disabled");
+        };
+        profileInputs.forEach((el) => {
+            el.addEventListener("input", markProfileChanged);
+            el.addEventListener("change", markProfileChanged);
+        });
+
+        // --- "Add skill" -> näyttää addblockin ja kytkee riippuvuudet
+        modalBody.querySelectorAll('[data-add="skills"]').forEach((btn) => {
             btn.addEventListener("click", () => {
-                const key = btn.dataset.add; // "skills"
-                this._toggleAddBlock(modalBody, key, true);
-                sectionKey.value = key;
+                this._toggleAddBlock(modalBody, "skills", true);
+                sectionKey.value = "skills";
                 saveBtn.removeAttribute("disabled");
                 this._wireDependencies(modalBody);
             });
         });
 
-        // "Cancel" -> piilota addblock, tyhjennä section_key, disabloi Save jos ei poistoja
+        // --- "Cancel" -> piilota skills addblock, tyhjennä section_key vain jos se on "skills"
         modalBody.querySelectorAll("[data-cancel]").forEach((btn) => {
             btn.addEventListener("click", () => {
                 this._hideAllAddBlocks(modalBody);
-                sectionKey.value = "";
-                if (!Object.values(this._pendingDeletions).some((s) => s && s.size)) {
+                if (sectionKey.value === "skills") {
+                    sectionKey.value = "";
+                }
+                const hasAnyDeletion = Object.values(this._pendingDeletions).some(
+                    (s) => s && s.size
+                );
+                const hasProfileChange =
+                    profileInputs && sectionKey.value === "profile";
+                if (!hasAnyDeletion && !hasProfileChange) {
                     saveBtn.setAttribute("disabled", "disabled");
                 }
             });
         });
 
-        // Poistocheckboxit
+        // --- Poistocheckboxit skills-taululle
         this._initDeletionSelection(modalBody, saveBtn, sectionKey);
 
-        // Submit: lisää delete_payload ja validoi pakolliset
+        // --- Submit: lisää delete_payload ja validoi tarvittaessa
         formEl.addEventListener("submit", (ev) => {
             // 1) delete_payload JSON
             const payload = {};
@@ -83,18 +97,26 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
             deleteInput.value = JSON.stringify(payload);
 
             // 2) kelpoisuus
-            const visible = modalBody.querySelector("[id^='addblock-']:not(.d-none)");
-            if (visible) {
-                const ok = this._validateRequired(visible);
+            const skillsBlock = modalBody.querySelector(
+                "#addblock-skills:not(.d-none)"
+            );
+            if (skillsBlock && sectionKey.value === "skills") {
+                const ok = this._validateRequired(skillsBlock);
                 if (!ok) {
                     ev.preventDefault();
                     this._showAlert(
                         modalBody,
                         "Fill the required fields before saving."
                     );
+                    return;
                 }
-            } else if (!Object.keys(payload).length) {
-                // Ei lisäystä eikä poistoja
+            }
+
+            // Jos ei profiilimuutosta, ei skills-lisäystä eikä poistoja -> estä submit
+            const hasAnyDeletion = Object.keys(payload).length > 0;
+            const isProfile = sectionKey.value === "profile";
+            const isSkills = sectionKey.value === "skills";
+            if (!hasAnyDeletion && !isProfile && !isSkills) {
                 ev.preventDefault();
                 this._showAlert(modalBody, "No changes to save.");
             }
@@ -126,13 +148,15 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
                     tr.style.opacity = cb.checked ? "0.6" : "";
                 }
 
-                // Save on aktiivinen jos on poistoja TAI jokin addblock käytössä
+                // Save on aktiivinen jos on poistoja TAI profiili/skills-lisäys käynnissä
                 const hasAnyDeletion = Object.values(this._pendingDeletions).some(
                     (s) => s && s.size > 0
                 );
-                const hasSectionKey = Boolean(sectionKeyEl && sectionKeyEl.value);
-
-                if (hasAnyDeletion || hasSectionKey) {
+                if (
+                    hasAnyDeletion ||
+                    sectionKeyEl.value === "profile" ||
+                    sectionKeyEl.value === "skills"
+                ) {
                     saveBtn.removeAttribute("disabled");
                 } else {
                     saveBtn.setAttribute("disabled", "disabled");
@@ -141,16 +165,17 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
         });
     },
 
-    // --- Addblock show/hide ---
+    // --- Addblock show/hide (vain skillsille) ---
     _toggleAddBlock(root, key, show) {
         const block = root.querySelector(`#addblock-${key}`);
         if (!block) return;
 
         block.classList.toggle("d-none", !show);
 
-        // Enable vain näkyvässä, required niille joilla *-merkki
+        // Enable vain näkyvässä
         block.querySelectorAll("input, select, textarea").forEach((el) => {
             el.disabled = !show;
+            // Skills: required-merkinnät labelissa -> el.required
             const col = el.closest(".col");
             const isReq = Boolean(col && col.querySelector("label .text-danger"));
             el.required = show && isReq;
@@ -161,12 +186,13 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
                     next &&
                     next.classList &&
                     next.classList.contains("invalid-feedback")
-                )
+                ) {
                     next.remove();
+                }
             }
         });
 
-        // Piilota muut addblockit + nollaa niiden virheet/required/disabled
+        // Piilota muut addblockit (varmuuden vuoksi, vaikka meillä on vain skills)
         root.querySelectorAll("[id^='addblock-']").forEach((other) => {
             if (other === block) return;
             other.classList.add("d-none");
@@ -179,8 +205,9 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
                     next &&
                     next.classList &&
                     next.classList.contains("invalid-feedback")
-                )
+                ) {
                     next.remove();
+                }
             });
         });
     },
@@ -215,7 +242,6 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
 
             const ctx = {skill_type_id: typeId};
             try {
-                // Hae kumpikin lista samanaikaisesti
                 const [skills, levels] = await Promise.all([
                     jsonrpc("/my/skills_modal/m2o_options", {
                         section_key: "skills",
@@ -248,18 +274,16 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
         });
     },
 
-    // --- Kevyt required-validointi näkyvässä addblockissa ---
+    // --- Kevyt required-validointi näkyvässä skills-addblockissa ---
     _validateRequired(container) {
         let ok = true;
-        const block = container.querySelector("[id^='addblock-']:not(.d-none)");
-        if (!block) return true;
 
-        block
+        container
             .querySelectorAll(".is-invalid")
             .forEach((el) => el.classList.remove("is-invalid"));
-        block.querySelectorAll(".invalid-feedback").forEach((el) => el.remove());
+        container.querySelectorAll(".invalid-feedback").forEach((el) => el.remove());
 
-        block.querySelectorAll("select").forEach((el) => {
+        container.querySelectorAll("select").forEach((el) => {
             if (el.disabled || !el.required) return;
             const val = (el.value || "").trim();
             if (!val) {
@@ -271,8 +295,9 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
                 el.insertAdjacentElement("afterend", fb);
             }
         });
+
         if (!ok) {
-            const first = block.querySelector(".is-invalid");
+            const first = container.querySelector(".is-invalid");
             if (first) first.focus();
         }
         return ok;
