@@ -31,6 +31,10 @@ Timed grants are configured in Odoo via:
 
 If timed access is not enabled, no further configuration is required.
 
+Additionally, the parameter  
+``hr_skills_frontend.mode``  
+controls whether users can add **one skill at a time** (`single`) or **all skills of a type at once** (`type_all`) in the “My skills” modal.
+
 Usage
 =====
 Install this module from Apps.  
