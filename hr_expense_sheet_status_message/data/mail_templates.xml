@@ -1,65 +1,41 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo noupdate="1">
-    <record id="hr_expense_template_message_submit" model="mail.template">
-        <field name="name">Submitted expense report email template</field>
-        <field name="subject">Submitted expense report</field>
-        <field name="email_from">{{ object.company_id.email }}</field>
-        <field name="email_cc" />
-        <field name="partner_to">{{ object.user_id.partner_id }}</field>
-        <field name="model_id" ref="hr_expense.model_hr_expense_sheet" />
-        <field name="auto_delete" eval="False" />
-        <field name="lang">en_US</field>
-        <field name="body_html" type="html">
+    <template id="hr_expense_template_message_submit_layout">
+        <div>
             <div style="margin: 0px; padding: 0px;">
                 <p style="margin: 0px; padding: 0px; font-size: 13px;">
                     Expense Report
-                    <t t-out="object.name" />
+                    <t t-out="record.name" />
                     has been submitted
                 </p>
             </div>
-        </field>
-    </record>
+        </div>
+    </template>
 
-    <record id="hr_expense_template_message_approve" model="mail.template">
-        <field name="name">Approved expense report email template</field>
-        <field name="subject">Approved expense report</field>
-        <field name="email_from">{{ object.company_id.email }}</field>
-        <field name="email_cc" />
-        <field name="partner_to">{{ object.employee_id.user_id.partner_id }}</field>
-        <field name="model_id" ref="hr_expense.model_hr_expense_sheet" />
-        <field name="auto_delete" eval="False" />
-        <field name="lang">en_US</field>
-        <field name="body_html" type="html">
+    <template id="hr_expense_template_message_approve_layout">
+        <div>
             <div style="margin: 0px; padding: 0px;">
                 <p style="margin: 0px; padding: 0px; font-size: 13px;">
-                    Your Expense Report
-                    <t t-out="object.name" />
+                    Expense Report
+                    <t t-out="record.name" />
                     has been approved
                 </p>
             </div>
-        </field>
-    </record>
+        </div>
+    </template>
 
-    <record id="hr_expense_template_message_refuse" model="mail.template">
-        <field name="name">Refused expense report email template</field>
-        <field name="subject">Refused expense report</field>
-        <field name="email_from">{{ object.company_id.email }}</field>
-        <field name="email_cc" />
-        <field name="partner_to">{{ object.employee_id.user_id.partner_id }}</field>
-        <field name="model_id" ref="hr_expense.model_hr_expense_sheet" />
-        <field name="auto_delete" eval="False" />
-        <field name="lang">en_US</field>
-        <field name="body_html" type="html">
+    <template id="hr_expense_template_message_refuse_layout">
+        <div>
             <div style="margin: 0px; padding: 0px;">
                 <p style="margin: 0px; padding: 0px; font-size: 13px;">
                     Your Expense Report
-                    <t t-out="object.name" />
+                    <t t-out="record.name" />
                     has been refused
                     <ul class="o_timeline_tracking_value_list">
                         <li>Reason: <t t-out="reason" /></li>
                     </ul>
                 </p>
             </div>
-        </field>
-    </record>
+        </div>
+    </template>
 </odoo>

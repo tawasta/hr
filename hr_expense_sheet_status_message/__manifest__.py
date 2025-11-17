@@ -21,7 +21,7 @@
 {
     "name": "Send a message after Submitted, Approved and Refused states from Expenses",
     "summary": "Send messages after Submitted, Approved and Refused states from Expenses",
-    "version": "17.0.1.2.2",
+    "version": "17.0.1.3.2",
     "category": "Expenses",
     "website": "https://github.com/tawasta/hr",
     "author": "Futural",
