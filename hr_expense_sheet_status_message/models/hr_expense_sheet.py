@@ -21,19 +21,20 @@ class HrExpenseSheet(models.Model):
         res = super().action_submit_sheet()
 
         for sheet in self:
-            sheet.message_post_with_source(
-                "hr_expense_sheet_status_message.hr_expense_template_message_submit_layout",
-                subtype_xmlid="mail.mt_note",
-                subject=_("Submitted expense report"),
-                render_values={
-                    "name": sheet.name,
-                    "partner": self.user_id.partner_id,
-                    "record": sheet,
-                },
-                email_layout_xmlid="mail.mail_notification_light",
-                partner_ids=[self.user_id.partner_id.id],
-                email_from=sheet.company_id.email,
-            )
+            if sheet.user_id:
+                sheet.message_post_with_source(
+                    "hr_expense_sheet_status_message.hr_expense_template_message_submit_layout",
+                    subtype_xmlid="mail.mt_note",
+                    subject=_("Submitted expense report"),
+                    render_values={
+                        "name": sheet.name,
+                        "partner": sheet.user_id.partner_id,
+                        "record": sheet,
+                    },
+                    email_layout_xmlid="mail.mail_notification_light",
+                    partner_ids=[sheet.user_id.partner_id.id],
+                    email_from=sheet.company_id.email,
+                )
 
         return res
 
@@ -47,11 +48,11 @@ class HrExpenseSheet(models.Model):
                 subject=_("Approved expense report"),
                 render_values={
                     "name": sheet.name,
-                    "partner": self.user_id.partner_id,
+                    "partner": sheet.user_id.partner_id,
                     "record": sheet,
                 },
                 email_layout_xmlid="mail.mail_notification_light",
-                partner_ids=[self.employee_id.user_id.partner_id.id],
+                partner_ids=[sheet.employee_id.user_id.partner_id.id],
                 email_from=sheet.company_id.email,
             )
 
@@ -71,12 +72,12 @@ class HrExpenseSheet(models.Model):
                 subject=_("Refused expense report"),
                 render_values={
                     "name": sheet.name,
-                    "partner": self.user_id.partner_id,
+                    "partner": sheet.user_id.partner_id,
                     "record": sheet,
                     "reason": reason,
                 },
                 email_layout_xmlid="mail.mail_notification_light",
-                partner_ids=[self.employee_id.user_id.partner_id.id],
+                partner_ids=[sheet.employee_id.user_id.partner_id.id],
                 email_from=sheet.company_id.email,
             )
         self.activity_update()
