@@ -20,13 +20,19 @@ class HrExpenseSheet(models.Model):
     def action_submit_sheet(self):
         res = super().action_submit_sheet()
 
-        subtype_id = self.env["ir.model.data"]._xmlid_to_res_id("mail.mt_comment")
-
         for sheet in self:
             sheet.message_post_with_source(
-                "hr_expense_sheet_status_message.hr_expense_template_message_submit",
-                subtype_id=subtype_id,
-                render_values={"name": sheet.name},
+                "hr_expense_sheet_status_message.hr_expense_template_message_submit_layout",
+                subtype_xmlid="mail.mt_note",
+                subject=_("Submitted expense report"),
+                render_values={
+                    "name": sheet.name,
+                    "partner": self.user_id.partner_id,
+                    "record": sheet,
+                },
+                email_layout_xmlid="mail.mail_notification_light",
+                partner_ids=[self.user_id.partner_id.id],
+                email_from=sheet.company_id.email,
             )
 
         return res
@@ -34,13 +40,19 @@ class HrExpenseSheet(models.Model):
     def action_approve_expense_sheets(self):
         res = super().action_approve_expense_sheets()
 
-        subtype_id = self.env["ir.model.data"]._xmlid_to_res_id("mail.mt_comment")
-
         for sheet in self:
             sheet.message_post_with_source(
-                "hr_expense_sheet_status_message.hr_expense_template_message_approve",
-                subtype_id=subtype_id,
-                render_values={"name": sheet.name},
+                "hr_expense_sheet_status_message.hr_expense_template_message_approve_layout",
+                subtype_xmlid="mail.mt_note",
+                subject=_("Approved expense report"),
+                render_values={
+                    "name": sheet.name,
+                    "partner": self.user_id.partner_id,
+                    "record": sheet,
+                },
+                email_layout_xmlid="mail.mail_notification_light",
+                partner_ids=[self.employee_id.user_id.partner_id.id],
+                email_from=sheet.company_id.email,
             )
 
         return res
@@ -52,11 +64,19 @@ class HrExpenseSheet(models.Model):
                 _("You cannot cancel an expense sheet linked to a journal entry")
             )
         self.approval_state = "cancel"
-        subtype_id = self.env["ir.model.data"]._xmlid_to_res_id("mail.mt_comment")
         for sheet in self:
             sheet.message_post_with_source(
-                "hr_expense_sheet_status_message.hr_expense_template_message_refuse",
-                subtype_id=subtype_id,
-                render_values={"reason": reason, "name": sheet.name},
+                "hr_expense_sheet_status_message.hr_expense_template_message_refuse_layout",
+                subtype_xmlid="mail.mt_note",
+                subject=_("Refused expense report"),
+                render_values={
+                    "name": sheet.name,
+                    "partner": self.user_id.partner_id,
+                    "record": sheet,
+                    "reason": reason,
+                },
+                email_layout_xmlid="mail.mail_notification_light",
+                partner_ids=[self.employee_id.user_id.partner_id.id],
+                email_from=sheet.company_id.email,
             )
         self.activity_update()
