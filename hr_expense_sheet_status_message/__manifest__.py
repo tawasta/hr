@@ -19,8 +19,8 @@
 ##############################################################################
 
 {
-    "name": "Send a message after Submitted, Approved and Refused states from Expenses",
-    "summary": "Send messages after Submitted, Approved and Refused states from Expenses",
+    "name": "Auto-send message when expense sheet status changes",
+    "summary": "Sends a message when expense sheet status is changed",
     "version": "17.0.1.3.3",
     "category": "Expenses",
     "website": "https://github.com/tawasta/hr",
