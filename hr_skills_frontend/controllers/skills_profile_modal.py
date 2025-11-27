@@ -1,7 +1,8 @@
-from odoo import http, _
+import logging
+
+from odoo import _, http
 from odoo.http import request
 from odoo.osv.expression import AND
-import logging
 
 _logger = logging.getLogger(__name__)
 

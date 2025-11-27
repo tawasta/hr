@@ -1,15 +1,19 @@
+import logging
 from collections import OrderedDict
-from operator import itemgetter
 
-from markupsafe import Markup
-from odoo import http, _
+from odoo import _, http
 from odoo.http import request
-from odoo.addons.portal.controllers.portal import CustomerPortal, pager as portal_pager
 from odoo.osv.expression import AND, OR
+
+from odoo.addons.portal.controllers.portal import CustomerPortal
+from odoo.addons.portal.controllers.portal import pager as portal_pager
+
+_logger = logging.getLogger(__name__)
 
 
 class HrSkillPortal(CustomerPortal):
-    """Portal controller that provides a modern listing for hr.employee.skill records (with sidebar lists)."""
+    """Portal controller that provides a modern listing
+    for hr.employee.skill records (with sidebar lists)."""
 
     # -------------------------
     # Top-level helpers (no nested defs)
@@ -46,7 +50,8 @@ class HrSkillPortal(CustomerPortal):
             for p in parts:
                 try:
                     values.append(int(p))
-                except Exception:
+                except Exception as e:
+                    _logger.warning(e)
                     pass
         # de-duplicate keeping order
         seen = set()
@@ -177,7 +182,8 @@ class HrSkillPortal(CustomerPortal):
     def _build_basic_search_domain(self, search_in, term):
         """
         Build a domain for simple free-text search.
-        - Limits search to the selected scope (employee/skill/type/level/department) or 'all'.
+        - Limits search to the selected scope
+          (employee/skill/type/level/department) or 'all'.
         - Uses ilike on human-readable names for better UX.
         """
         parts = []
@@ -201,12 +207,17 @@ class HrSkillPortal(CustomerPortal):
         self, SkillSudo, base_domain, selected_skill_ids, selected_level_ids
     ):
         """
-        Apply AND filters for selected skills and/or levels onto base_domain and return a new domain.
+        Apply AND filters for selected skills and/or
+        levels onto base_domain and return a new domain.
+
         AND semantics:
-        - skills + levels: employee must have EACH selected skill at ANY of the selected levels (at least one allowed level per skill).
+        - skills + levels: employee must have EACH selected skill
+          at ANY of the selected levels (at least one allowed level per skill).
           Result rows are then limited to those skills and those levels.
-        - skills only: employee must have EACH selected skill (any level). Rows limited to selected skills.
-        - levels only: employee must have EACH selected level (with any skill). Rows limited to selected levels.
+        - skills only: employee must have EACH selected skill (any level).
+          Rows limited to selected skills.
+        - levels only: employee must have EACH selected level (with any skill).
+          Rows limited to selected levels.
         - none selected: base_domain unchanged.
         """
         domain = list(base_domain) if base_domain else []
