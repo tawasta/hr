@@ -21,7 +21,7 @@
 {
     "name": "Auto-send message when expense sheet status changes",
     "summary": "Sends a message when expense sheet status is changed",
-    "version": "17.0.1.4.3",
+    "version": "17.0.1.4.4",
     "category": "Expenses",
     "website": "https://github.com/tawasta/hr",
     "author": "Futural",

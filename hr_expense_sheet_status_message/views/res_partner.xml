@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="base.view_partner_form" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='website']" position="before">
-                <field name="submit_message_receiver" groups="base.group_system" />
+                <field name="optional_message_receiver" groups="base.group_system" />
             </xpath>
         </field>
     </record>
