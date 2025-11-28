@@ -22,6 +22,14 @@ class HrExpenseSheet(models.Model):
 
         for sheet in self:
             if sheet.user_id:
+                optional_receiver = self.env["res.partner"].search(
+                    [("submit_message_receiver", "=", True)]
+                )
+                send_partners = [sheet.user_id.partner_id.id]
+
+                if optional_receiver:
+                    send_partners.append(optional_receiver.id)
+
                 sheet.message_post_with_source(
                     "hr_expense_sheet_status_message.hr_expense_template_message_submit_layout",
                     subtype_xmlid="mail.mt_note",
@@ -32,7 +40,7 @@ class HrExpenseSheet(models.Model):
                         "record": sheet,
                     },
                     email_layout_xmlid="mail.mail_notification_light",
-                    partner_ids=[sheet.user_id.partner_id.id],
+                    partner_ids=send_partners,
                     email_from=sheet.company_id.email,
                 )
 

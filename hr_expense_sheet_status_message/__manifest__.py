@@ -21,7 +21,7 @@
 {
     "name": "Auto-send message when expense sheet status changes",
     "summary": "Sends a message when expense sheet status is changed",
-    "version": "17.0.1.3.3",
+    "version": "17.0.1.4.3",
     "category": "Expenses",
     "website": "https://github.com/tawasta/hr",
     "author": "Futural",
@@ -33,5 +33,6 @@
     ],
     "data": [
         "data/mail_templates.xml",
+        "views/res_partner.xml",
     ],
 }
