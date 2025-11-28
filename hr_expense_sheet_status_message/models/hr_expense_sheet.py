@@ -22,13 +22,7 @@ class HrExpenseSheet(models.Model):
 
         for sheet in self:
             if sheet.user_id:
-                optional_receiver = self.env["res.partner"].search(
-                    [("submit_message_receiver", "=", True)]
-                )
                 send_partners = [sheet.user_id.partner_id.id]
-
-                if optional_receiver:
-                    send_partners.append(optional_receiver.id)
 
                 sheet.message_post_with_source(
                     "hr_expense_sheet_status_message.hr_expense_template_message_submit_layout",
@@ -43,13 +37,21 @@ class HrExpenseSheet(models.Model):
                     partner_ids=send_partners,
                     email_from=sheet.company_id.email,
                 )
-
         return res
 
     def action_approve_expense_sheets(self):
         res = super().action_approve_expense_sheets()
 
         for sheet in self:
+            optional_receiver = self.env["res.partner"].search(
+                [("optional_message_receiver", "=", True)]
+            )
+
+            send_partners = [sheet.employee_id.user_id.partner_id.id]
+
+            if optional_receiver:
+                send_partners += optional_receiver.ids
+
             sheet.message_post_with_source(
                 "hr_expense_sheet_status_message.hr_expense_template_message_approve_layout",
                 subtype_xmlid="mail.mt_note",
@@ -60,10 +62,9 @@ class HrExpenseSheet(models.Model):
                     "record": sheet,
                 },
                 email_layout_xmlid="mail.mail_notification_light",
-                partner_ids=[sheet.employee_id.user_id.partner_id.id],
+                partner_ids=send_partners,
                 email_from=sheet.company_id.email,
             )
-
         return res
 
     def _do_refuse(self, reason):
