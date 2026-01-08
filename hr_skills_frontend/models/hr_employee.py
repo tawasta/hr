@@ -27,6 +27,14 @@ class HrEmployee(models.Model):
     # Vapaateksti
     bio = fields.Text(string="About me")
 
+    membership_interest = fields.Text(
+        string="Why are you interested in joining the Association's activities?"
+    )
+
+    strategy_experience_interest = fields.Text(
+        string="Experience and areas of interest related to strategic leadership"
+    )
+
     @api.depends("consulting_since", "strategy_since")
     def _compute_years(self):
         today = date.today()

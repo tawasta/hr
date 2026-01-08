@@ -95,4 +95,18 @@
       </xpath>
     </field>
   </record>
+
+  <record id="view_employee_form" model="ir.ui.view">
+        <field name="name">hr.employee.form.hour.fields</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form" />
+        <field name="arch" type="xml">
+            <field name="coach_id" position="after">
+                <field name="bio" />
+                <field name="membership_interest" />
+                <field name="strategy_experience_interest" />
+            </field>
+        </field>
+    </record>
+
 </odoo>
