@@ -134,8 +134,20 @@ class PortalSkillProfileController(http.Controller):
                         "type": "date",
                     },
                     {"name": "bio", "label": _("About me"), "type": "text"},
-                    {"name": "membership_interest", "label": _("Why are you interested in joining the Association's activities?"), "type": "text"},
-                    {"name": "strategy_experience_interest", "label": _("Experience and areas of interest related to strategic leadership"), "type": "text"},
+                    {
+                        "name": "membership_interest",
+                        "label": _(
+                            "Why are you interested in joining the Association's activities?"  # noqa: E501
+                        ),
+                        "type": "text",
+                    },
+                    {
+                        "name": "strategy_experience_interest",
+                        "label": _(
+                            "Experience and areas of interest related to strategic leadership"  # noqa: E501
+                        ),
+                        "type": "text",
+                    },
                 ],
             },
         ]

@@ -130,17 +130,25 @@
               <label class="form-label mb-1">
                 Why are you interested in joining the Association's activities?
               </label>
-              <textarea class="form-control" rows="4" name="profile__membership_interest"><t
-                  t-esc="profile_values.get('membership_interest') or ''"
-              /></textarea>
+              <textarea
+                                class="form-control"
+                                rows="4"
+                                name="profile__membership_interest"
+                            ><t
+                                    t-esc="profile_values.get('membership_interest') or ''"
+                                /></textarea>
             </div>
             <div class="col-12">
               <label class="form-label mb-1">
                 Experience and areas of interest related to strategic leadership
               </label>
-              <textarea class="form-control" rows="4" name="profile__strategy_experience_interest"><t
-                  t-esc="profile_values.get('strategy_experience_interest') or ''"
-              /></textarea>
+              <textarea
+                                class="form-control"
+                                rows="4"
+                                name="profile__strategy_experience_interest"
+                            ><t
+                                    t-esc="profile_values.get('strategy_experience_interest') or ''"
+                                /></textarea>
             </div>
           </div>
           <div class="mt-2 text-muted small">
