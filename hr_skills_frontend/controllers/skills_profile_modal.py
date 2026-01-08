@@ -68,6 +68,8 @@ def _profile_values(emp):
         else "",
         "strategy_since": emp.strategy_since.isoformat() if emp.strategy_since else "",
         "bio": emp.bio or "",
+        "membership_interest": emp.membership_interest or "",
+        "strategy_experience_interest": emp.strategy_experience_interest or "",
         "consulting_years": emp.consulting_years,
         "strategy_years": emp.strategy_years,
     }
@@ -132,6 +134,20 @@ class PortalSkillProfileController(http.Controller):
                         "type": "date",
                     },
                     {"name": "bio", "label": _("About me"), "type": "text"},
+                    {
+                        "name": "membership_interest",
+                        "label": _(
+                            "Why are you interested in joining the Association's activities?"  # noqa: E501
+                        ),
+                        "type": "text",
+                    },
+                    {
+                        "name": "strategy_experience_interest",
+                        "label": _(
+                            "Experience and areas of interest related to strategic leadership"  # noqa: E501
+                        ),
+                        "type": "text",
+                    },
                 ],
             },
         ]
