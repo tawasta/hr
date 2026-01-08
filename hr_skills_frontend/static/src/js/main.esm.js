@@ -223,10 +223,14 @@ publicWidget.registry.HrEmpSkillsModal = publicWidget.Widget.extend({
                 const cEl = qs(root, 'input[name="profile__consulting_since"]');
                 const sEl = qs(root, 'input[name="profile__strategy_since"]');
                 const bEl = qs(root, 'textarea[name="profile__bio"]');
+                const miEl = qs(root, 'textarea[name="profile__membership_interest"]');
+                const seEl = qs(root, 'textarea[name="profile__strategy_experience_interest"]');
                 payload.profile = {
                     consulting_since: cEl ? cEl.value || "" : "",
                     strategy_since: sEl ? sEl.value || "" : "",
                     bio: bEl ? bEl.value || "" : "",
+                    membership_interest: miEl ? miEl.value || "" : "",
+                    strategy_experience_interest: seEl ? seEl.value || "" : "",
                 };
             }
 
