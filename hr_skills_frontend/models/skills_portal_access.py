@@ -32,6 +32,9 @@ class HrSkillsPortalAccess(models.Model):
         compute="_compute_state",
         store=False,
     )
+    invoice_id = fields.Many2one(
+        "account.move", index=True, ondelete="set null"
+    )
 
     _sql_constraints = [
         ("check_window", "CHECK(date_end > date_start)", "End must be after start."),

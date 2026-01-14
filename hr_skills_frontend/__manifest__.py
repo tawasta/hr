@@ -31,6 +31,7 @@
     "depends": [
         "hr_skills",
         "website",
+        "product",
     ],
     "data": [
         "data/website_menu.xml",
