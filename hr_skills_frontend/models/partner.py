@@ -17,10 +17,12 @@ class ResPartner(models.Model):
             return False
 
         portal_group = self.env.ref("base.group_portal")
-        return Users.create({
-            "name": self.name or self.email,
-            "login": self.email,
-            "email": self.email,
-            "partner_id": self.id,
-            "groups_id": [(6, 0, [portal_group.id])],
-        })
+        return Users.create(
+            {
+                "name": self.name or self.email,
+                "login": self.email,
+                "email": self.email,
+                "partner_id": self.id,
+                "groups_id": [(6, 0, [portal_group.id])],
+            }
+        )

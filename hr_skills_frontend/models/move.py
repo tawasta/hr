@@ -1,7 +1,9 @@
-from odoo import fields, models
 import logging
 
+from odoo import fields, models
+
 _logger = logging.getLogger(__name__)
+
 
 class AccountMove(models.Model):
     _inherit = "account.move"
@@ -39,12 +41,17 @@ class AccountMove(models.Model):
             if not user:
                 continue
 
-            # Etsi uusin grant (aktiivinen TAI tuleva), jotta uusi alkaa siitä mihin edellinen päättyy
+            # Etsi uusin grant (aktiivinen TAI tuleva),
+            # jotta uusi alkaa siitä mihin edellinen päättyy
             last_grant = Access.search(
                 [
                     ("user_id", "=", user.id),
                     ("active", "=", True),
-                    ("date_end", ">=", now),  # huom: tulevatkin mukana jos date_end tulevaisuudessa
+                    (
+                        "date_end",
+                        ">=",
+                        now,
+                    ),  # huom: tulevatkin mukana jos date_end tulevaisuudessa
                 ],
                 order="date_end desc",
                 limit=1,
@@ -59,15 +66,16 @@ class AccountMove(models.Model):
 
             end = fields.Datetime.add(start, days=total_days)
 
-            Access.create({
-                "user_id": user.id,
-                "date_start": start,
-                "date_end": end,
-                "active": True,
-                "invoice_id": move.id,
-                "notes": f"Auto-granted from paid invoice/receipt {move.name}. Duration: {total_days} days.",
-            })
-
+            Access.create(
+                {
+                    "user_id": user.id,
+                    "date_start": start,
+                    "date_end": end,
+                    "active": True,
+                    "invoice_id": move.id,
+                    "notes": f"Auto-granted from paid invoice/receipt {move.name}. Duration: {total_days} days.",  # noqa E501
+                }
+            )
 
     def _track_subtype(self, init_values):
         self.ensure_one()

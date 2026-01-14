@@ -24,7 +24,7 @@ class ProductProduct(models.Model):
         string="Skills Access Duration (days)",
         compute="_compute_skills_days",
         store=True,
-        help="Computed from the variant's attribute values (product.attribute.value.skills_portal_days).",
+        help="Computed from the variant's attribute values (product.attribute.value.skills_portal_days).",  # noqa E501
     )
 
     @api.depends(
