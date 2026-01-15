@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="product_attribute_view_form" model="ir.ui.view">
+        <field name="name">product.attribute.form</field>
+        <field name="model">product.attribute</field>
+        <field name="inherit_id" ref="product.product_attribute_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='attribute_values']//field[@name='value_ids']//tree" position="inside">
+                <field name="skills_portal_days" />
+            </xpath>
+        </field>
+    </record>
+
+    <record id="product_normal_form_view" model="ir.ui.view">
+        <field name="name">product.product.form.skills</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view" />
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[last()]" position="after">
+                <page
+                    string="Skills"
+                    name="skills"
+                >
+
+                    <field name="skills_portal_grant"/>
+                    <field name="skills_portal_days"/>
+                </page>
+
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
