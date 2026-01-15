@@ -6,7 +6,10 @@
         <field name="model">product.attribute</field>
         <field name="inherit_id" ref="product.product_attribute_view_form" />
         <field name="arch" type="xml">
-            <xpath expr="//page[@name='attribute_values']//field[@name='value_ids']//tree" position="inside">
+            <xpath
+                expr="//page[@name='attribute_values']//field[@name='value_ids']//tree"
+                position="inside"
+            >
                 <field name="skills_portal_days" />
             </xpath>
         </field>
@@ -18,13 +21,10 @@
         <field name="inherit_id" ref="product.product_normal_form_view" />
         <field name="arch" type="xml">
             <xpath expr="//notebook/page[last()]" position="after">
-                <page
-                    string="Skills"
-                    name="skills"
-                >
+                <page string="Skills" name="skills">
 
-                    <field name="skills_portal_grant"/>
-                    <field name="skills_portal_days"/>
+                    <field name="skills_portal_grant" />
+                    <field name="skills_portal_days" />
                 </page>
 
             </xpath>
