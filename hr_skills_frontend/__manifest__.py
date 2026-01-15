@@ -31,11 +31,13 @@
     "depends": [
         "hr_skills",
         "website",
+        "product",
     ],
     "data": [
         "data/website_menu.xml",
         "data/ir_cron.xml",
         "security/ir.model.access.csv",
+        "views/product.xml",
         "views/skills_portal_access_views.xml",
         "views/skills_portal.xml",
         "views/skills_profile_modal.xml",
