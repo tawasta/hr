@@ -37,30 +37,13 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
             value = value.replace(" ", "").replace(",", ".")
         return float(value)
 
-    def _validate_payment_mode(self, payment_mode):
-        if payment_mode not in ("own_account", "company_account"):
-            return "own_account"
-        return payment_mode
-
-    def _create_attachment(self, upload):
-        if not upload or not getattr(upload, "filename", False):
-            return request.env["ir.attachment"].sudo()
-
-        content = upload.read()
-        if not content:
-            return request.env["ir.attachment"].sudo()
-
-        Attachment = request.env["ir.attachment"].sudo()
-        att = Attachment.create(
-            {
-                "name": upload.filename,
-                "datas": base64.b64encode(content),
-                "mimetype": upload.content_type,
-                "res_model": "hr.expense",
-                "res_id": 0,
-            }
-        )
-        return att
+    def _to_int(self, value, default=0):
+        try:
+            if value in (None, "", False):
+                return default
+            return int(value)
+        except Exception:
+            return default
 
     def _normalize_date(self, raw_date):
         raw_date = (raw_date or "").strip()
@@ -77,6 +60,25 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
 
         _logger.warning("Invalid date input %r, falling back to today.", raw_date)
         return date.today().isoformat()
+
+    def _create_attachment(self, upload):
+        if not upload or not getattr(upload, "filename", False):
+            return request.env["ir.attachment"].sudo()
+        content = upload.read()
+        if not content:
+            return request.env["ir.attachment"].sudo()
+
+        Attachment = request.env["ir.attachment"].sudo()
+        return Attachment.create(
+            {
+                "name": upload.filename,
+                "datas": base64.b64encode(content),
+                "mimetype": getattr(upload, "content_type", False)
+                or "application/octet-stream",
+                "res_model": "hr.expense",
+                "res_id": 0,
+            }
+        )
 
     def portal_my_expenses(
         self,
@@ -99,9 +101,7 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
         )
         try:
             company = request.env.company
-            response.qcontext["today_fi"] = date.today().strftime(
-                "%d.%m.%Y"
-            )  # dd.MM.yyyy
+            response.qcontext["today_fi"] = date.today().strftime("%d.%m.%Y")
             response.qcontext["products"] = self._allowed_products(company)
 
             employee = self._portal_employee()
@@ -111,16 +111,13 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
             Country = request.env["res.country"].sudo()
             State = request.env["res.country.state"].sudo()
 
-            countries = Country.search([], order="name asc")
-            states = State.search([], order="name asc")  # keep your approach
-
             response.qcontext.update(
                 {
                     "employee": employee,
                     "partner": partner,
                     "partner_iban": bank.acc_number if bank else "",
-                    "countries": countries,
-                    "states": states,
+                    "countries": Country.search([], order="name asc"),
+                    "states": State.search([], order="name asc"),
                 }
             )
         except Exception as e:
@@ -135,7 +132,7 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
         methods=["POST"],
         csrf=True,
     )
-    def portal_create_expense(self, **post):
+    def portal_create_expense(self, **post):  # noqa: C901
         employee = self._portal_employee()
         company = request.env.company
 
@@ -144,8 +141,8 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
         partner_street2 = (post.get("partner_street2") or "").strip()
         partner_zip = (post.get("partner_zip") or "").strip()
         partner_city = (post.get("partner_city") or "").strip()
-        partner_country_id = int(post.get("partner_country_id") or 0)
-        partner_state_id = int(post.get("partner_state_id") or 0)
+        partner_country_id = self._to_int(post.get("partner_country_id"), 0)
+        partner_state_id = self._to_int(post.get("partner_state_id"), 0)
 
         if partner_ssn or any(
             [
@@ -170,62 +167,148 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
                     }
                     if partner_ssn:
                         vals_partner["social_security_number"] = partner_ssn
-
                     partner.sudo().write(vals_partner)
             except Exception as e:
-                _logger.exception("Saving partner details to partner failed: %s", e)
+                _logger.exception("Saving partner details failed: %s", e)
                 request.env.cr.rollback()
                 return request.redirect("/my/expenses?create_error=1")
 
-        name = (post.get("name") or "").strip()
-        product_id = int(post.get("product_id") or 0)
-        expense_date = self._normalize_date(post.get("date"))
-        payment_mode = self._validate_payment_mode(
-            (post.get("payment_mode") or "own_account").strip()
-        )
-        description = (post.get("description") or "").strip()
+        form = request.httprequest.form
+        indices = form.getlist("line_idx") or []
+        indices = [str(i).strip() for i in indices if str(i).strip()]
 
-        try:
-            quantity = self._to_float(post.get("quantity"), default=1.0)
-        except Exception:
-            quantity = 0.0
-
-        errors = []
-        if not name:
-            errors.append("name")
-        if not product_id:
-            errors.append("product_id")
-        if quantity <= 0:
-            errors.append("quantity")
-
-        allowed_products = self._allowed_products(company)
-        if product_id and product_id not in allowed_products.ids:
-            errors.append("product_id")
-
-        if errors:
+        if not indices:
+            _logger.warning("PORTAL EXPENSE CREATE: no line_idx provided")
             return request.redirect("/my/expenses?create_error=1")
 
-        upload = post.get("receipt")
-        attachment = self._create_attachment(upload)
+        allowed_products = self._allowed_products(company)
+        allowed_product_ids = set(allowed_products.ids)
 
-        vals = {
-            "name": name,
-            "date": expense_date,
-            "employee_id": employee.id,
-            "company_id": company.id,
-            "product_id": product_id,
-            "quantity": quantity,
-            "payment_mode": payment_mode,
-            "description": description or False,
-        }
+        expense_vals_list = []
+        kept_indices = []
+        attachments_by_index = {}
+
+        any_invalid = False
+        invalid_indices = []
+
+        for idx in indices:
+            raw_name = form.get(f"line_name_{idx}")
+            raw_product = form.get(f"line_product_id_{idx}")
+            raw_date = form.get(f"line_date_{idx}")
+            raw_notes = form.get(f"line_description_{idx}")
+            raw_qty = form.get(f"line_quantity_{idx}")
+            raw_unit = form.get(f"line_price_unit_{idx}")
+
+            line_name = (raw_name or "").strip()
+            line_product_id = self._to_int(raw_product, 0)
+            line_notes = (raw_notes or "").strip()
+            line_date = self._normalize_date(raw_date)
+
+            try:
+                line_quantity = self._to_float(raw_qty, default=1.0)
+            except Exception:
+                line_quantity = 0.0
+
+            try:
+                line_price_unit = self._to_float(raw_unit, default=0.0)
+            except Exception:
+                line_price_unit = 0.0
+
+            # Skip fully empty lines
+            is_empty = (
+                not line_name
+                and not line_product_id
+                and (not raw_date or not str(raw_date).strip())
+                and not line_notes
+                and (raw_qty in (None, "", False) or str(raw_qty).strip() in ("", "0"))
+                and (
+                    raw_unit in (None, "", False) or str(raw_unit).strip() in ("", "0")
+                )
+            )
+            if is_empty:
+                continue
+
+            # Validations
+            if (
+                not line_name
+                or not line_product_id
+                or line_product_id not in allowed_product_ids
+            ):
+                any_invalid = True
+                invalid_indices.append(idx)
+                _logger.warning(
+                    "PORTAL EXPENSE LINE INVALID idx=%s (name=%r product_id=%s allowed=%s)",  # noqa E501
+                    idx,
+                    line_name,
+                    line_product_id,
+                    (line_product_id in allowed_product_ids),
+                )
+                continue
+
+            if line_quantity <= 0 or line_price_unit <= 0:
+                any_invalid = True
+                invalid_indices.append(idx)
+                _logger.warning(
+                    "PORTAL EXPENSE LINE INVALID AMOUNTS idx=%s qty=%s unit=%s",
+                    idx,
+                    line_quantity,
+                    line_price_unit,
+                )
+                continue
+
+            total_amount_currency = line_price_unit * line_quantity
+
+            expense_vals_list.append(
+                {
+                    "name": line_name,
+                    "date": line_date,
+                    "employee_id": employee.id,
+                    "company_id": company.id,
+                    "product_id": line_product_id,
+                    "quantity": line_quantity,
+                    "price_unit": line_price_unit,  # requested: store unit price
+                    "description": line_notes or False,
+                    "currency_id": company.currency_id.id,
+                    "total_amount_currency": total_amount_currency,
+                    # IMPORTANT: UI removed Paid-by, but model often needs this
+                    "payment_mode": "own_account",
+                }
+            )
+            kept_indices.append(idx)
+
+            upload = post.get(f"receipt_{idx}")
+            attachments_by_index[idx] = self._create_attachment(upload)
+
+        if not expense_vals_list or any_invalid:
+            _logger.warning(
+                "PORTAL EXPENSE CREATE: aborting (any_invalid=%s, vals=%s)",
+                any_invalid,
+                len(expense_vals_list),
+            )
+            return request.redirect("/my/expenses?create_error=1")
 
         try:
-            expense = request.env["hr.expense"].sudo().create(vals)
-            if attachment and attachment.exists():
-                attachment.write({"res_id": expense.id})
-                expense.sudo().attach_document(attachment_ids=[attachment.id])
+            expenses = request.env["hr.expense"].sudo().create(expense_vals_list)
         except Exception as e:
-            _logger.exception("Portal expense create failed: %s", e)
+            _logger.exception("Creating expense lines failed: %s", e)
+            request.env.cr.rollback()
+            return request.redirect("/my/expenses?create_error=1")
+
+        try:
+            for expense, idx in zip(expenses, kept_indices):  # noqa B905
+                att = attachments_by_index.get(idx)
+                if att and att.exists():
+                    att.write({"res_id": expense.id})
+                    expense.sudo().attach_document(attachment_ids=[att.id])
+        except Exception as e:
+            _logger.exception("Attaching receipts failed: %s", e)
+            request.env.cr.rollback()
+            return request.redirect("/my/expenses?create_error=1")
+
+        try:
+            expenses.sudo().action_submit_expenses()
+        except Exception as e:
+            _logger.exception("Submitting expenses into sheet failed: %s", e)
             request.env.cr.rollback()
             return request.redirect("/my/expenses?create_error=1")
 

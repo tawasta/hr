@@ -2,21 +2,119 @@
 
 import publicWidget from "@web/legacy/js/public/public_widget";
 
-publicWidget.registry.PortalExpenseTempus = publicWidget.Widget.extend({
+publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
     selector: ".o_portal_wrap",
 
     start() {
         this._super(...arguments);
 
-        const $modal = $("#portalCreateExpenseModal");
-        if (!$modal.length) return;
+        this.$modal = $("#portalCreateExpenseModal");
+        if (!this.$modal.length) return this._super(...arguments);
 
-        // Init only when modal is visible (same pattern as your working module)
-        $modal.on("shown.bs.modal", () => {
-            this._initTempusInside($modal);
+        this.$modal.on("shown.bs.modal", () => {
+            const $wrap = this.$modal.find(".js-expense-lines-cards");
+            if ($wrap.length && !$wrap.find(".js-expense-line-card").length) {
+                this._addLine(true);
+            }
+            this._initTempusInside(this.$modal);
+            this._updateLineNumbers();
         });
 
+        this.$modal.on("click", ".js-add-expense-line", (ev) => {
+            ev.preventDefault();
+            this._addLine(true);
+        });
+
+        this.$modal.on("click", ".js-remove-expense-line", (ev) => {
+            ev.preventDefault();
+            const $card = $(ev.currentTarget).closest(".js-expense-line-card");
+            $card.remove();
+
+            const $wrap = this.$modal.find(".js-expense-lines-cards");
+            if ($wrap.find(".js-expense-line-card").length === 0) {
+                this._addLine(true);
+            } else {
+                this._updateLineNumbers();
+            }
+        });
+
+        this.$modal.on(
+            "input change",
+            ".js-expense-line-card input, .js-expense-line-card select",
+            (ev) => {
+                const $card = $(ev.currentTarget).closest(".js-expense-line-card");
+                this._updateCardHeader($card);
+            }
+        );
+
         return this._super(...arguments);
+    },
+
+    _nextIndex() {
+        const $wrap = this.$modal.find(".js-expense-lines-cards");
+        const current = parseInt($wrap.attr("data-next-index") || "1", 10);
+        $wrap.attr("data-next-index", String(current + 1));
+        return current;
+    },
+
+    _addLine(open) {
+        const $wrap = this.$modal.find(".js-expense-lines-cards");
+        if (!$wrap.length) return;
+
+        const idx = this._nextIndex();
+
+        const $tmpl = this.$modal.find("template#portal_expense_line_tpl");
+        if (!$tmpl.length) {
+            console.error("Template #portal_expense_line_tpl not found");
+            return;
+        }
+
+        const html = $tmpl.html().replaceAll("__IDX__", String(idx));
+        const $node = $(html);
+        $wrap.append($node);
+
+        this._initTempusInside($node);
+        this._updateLineNumbers();
+        this._updateCardHeader($node);
+
+        if (open) {
+            // After replaceAll("__IDX__", idx): id becomes portalExpLineBody_1 (NOT ...___1__)
+            const collapseId = `portalExpLineBody_${idx}`;
+            const $collapse = $node.find(`#${collapseId}`);
+            const $btn = $node.find(`[data-bs-target="#${collapseId}"]`);
+
+            if ($collapse.length) $collapse.addClass("show");
+            if ($btn.length)
+                $btn.removeClass("collapsed").attr("aria-expanded", "true");
+        }
+    },
+
+    _updateLineNumbers() {
+        const $cards = this.$modal.find(".js-expense-line-card");
+        $cards.each(function (i) {
+            $(this)
+                .find(".js-line-no")
+                .text(String(i + 1));
+        });
+    },
+
+    _updateCardHeader($card) {
+        const idx = $card.attr("data-idx");
+
+        // Names become line_name_1 etc (from your logs)
+        const name = ($card.find(`[name="line_name_${idx}"]`).val() || "")
+            .toString()
+            .trim();
+        const qty = ($card.find(`[name="line_quantity_${idx}"]`).val() || "")
+            .toString()
+            .trim();
+        const unit = ($card.find(`[name="line_price_unit_${idx}"]`).val() || "")
+            .toString()
+            .trim();
+
+        let summary = name ? name : "New line";
+        if (qty && unit) summary += ` · ${qty} × ${unit}`;
+        $card.find(".js-line-summary").text(summary);
     },
 
     _initTempusInside($root) {
@@ -24,8 +122,6 @@ publicWidget.registry.PortalExpenseTempus = publicWidget.Widget.extend({
 
         $root.find("input.datetimepicker-input").each(function () {
             const el = this;
-
-            // Prevent multiple inits
             if (el.dataset.tdInitialized === "1") return;
             el.dataset.tdInitialized = "1";
 
@@ -34,7 +130,6 @@ publicWidget.registry.PortalExpenseTempus = publicWidget.Widget.extend({
                 return;
             }
 
-            // Create instance on the INPUT (same as your working example)
             // eslint-disable-next-line no-undef
             const instance = new tempusDominus.TempusDominus(el, {
                 display: {
@@ -46,11 +141,7 @@ publicWidget.registry.PortalExpenseTempus = publicWidget.Widget.extend({
                         decades: true,
                         clock: false,
                     },
-                    buttons: {
-                        today: true,
-                        clear: true,
-                        close: true,
-                    },
+                    buttons: {today: true, clear: true, close: true},
                     icons: {
                         time: "fa fa-clock",
                         date: "fa fa-calendar",
@@ -66,12 +157,9 @@ publicWidget.registry.PortalExpenseTempus = publicWidget.Widget.extend({
                     toolbarPlacement: "bottom",
                     calendarWeeks: true,
                 },
-                localization: {
-                    format: "dd.MM.yyyy",
-                },
+                localization: {format: "dd.MM.yyyy"},
             });
 
-            // Make the calendar icon open the picker
             const $group = $(el).closest(".input-group");
             const $btn = $group.find(".input-group-text").first();
             if ($btn && $btn.length) {
@@ -81,7 +169,6 @@ publicWidget.registry.PortalExpenseTempus = publicWidget.Widget.extend({
                         try {
                             instance.show();
                         } catch (e) {
-                            // If API differs in minor versions, fallback to focusing the input
                             el.focus();
                         }
                     }
@@ -91,4 +178,4 @@ publicWidget.registry.PortalExpenseTempus = publicWidget.Widget.extend({
     },
 });
 
-export default publicWidget.registry.PortalExpenseTempus;
+export default publicWidget.registry.PortalExpenseModalMulti;
