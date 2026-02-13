@@ -116,6 +116,30 @@
                                         />
                                     </div>
 
+                                    <div class="col-12 col-md-6">
+                                        <label
+                                            class="form-label"
+                                        >Personal Identification Number</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="partner_ssn"
+                                            id="partner_ssn_input"
+                                            placeholder="e.g. 131052-308T"
+                                            autocomplete="off"
+                                        />
+
+                                        <div
+                                            id="partner_ssn_error"
+                                            class="invalid-feedback d-block"
+                                            style="display:none;"
+                                        />
+
+                                        <div class="form-text text-muted">
+                                            Will be stored encrypted (never saved in plain text).
+                                        </div>
+                                    </div>
+
                                     <div class="col-12">
                                         <div class="fw-semibold">Address</div>
                                         <div
@@ -204,30 +228,6 @@
                                                 </option>
                                             </t>
                                         </select>
-                                    </div>
-
-                                    <div class="col-12 col-md-6">
-                                        <label
-                                            class="form-label"
-                                        >Personal Identification Number</label>
-                                        <input
-                                            type="text"
-                                            class="form-control"
-                                            name="partner_ssn"
-                                            id="partner_ssn_input"
-                                            placeholder="e.g. 131052-308T"
-                                            autocomplete="off"
-                                        />
-
-                                        <div
-                                            id="partner_ssn_error"
-                                            class="invalid-feedback d-block"
-                                            style="display:none;"
-                                        />
-
-                                        <div class="form-text text-muted">
-                                            Will be stored encrypted (never saved in plain text).
-                                        </div>
                                     </div>
 
                                     <div class="col-12 col-md-6">
