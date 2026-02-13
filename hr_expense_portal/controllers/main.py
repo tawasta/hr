@@ -3,7 +3,7 @@ from operator import itemgetter
 
 from dateutil.relativedelta import relativedelta
 
-from odoo import fields, http
+from odoo import _, fields, http
 from odoo.exceptions import AccessError, MissingError
 from odoo.http import request
 from odoo.osv.expression import AND, OR
@@ -15,6 +15,12 @@ from odoo.addons.portal.controllers.portal import pager as portal_pager
 
 
 class HrExpenseCustomerPortal(CustomerPortal):
+    def _check_portal_expense_access(self):
+        if not request.env.user.has_group(
+            "hr_expense_portal.group_portal_expense_access"
+        ):
+            raise AccessError(_("Access Denied"))
+
     def _prepare_home_portal_values(self, counters):
         values = super()._prepare_home_portal_values(counters)
         if "expense_count" in counters:
@@ -171,6 +177,7 @@ class HrExpenseCustomerPortal(CustomerPortal):
         groupby="none",
         **kw,
     ):
+        self._check_portal_expense_access()
         Expense = request.env["hr.expense"]
 
         values = self._prepare_portal_layout_values()
@@ -262,6 +269,7 @@ class HrExpenseCustomerPortal(CustomerPortal):
         ["/my/expenses/<int:expense_id>"], type="http", auth="user", website=True
     )
     def portal_my_expense(self, expense_id, **kw):
+        self._check_portal_expense_access()
         try:
             expense = request.env["hr.expense"].browse(expense_id)
             if not expense.exists():
@@ -342,6 +350,7 @@ class HrExpenseCustomerPortal(CustomerPortal):
     def portal_my_expense_reports(
         self, page=1, sortby="date", filterby="all", search=None, search_in="all", **kw
     ):
+        self._check_portal_expense_access()
         Sheet = request.env["hr.expense.sheet"]
 
         values = self._prepare_portal_layout_values()

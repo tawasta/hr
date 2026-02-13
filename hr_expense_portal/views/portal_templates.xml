@@ -41,6 +41,9 @@
         </xpath>
 
         <div id="portal_service_category" position="inside">
+        <t
+                t-if="request.env.user.has_group('hr_expense_portal.group_portal_expense_access')"
+            >
             <t t-call="portal.portal_docs_entry">
                 <t t-set="icon" t-value="'/hr_expense/static/description/icon.png'" />
                 <t t-set="title">Expenses</t>
@@ -56,6 +59,7 @@
                 <t t-set="text">Track submissions, approvals and payments</t>
                 <t t-set="placeholder_count" t-value="'expense_sheet_count'" />
             </t>
+        </t>
         </div>
     </template>
 
