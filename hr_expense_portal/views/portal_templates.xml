@@ -1,0 +1,484 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <template
+        id="portal_breadcrumbs_hr_expense"
+        inherit_id="portal.portal_breadcrumbs"
+        priority="40"
+    >
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+
+            <li
+                t-if="page_name in ['expense', 'expense_detail']"
+                t-attf-class="breadcrumb-item #{'active ' if page_name == 'expense' else ''}"
+            >
+                <a
+                    t-if="page_name == 'expense_detail'"
+                    t-attf-href="/my/expenses?{{ keep_query() }}"
+                >Expenses</a>
+                <t t-else="">Expenses</t>
+            </li>
+
+            <li
+                t-if="page_name == 'expense_detail' and expense"
+                class="breadcrumb-item active text-truncate"
+            >
+                <t t-esc="expense.name" />
+            </li>
+
+        </xpath>
+    </template>
+
+    <template
+        id="portal_my_home_expense_entries"
+        name="Show Expenses / Expense Reports"
+        customize_show="True"
+        inherit_id="portal.portal_my_home"
+        priority="50"
+    >
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_service_category_enable" t-value="True" />
+        </xpath>
+
+        <div id="portal_service_category" position="inside">
+        <t
+                t-if="request.env.user.has_group('hr_expense_portal.group_portal_expense_access')"
+            >
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/hr_expense/static/description/icon.png'" />
+                <t t-set="title">Expenses</t>
+                <t t-set="url" t-value="'/my/expenses'" />
+                <t t-set="text">Browse and review your expense lines</t>
+                <t t-set="placeholder_count" t-value="'expense_count'" />
+            </t>
+
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/hr_expense/static/description/icon.png'" />
+                <t t-set="title">Expense Reports</t>
+                <t t-set="url" t-value="'/my/expense-reports'" />
+                <t t-set="text">Track submissions, approvals and payments</t>
+                <t t-set="placeholder_count" t-value="'expense_sheet_count'" />
+            </t>
+        </t>
+        </div>
+    </template>
+
+    <template id="portal_my_expenses" name="My Expenses">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True" />
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Expenses</t>
+            </t>
+
+            <t t-if="not grouped_expenses">
+                <div class="alert alert-warning" role="alert">
+                    <t t-out="'There are no expenses matching your criteria.'" />
+                </div>
+            </t>
+
+            <t t-if="grouped_expenses">
+                <div class="card mb-3">
+                    <div
+                        class="card-body d-flex flex-wrap align-items-center justify-content-between gap-2"
+                    >
+                        <div class="d-flex flex-column">
+                            <strong class="h5 m-0">
+                                <t t-out="'Total:'" />
+                                <span
+                                    t-esc="total_amount_sum"
+                                    t-options="{'widget': 'monetary', 'display_currency': request.env.company.currency_id}"
+                                />
+                            </strong>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <a
+                                class="btn btn-outline-secondary btn-sm"
+                                href="/my/expense-reports"
+                            >
+                                <t t-out="'Go to Reports'" />
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <t t-call="portal.portal_table">
+                    <thead>
+                        <tr>
+                            <th><t t-out="'Date'" /></th>
+                            <th><t t-out="'Description'" /></th>
+                            <th class="d-none d-md-table-cell"><t
+                                    t-out="'Category'"
+                                /></th>
+                            <th class="d-none d-md-table-cell"><t
+                                    t-out="'Report'"
+                                /></th>
+                            <th><t t-out="'Status'" /></th>
+                            <th class="text-end"><t t-out="'Amount'" /></th>
+                        </tr>
+                    </thead>
+
+                    <t t-foreach="grouped_expenses" t-as="grp">
+                        <t t-set="records" t-value="grp[0]" />
+                        <t t-set="grp_amount" t-value="grp[1]" />
+
+                        <tbody t-if="groupby != 'none'">
+                            <tr class="table-light">
+                                <th colspan="5">
+                                    <t t-if="groupby == 'state'">
+                                        <t t-esc="records[0].state" />
+                                    </t>
+                                    <t t-elif="groupby == 'month'">
+                                        <t t-esc="records[0].date" />
+                                    </t>
+                                    <t t-elif="groupby == 'report'">
+                                        <t t-esc="records[0].sheet_id.name or ''" />
+                                    </t>
+                                    <t t-elif="groupby == 'category'">
+                                        <t
+                                            t-esc="records[0].product_id.display_name or ''"
+                                        />
+                                    </t>
+                                    <span class="text-muted">(<t
+                                            t-esc="len(records)"
+                                        />)</span>
+                                </th>
+                                <th class="text-end">
+                                    <span class="text-muted me-1"><t
+                                            t-out="'Subtotal:'"
+                                        /></span>
+                                    <span
+                                        t-esc="grp_amount"
+                                        t-options="{'widget': 'monetary', 'display_currency': request.env.company.currency_id}"
+                                    />
+                                </th>
+                            </tr>
+                        </tbody>
+
+                        <tbody>
+                            <t t-foreach="records" t-as="e">
+                                <tr>
+                                    <td><span
+                                            t-field="e.date"
+                                            t-options="{'widget': 'date'}"
+                                        /></td>
+
+                                    <td>
+                                        <a
+                                            t-attf-href="/my/expenses/#{e.id}?{{ keep_query() }}"
+                                            class="text-decoration-none"
+                                        >
+                                            <t t-esc="e.name" />
+                                        </a>
+                                        <div class="text-muted small d-md-none">
+                                            <t
+                                                t-esc="e.product_id.display_name if e.product_id else ''"
+                                            />
+                                            <t t-if="e.sheet_id"> · <t
+                                                    t-esc="e.sheet_id.name"
+                                                /></t>
+                                        </div>
+                                    </td>
+
+                                    <td class="d-none d-md-table-cell">
+                                        <t
+                                            t-esc="e.product_id.display_name if e.product_id else ''"
+                                        />
+                                    </td>
+
+                                    <td class="d-none d-md-table-cell">
+                                        <t t-if="e.sheet_id">
+                                            <a
+                                                t-attf-href="/my/expense-reports?search=#{e.sheet_id.name}"
+                                                class="text-decoration-none"
+                                            >
+                                                <t t-esc="e.sheet_id.name" />
+                                            </a>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="text-muted">-</span>
+                                        </t>
+                                    </td>
+
+                                    <td>
+                                        <t t-set="st" t-value="e.state" />
+                                        <span
+                                            t-attf-class="badge rounded-pill
+                                            #{'bg-secondary' if st in ['draft','reported']
+                                            else 'bg-info' if st == 'submitted'
+                                            else 'bg-primary' if st == 'approved'
+                                            else 'bg-success' if st == 'done'
+                                            else 'bg-danger' if st == 'refused'
+                                            else 'bg-light text-dark'}"
+                                        >
+                                            <t t-esc="st" />
+                                        </span>
+                                    </td>
+
+                                    <td class="text-end">
+                                        <span
+                                            t-field="e.total_amount"
+                                            t-options="{'widget': 'monetary', 'display_currency': e.company_currency_id}"
+                                        />
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_expense" name="My Expense">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True" />
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Expense</t>
+            </t>
+
+            <t t-if="not expense">
+                <div class="alert alert-warning" role="alert">
+                    <t t-out="'Expense not found.'" />
+                </div>
+            </t>
+
+            <t t-if="expense">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div
+                            class="d-flex flex-wrap justify-content-between align-items-start gap-2"
+                        >
+                            <div>
+                                <h5 class="mb-1">
+                                    <t t-esc="expense.name" />
+                                    <small class="text-muted">(#<t
+                                            t-esc="expense.id"
+                                        />)</small>
+                                </h5>
+                                <div class="text-muted small">
+                                    <span
+                                        t-field="expense.date"
+                                        t-options="{'widget': 'date'}"
+                                    />
+                                    <t t-if="expense.product_id"> · <t
+                                            t-esc="expense.product_id.display_name"
+                                        /></t>
+                                    <t t-if="expense.sheet_id"> · <t
+                                            t-esc="expense.sheet_id.name"
+                                        /></t>
+                                </div>
+                            </div>
+
+                            <div class="text-end">
+                                <div class="mb-1">
+                                    <small class="text-muted"><t
+                                            t-out="'Status:'"
+                                        /></small>
+                                </div>
+                                <t t-set="st" t-value="expense.state" />
+                                <span
+                                    t-attf-class="badge rounded-pill
+                                    #{'bg-secondary' if st in ['draft','reported']
+                                    else 'bg-info' if st == 'submitted'
+                                    else 'bg-primary' if st == 'approved'
+                                    else 'bg-success' if st == 'done'
+                                    else 'bg-danger' if st == 'refused'
+                                    else 'bg-light text-dark'}"
+                                >
+                                    <t t-esc="st" />
+                                </span>
+                            </div>
+                        </div>
+
+                        <hr class="my-3" />
+
+                        <div class="row g-3">
+                            <div class="col-12 col-lg-6">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted"><t
+                                            t-out="'Total'"
+                                        /></span>
+                                    <strong>
+                                        <span
+                                            t-field="expense.total_amount"
+                                            t-options="{'widget': 'monetary', 'display_currency': expense.company_currency_id}"
+                                        />
+                                    </strong>
+                                </div>
+
+                                <div
+                                    class="d-flex justify-content-between mt-2"
+                                    t-if="expense.payment_mode"
+                                >
+                                    <span class="text-muted"><t
+                                            t-out="'Paid By'"
+                                        /></span>
+                                    <span t-esc="expense.payment_mode" />
+                                </div>
+
+                                <div
+                                    class="d-flex justify-content-between mt-2"
+                                    t-if="expense.sheet_id"
+                                >
+                                    <span class="text-muted"><t
+                                            t-out="'Report'"
+                                        /></span>
+                                    <span t-esc="expense.sheet_id.name" />
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-lg-6">
+                                <div class="d-flex justify-content-between">
+                                    <span class="text-muted"><t
+                                            t-out="'Employee'"
+                                        /></span>
+                                    <span
+                                        t-esc="expense.employee_id.display_name if expense.employee_id else ''"
+                                    />
+                                </div>
+
+                                <div
+                                    class="d-flex justify-content-between mt-2"
+                                    t-if="expense.price_unit"
+                                >
+                                    <span class="text-muted"><t
+                                            t-out="'Unit Price'"
+                                        /></span>
+                                    <span
+                                        t-field="expense.price_unit"
+                                        t-options="{'widget': 'monetary', 'display_currency': expense.company_currency_id}"
+                                    />
+                                </div>
+
+                                <div
+                                    class="d-flex justify-content-between mt-2"
+                                    t-if="expense.quantity"
+                                >
+                                    <span class="text-muted"><t
+                                            t-out="'Quantity'"
+                                        /></span>
+                                    <span t-esc="expense.quantity" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mb-3" t-if="attachments">
+                    <div class="card-body">
+                        <strong class="d-block mb-2"><t
+                                t-out="'Attachments'"
+                            /></strong>
+                        <div class="row">
+                            <div class="col-12">
+                                <ul class="list-group">
+                                    <t t-foreach="attachments" t-as="att">
+                                        <a
+                                            class="list-group-item list-group-item-action d-flex align-items-center oe_attachments py-1 px-2"
+                                            t-attf-href="/web/content/#{att.id}?download=true"
+                                            target="_blank"
+                                            data-no-post-process=""
+                                        >
+                                            <div
+                                                class="oe_attachment_embedded o_image o_image_small me-2"
+                                                t-att-title="att.name"
+                                                t-att-data-mimetype="att.mimetype"
+                                                t-attf-data-src="/web/image/#{att.id}/50x40"
+                                            />
+                                            <div
+                                                class="oe_attachment_name text-truncate"
+                                            >
+                                                <t t-esc="att.name" />
+                                            </div>
+                                        </a>
+                                    </t>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="mb-3"><t t-out="'Communication'" /></h5>
+                        <t t-call="portal.message_thread">
+                            <t t-set="object" t-value="expense" />
+                        </t>
+                    </div>
+                </div>
+
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_expense_reports" name="My Expense Reports">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True" />
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Expense Reports</t>
+            </t>
+
+            <t t-if="not sheets">
+                <div class="alert alert-warning" role="alert">
+                    <t t-out="'There are no expense reports matching your criteria.'" />
+                </div>
+            </t>
+
+            <t t-if="sheets">
+                <t t-call="portal.portal_table">
+                    <thead>
+                        <tr>
+                            <th><t t-out="'Date'" /></th>
+                            <th><t t-out="'Report'" /></th>
+                            <th><t t-out="'Status'" /></th>
+                            <th class="text-end"><t t-out="'Total'" /></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="sheets" t-as="s">
+                            <tr>
+                                <td>
+                                    <span
+                                        t-field="s.accounting_date"
+                                        t-options="{'widget': 'date'}"
+                                    />
+                                </td>
+                                <td>
+                                    <strong><t t-esc="s.name" /></strong>
+                                    <div class="text-muted small">
+                                        <t t-esc="s.nb_expense" /> <t t-out="'lines'" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <t t-set="st" t-value="s.state" />
+                                    <span
+                                        t-attf-class="badge rounded-pill
+                                        #{'bg-secondary' if st == 'draft'
+                                        else 'bg-info' if st == 'submit'
+                                        else 'bg-primary' if st == 'approve'
+                                        else 'bg-warning text-dark' if st == 'post'
+                                        else 'bg-success' if st == 'done'
+                                        else 'bg-danger' if st == 'cancel'
+                                        else 'bg-light text-dark'}"
+                                    >
+                                        <t t-esc="st" />
+                                    </span>
+                                </td>
+                                <td class="text-end">
+                                    <span
+                                        t-field="s.total_amount"
+                                        t-options="{'widget': 'monetary', 'display_currency': s.company_currency_id}"
+                                    />
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

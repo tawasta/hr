@@ -1,0 +1,501 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <template
+        id="portal_my_expenses_add_create_button"
+        inherit_id="hr_expense_portal.portal_my_expenses"
+        priority="60"
+    >
+        <xpath
+            expr="//t[@t-if='grouped_expenses']/div[contains(@class,'card')][1]"
+            position="before"
+        >
+
+            <t t-if="request.params.get('create_ok')">
+                <div class="alert alert-success d-flex align-items-center" role="alert">
+                    <i class="fa fa-check-circle me-2" />
+                    <div>Expense report created successfully.</div>
+                </div>
+            </t>
+
+            <t t-if="request.params.get('create_error')">
+                <div class="alert alert-danger d-flex align-items-center" role="alert">
+                    <i class="fa fa-exclamation-triangle me-2" />
+                    <div
+                    >Could not create expense report. Please check required fields and try again.</div>
+                </div>
+            </t>
+
+            <div class="card mb-3 border-0 shadow-sm">
+                <div
+                    class="card-body d-flex flex-wrap align-items-center justify-content-between gap-2"
+                >
+                    <div>
+                        <div class="fw-semibold">Create a new expense report</div>
+                        <div
+                            class="text-muted small"
+                        >Add multiple expense lines, then submit them as one report.</div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button
+                            type="button"
+                            class="btn btn-primary btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#portalCreateExpenseModal"
+                        >
+                            <i class="fa fa-plus me-2" />Create expense report
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="modal fade"
+                id="portalCreateExpenseModal"
+                tabindex="-1"
+                aria-labelledby="portalCreateExpenseModalLabel"
+                aria-hidden="true"
+            >
+
+                <div
+                    class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl"
+                >
+                    <div
+                        class="modal-content"
+                        style="max-height: calc(100vh - 3.5rem);"
+                    >
+
+                        <form
+                            action="/my/expenses/create"
+                            method="post"
+                            enctype="multipart/form-data"
+                        >
+                            <input
+                                type="hidden"
+                                name="csrf_token"
+                                t-att-value="request.csrf_token()"
+                            />
+
+                            <div class="modal-header">
+                                <h5
+                                    class="modal-title"
+                                    id="portalCreateExpenseModalLabel"
+                                >
+                                    <i
+                                        class="fa fa-receipt me-2"
+                                    />Create expense report
+                                </h5>
+                                <button
+                                    type="button"
+                                    class="btn-close"
+                                    data-bs-dismiss="modal"
+                                    aria-label="Close"
+                                />
+                            </div>
+
+                            <div
+                                class="modal-body"
+                                style="overflow-y:auto; max-height: calc(100vh - 12rem);"
+                            >
+
+                                <!-- =========================
+                                     KEEP: Partner details (UNCHANGED)
+                                     ========================= -->
+                                <div class="row g-3 mb-2">
+                                    <div class="col-12">
+                                        <div class="fw-semibold">Partner details</div>
+                                        <div
+                                            class="text-muted small"
+                                        >These details are taken from your employee/contact information.</div>
+                                        <hr class="mt-2 mb-0" />
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <label class="form-label">Name</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            t-att-value="(partner and partner.name) or (employee and employee.name) or ''"
+                                            readonly="readonly"
+                                        />
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <label
+                                            class="form-label"
+                                        >Personal Identification Number</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="partner_ssn"
+                                            id="partner_ssn_input"
+                                            placeholder="e.g. 131052-308T"
+                                            autocomplete="off"
+                                        />
+                                        <div
+                                            id="partner_ssn_error"
+                                            class="invalid-feedback d-block"
+                                            style="display:none;"
+                                        />
+                                        <div
+                                            class="form-text text-muted"
+                                        >Will be stored encrypted (never saved in plain text).</div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="fw-semibold">Address</div>
+                                        <div
+                                            class="text-muted small"
+                                        >This address will be saved to your private contact.</div>
+                                        <hr class="mt-2 mb-0" />
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label">Street</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="partner_street"
+                                            t-att-value="(partner and partner.street) or ''"
+                                            autocomplete="street-address"
+                                        />
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label class="form-label">Street 2</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="partner_street2"
+                                            t-att-value="(partner and partner.street2) or ''"
+                                            autocomplete="address-line2"
+                                        />
+                                    </div>
+
+                                    <div class="col-12 col-md-4">
+                                        <label class="form-label">ZIP</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="partner_zip"
+                                            t-att-value="(partner and partner.zip) or ''"
+                                            autocomplete="postal-code"
+                                        />
+                                    </div>
+
+                                    <div class="col-12 col-md-4">
+                                        <label class="form-label">City</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            name="partner_city"
+                                            t-att-value="(partner and partner.city) or ''"
+                                            autocomplete="address-level2"
+                                        />
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <label class="form-label">Country</label>
+                                        <select
+                                            class="form-select"
+                                            name="partner_country_id"
+                                            id="partner_country_id"
+                                        >
+                                            <option value="">Select country…</option>
+                                            <t t-foreach="countries" t-as="c">
+                                                <option
+                                                    t-att-value="c.id"
+                                                    t-att-selected="partner and partner.country_id and partner.country_id.id == c.id"
+                                                >
+                                                    <t t-esc="c.name" />
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <label class="form-label">State</label>
+                                        <select
+                                            class="form-select"
+                                            name="partner_state_id"
+                                            id="partner_state_id"
+                                        >
+                                            <option value="">Select state…</option>
+                                            <t t-foreach="states" t-as="s">
+                                                <option
+                                                    t-att-value="s.id"
+                                                    t-att-selected="partner and partner.state_id and partner.state_id.id == s.id"
+                                                >
+                                                    <t t-esc="s.name" />
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+
+                                    <div class="col-12 col-md-6">
+                                        <label
+                                            class="form-label"
+                                        >Bank account (IBAN)</label>
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            t-att-value="partner_iban or ''"
+                                        />
+                                    </div>
+
+                                    <div class="col-12">
+                                        <hr class="my-2" />
+                                    </div>
+                                </div>
+
+                                <!-- =========================
+                                     Expense lines header (KEEP)
+                                     ========================= -->
+                                <div
+                                    class="d-flex align-items-center justify-content-between mb-2"
+                                >
+                                    <div>
+                                        <div class="fw-semibold">Expense lines</div>
+                                        <div
+                                            class="text-muted small"
+                                        >Each line becomes one expense line in the report.</div>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        class="btn btn-outline-primary btn-sm js-add-expense-line"
+                                    >
+                                        <i class="fa fa-plus me-2" />Add line
+                                    </button>
+                                </div>
+
+                                <!-- =========================
+                                     REPLACE: table -> accordion cards
+                                     ========================= -->
+                                <div
+                                    class="accordion js-expense-lines-cards"
+                                    id="portalExpenseLinesAccordion"
+                                    data-next-index="1"
+                                >
+                                    <!-- cards injected by JS -->
+                                </div>
+
+                                <div class="alert alert-info py-2 small mb-0 mt-3">
+                                    <i class="fa fa-info-circle me-2" />
+                                    Clicking Create will generate one expense report (hr.expense.sheet) and submit it for approval.
+                                </div>
+
+                                <template id="portal_expense_line_tpl">
+                                    <div
+                                        class="accordion-item js-expense-line-card"
+                                        data-idx="__IDX__"
+                                    >
+                                        <h2
+                                            class="accordion-header"
+                                            id="portalExpLineHead___IDX__"
+                                        >
+                                            <button
+                                                class="accordion-button collapsed"
+                                                type="button"
+                                                data-bs-toggle="collapse"
+                                                data-bs-target="#portalExpLineBody___IDX__"
+                                                aria-expanded="false"
+                                                aria-controls="portalExpLineBody___IDX__"
+                                            >
+                                                <span
+                                                    class="me-2 text-muted fw-semibold"
+                                                >#<span
+                                                        class="js-line-no"
+                                                    >1</span></span>
+                                                <span
+                                                    class="js-line-summary"
+                                                >New line</span>
+                                            </button>
+                                        </h2>
+
+                                        <div
+                                            id="portalExpLineBody___IDX__"
+                                            class="accordion-collapse collapse"
+                                            aria-labelledby="portalExpLineHead___IDX__"
+                                            data-bs-parent="#portalExpenseLinesAccordion"
+                                        >
+                                            <div class="accordion-body">
+
+                                                <input
+                                                    type="hidden"
+                                                    name="line_idx"
+                                                    value="__IDX__"
+                                                />
+
+                                                <div class="row g-3">
+
+                                                    <div class="col-12 col-lg-3">
+                                                        <label
+                                                            class="form-label"
+                                                        >Date <span
+                                                                class="text-danger"
+                                                            >*</span></label>
+                                                        <div class="input-group">
+                                                            <input
+                                                                type="text"
+                                                                class="form-control datetimepicker-input"
+                                                                name="line_date___IDX__"
+                                                                t-att-value="today_fi or ''"
+                                                                placeholder="dd.MM.yyyy"
+                                                                autocomplete="off"
+                                                                required="required"
+                                                            />
+                                                            <span
+                                                                class="input-group-text"
+                                                                style="cursor:pointer;"
+                                                            >
+                                                                <i
+                                                                    class="fa fa-calendar"
+                                                                />
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-12 col-lg-4">
+                                                        <label
+                                                            class="form-label"
+                                                        >Category <span
+                                                                class="text-danger"
+                                                            >*</span></label>
+                                                        <select
+                                                            class="form-select"
+                                                            name="line_product_id___IDX__"
+                                                            required="required"
+                                                        >
+                                                            <option
+                                                                value=""
+                                                            >Select…</option>
+                                                            <t
+                                                                t-foreach="products"
+                                                                t-as="p"
+                                                            >
+                                                                <option
+                                                                    t-att-value="p.id"
+                                                                ><t
+                                                                        t-esc="p.display_name"
+                                                                    /></option>
+                                                            </t>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="col-12 col-lg-5">
+                                                        <label
+                                                            class="form-label"
+                                                        >Description <span
+                                                                class="text-danger"
+                                                            >*</span></label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            name="line_name___IDX__"
+                                                            placeholder="e.g. Taxi to customer meeting"
+                                                            required="required"
+                                                        />
+                                                    </div>
+
+                                                    <div class="col-6 col-lg-2">
+                                                        <label
+                                                            class="form-label"
+                                                        >Qty <span
+                                                                class="text-danger"
+                                                            >*</span></label>
+                                                        <input
+                                                            type="number"
+                                                            class="form-control text-end"
+                                                            name="line_quantity___IDX__"
+                                                            step="0.01"
+                                                            min="0.01"
+                                                            value="1"
+                                                            required="required"
+                                                        />
+                                                    </div>
+
+                                                    <div class="col-6 col-lg-2">
+                                                        <label
+                                                            class="form-label"
+                                                        >Unit price <span
+                                                                class="text-danger"
+                                                            >*</span></label>
+                                                        <input
+                                                            type="number"
+                                                            class="form-control text-end"
+                                                            name="line_price_unit___IDX__"
+                                                            step="0.01"
+                                                            min="0.01"
+                                                            placeholder="0.00"
+                                                            required="required"
+                                                        />
+                                                    </div>
+
+                                                    <div class="col-12 col-lg-4">
+                                                        <label
+                                                            class="form-label"
+                                                        >Receipt</label>
+                                                        <input
+                                                            type="file"
+                                                            class="form-control"
+                                                            name="receipt___IDX__"
+                                                            accept="image/*,application/pdf"
+                                                        />
+                                                    </div>
+
+                                                    <div class="col-12 col-lg-4">
+                                                        <label
+                                                            class="form-label"
+                                                        >Internal Notes</label>
+                                                        <input
+                                                            type="text"
+                                                            class="form-control"
+                                                            name="line_description___IDX__"
+                                                            placeholder="Optional notes…"
+                                                        />
+                                                    </div>
+
+                                                    <div
+                                                        class="col-12 d-flex justify-content-end"
+                                                    >
+                                                        <button
+                                                            type="button"
+                                                            class="btn btn-outline-danger btn-sm js-remove-expense-line"
+                                                        >
+                                                            <i
+                                                                class="fa fa-trash me-2"
+                                                            />Remove line
+                                                        </button>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button
+                                    type="button"
+                                    class="btn btn-outline-secondary"
+                                    data-bs-dismiss="modal"
+                                >Cancel</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-save me-2" />Create report
+                                </button>
+                            </div>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+
+        </xpath>
+    </template>
+
+</odoo>
