@@ -12,7 +12,9 @@ class HrEmployee(models.Model):
                 "tag": "display_notification",
                 "params": {
                     "title": _("No Private Contact"),
-                    "message": _("This employee has no private contact (work contact)."),
+                    "message": _(
+                        "This employee has no private contact (work contact)."
+                    ),
                     "sticky": False,
                 },
             }

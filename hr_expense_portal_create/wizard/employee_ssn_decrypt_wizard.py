@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from odoo import _, fields, models
 
 
@@ -21,7 +19,9 @@ class HrEmployeeSSNDecryptWizard(models.TransientModel):
                 "tag": "display_notification",
                 "params": {
                     "title": _("No Personal Identification Number"),
-                    "message": _("No encrypted personal identification number found on the employee's private contact."),
+                    "message": _(
+                        "No encrypted personal identification number found on the employee's private contact."  # noqa: E501
+                    ),
                     "sticky": False,
                 },
             }
@@ -31,7 +31,10 @@ class HrEmployeeSSNDecryptWizard(models.TransientModel):
             self.key,
         )
 
-        if decrypted in (_("The key you provided is incorrect."), _("Decryption failed")):
+        if decrypted in (
+            _("The key you provided is incorrect."),
+            _("Decryption failed"),
+        ):
             return {
                 "type": "ir.actions.client",
                 "tag": "display_notification",

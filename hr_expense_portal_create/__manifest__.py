@@ -46,7 +46,6 @@
             "https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/css/tempus-dominus.min.css",
             "https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js",
             "https://cdn.jsdelivr.net/npm/@eonasdan/tempus-dominus@6.9.4/dist/js/tempus-dominus.min.js",
-
             # Our init
             "/hr_expense_portal_create/static/src/js/portal_expense_create.esm.js",
         ],

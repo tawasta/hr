@@ -12,6 +12,8 @@ addon | version | maintainers | summary
 --- | --- | --- | ---
 [hr_expense_current_date_as_accounting_date](hr_expense_current_date_as_accounting_date/) | 17.0.1.0.0 |  | When confirming expense sheet, use current date as accounting date
 [hr_expense_hide_mobile_app](hr_expense_hide_mobile_app/) | 17.0.1.0.0 |  | Don't show mobile app suggestion (as it doesn't work on CE)
+[hr_expense_portal](hr_expense_portal/) | 17.0.1.0.0 |  | Employee-friendly Expense & Expense Report portal
+[hr_expense_portal_create](hr_expense_portal_create/) | 17.0.1.0.0 |  | HR Expense Portal - Create Expenses
 [hr_expense_sheet_status_message](hr_expense_sheet_status_message/) | 17.0.1.4.4 |  | Sends a message when expense sheet status is changed
 [hr_skills_frontend](hr_skills_frontend/) | 17.0.1.0.0 |  | HR Skills Frontend
 [hr_timesheet_employee_hour_balance](hr_timesheet_employee_hour_balance/) | 17.0.1.0.0 |  | Show the hour balance for each employee

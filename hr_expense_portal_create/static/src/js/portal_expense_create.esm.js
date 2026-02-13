@@ -14,72 +14,9 @@ publicWidget.registry.PortalExpenseTempus = publicWidget.Widget.extend({
         // Init only when modal is visible (same pattern as your working module)
         $modal.on("shown.bs.modal", () => {
             this._initTempusInside($modal);
-            this._initSsnValidation($modal);
         });
 
         return this._super(...arguments);
-    },
-
-    _initSsnValidation($root) {
-        const $form = $root.find('form[action="/my/expenses/create"]').first();
-        if (!$form.length) return;
-
-        // prevent multiple binding
-        if ($form.data("ssnValidationBound")) return;
-        $form.data("ssnValidationBound", true);
-
-        const $input = $root.find("#speaker_ssn_input");
-        const $err = $root.find("#speaker_ssn_error");
-
-        function showError(msg) {
-            if ($err && $err.length) {
-                $err.text(msg);
-                $err.show();
-            }
-            if ($input && $input.length) {
-                $input.addClass("is-invalid");
-            }
-        }
-
-        function clearError() {
-            if ($err && $err.length) {
-                $err.text("");
-                $err.hide();
-            }
-            if ($input && $input.length) {
-                $input.removeClass("is-invalid");
-            }
-        }
-
-        // live validation while typing (optional but nice)
-        $input.on("input.portalSsn", () => {
-            const v = ($input.val() || "").trim();
-            if (!v) {
-                clearError();
-                return;
-            }
-            if (isValidFinnishHetu(v)) clearError();
-        });
-
-        // block submit if invalid
-        $form.on("submit.portalSsn", (ev) => {
-            const v = ($input.val() || "").trim();
-
-            // allow empty (optional field)
-            if (!v) {
-                clearError();
-                return;
-            }
-
-            if (!isValidFinnishHetu(v)) {
-                ev.preventDefault();
-                ev.stopPropagation();
-                showError("Invalid Personal Identification Number format or checksum.");
-                $input.focus();
-            } else {
-                clearError();
-            }
-        });
     },
 
     _initTempusInside($root) {
@@ -138,14 +75,17 @@ publicWidget.registry.PortalExpenseTempus = publicWidget.Widget.extend({
             const $group = $(el).closest(".input-group");
             const $btn = $group.find(".input-group-text").first();
             if ($btn && $btn.length) {
-                $btn.off("click.portalExpenseTempus").on("click.portalExpenseTempus", () => {
-                    try {
-                        instance.show();
-                    } catch (e) {
-                        // If API differs in minor versions, fallback to focusing the input
-                        el.focus();
+                $btn.off("click.portalExpenseTempus").on(
+                    "click.portalExpenseTempus",
+                    () => {
+                        try {
+                            instance.show();
+                        } catch (e) {
+                            // If API differs in minor versions, fallback to focusing the input
+                            el.focus();
+                        }
                     }
-                });
+                );
             }
         });
     },

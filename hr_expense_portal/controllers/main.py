@@ -1,26 +1,28 @@
-# -*- coding: utf-8 -*-
-
 from collections import OrderedDict
-from dateutil.relativedelta import relativedelta
 from operator import itemgetter
+
+from dateutil.relativedelta import relativedelta
 
 from odoo import fields, http
 from odoo.exceptions import AccessError, MissingError
 from odoo.http import request
 from odoo.osv.expression import AND, OR
-from odoo.tools import date_utils, groupby as groupbyelem
+from odoo.tools import date_utils
+from odoo.tools import groupby as groupbyelem
 
-from odoo.addons.portal.controllers.portal import CustomerPortal, pager as portal_pager
+from odoo.addons.portal.controllers.portal import CustomerPortal
+from odoo.addons.portal.controllers.portal import pager as portal_pager
 
 
 class HrExpenseCustomerPortal(CustomerPortal):
-
     def _prepare_home_portal_values(self, counters):
         values = super()._prepare_home_portal_values(counters)
         if "expense_count" in counters:
             values["expense_count"] = request.env["hr.expense"].search_count([])
         if "expense_sheet_count" in counters:
-            values["expense_sheet_count"] = request.env["hr.expense.sheet"].search_count([])
+            values["expense_sheet_count"] = request.env[
+                "hr.expense.sheet"
+            ].search_count([])
         return values
 
     def _expense_searchbar_sortings(self):
@@ -75,45 +77,100 @@ class HrExpenseCustomerPortal(CustomerPortal):
         last_month = today + relativedelta(months=-1)
         last_year = today + relativedelta(years=-1)
 
-        return OrderedDict([
-            ("all", {"label": "All", "domain": []}),
-            ("to_report", {"label": "To Report", "domain": [("state", "=", "draft")]}),
-            ("to_submit", {"label": "To Submit", "domain": [("state", "=", "reported")]}),
-            ("submitted", {"label": "Submitted", "domain": [("state", "=", "submitted")]}),
-            ("approved", {"label": "Approved", "domain": [("state", "=", "approved")]}),
-            ("done", {"label": "Done", "domain": [("state", "=", "done")]}),
-            ("refused", {"label": "Refused", "domain": [("state", "=", "refused")]}),
-
-            ("today", {"label": "Today", "domain": [("date", "=", today)]}),
-            ("this_month", {"label": "This month", "domain": [
-                ("date", ">=", date_utils.start_of(today, "month")),
-                ("date", "<=", date_utils.end_of(today, "month")),
-            ]}),
-            ("last_month", {"label": "Last month", "domain": [
-                ("date", ">=", date_utils.start_of(last_month, "month")),
-                ("date", "<=", date_utils.end_of(last_month, "month")),
-            ]}),
-            ("this_quarter", {"label": "This quarter", "domain": [
-                ("date", ">=", quarter_start),
-                ("date", "<=", quarter_end),
-            ]}),
-            ("this_year", {"label": "This year", "domain": [
-                ("date", ">=", date_utils.start_of(today, "year")),
-                ("date", "<=", date_utils.end_of(today, "year")),
-            ]}),
-            ("last_year", {"label": "Last year", "domain": [
-                ("date", ">=", date_utils.start_of(last_year, "year")),
-                ("date", "<=", date_utils.end_of(last_year, "year")),
-            ]}),
-        ])
+        return OrderedDict(
+            [
+                ("all", {"label": "All", "domain": []}),
+                (
+                    "to_report",
+                    {"label": "To Report", "domain": [("state", "=", "draft")]},
+                ),
+                (
+                    "to_submit",
+                    {"label": "To Submit", "domain": [("state", "=", "reported")]},
+                ),
+                (
+                    "submitted",
+                    {"label": "Submitted", "domain": [("state", "=", "submitted")]},
+                ),
+                (
+                    "approved",
+                    {"label": "Approved", "domain": [("state", "=", "approved")]},
+                ),
+                ("done", {"label": "Done", "domain": [("state", "=", "done")]}),
+                (
+                    "refused",
+                    {"label": "Refused", "domain": [("state", "=", "refused")]},
+                ),
+                ("today", {"label": "Today", "domain": [("date", "=", today)]}),
+                (
+                    "this_month",
+                    {
+                        "label": "This month",
+                        "domain": [
+                            ("date", ">=", date_utils.start_of(today, "month")),
+                            ("date", "<=", date_utils.end_of(today, "month")),
+                        ],
+                    },
+                ),
+                (
+                    "last_month",
+                    {
+                        "label": "Last month",
+                        "domain": [
+                            ("date", ">=", date_utils.start_of(last_month, "month")),
+                            ("date", "<=", date_utils.end_of(last_month, "month")),
+                        ],
+                    },
+                ),
+                (
+                    "this_quarter",
+                    {
+                        "label": "This quarter",
+                        "domain": [
+                            ("date", ">=", quarter_start),
+                            ("date", "<=", quarter_end),
+                        ],
+                    },
+                ),
+                (
+                    "this_year",
+                    {
+                        "label": "This year",
+                        "domain": [
+                            ("date", ">=", date_utils.start_of(today, "year")),
+                            ("date", "<=", date_utils.end_of(today, "year")),
+                        ],
+                    },
+                ),
+                (
+                    "last_year",
+                    {
+                        "label": "Last year",
+                        "domain": [
+                            ("date", ">=", date_utils.start_of(last_year, "year")),
+                            ("date", "<=", date_utils.end_of(last_year, "year")),
+                        ],
+                    },
+                ),
+            ]
+        )
 
     @http.route(
         ["/my/expenses", "/my/expenses/page/<int:page>"],
-        type="http", auth="user", website=True
+        type="http",
+        auth="user",
+        website=True,
     )
-    def portal_my_expenses(self, page=1, sortby="date", filterby="all",
-                           search=None, search_in="all", groupby="none", **kw):
-
+    def portal_my_expenses(
+        self,
+        page=1,
+        sortby="date",
+        filterby="all",
+        search=None,
+        search_in="all",
+        groupby="none",
+        **kw,
+    ):
         Expense = request.env["hr.expense"]
 
         values = self._prepare_portal_layout_values()
@@ -149,10 +206,12 @@ class HrExpenseCustomerPortal(CustomerPortal):
             step=step,
         )
 
-        expenses = Expense.search(domain, order=order, limit=step, offset=pager["offset"])
+        expenses = Expense.search(
+            domain, order=order, limit=step, offset=pager["offset"]
+        )
 
         rg_total = Expense._read_group(domain, aggregates=["total_amount:sum"])
-        total_amount_sum = (rg_total[0][0] if rg_total else 0.0)
+        total_amount_sum = rg_total[0][0] if rg_total else 0.0
 
         grouped_expenses = []
         if groupby and groupby != "none":
@@ -160,7 +219,9 @@ class HrExpenseCustomerPortal(CustomerPortal):
             gb = mapping.get(groupby)
 
             if gb == "date:month":
-                rg = Expense._read_group(domain, ["date:month"], ["total_amount:sum", "id:recordset"])
+                rg = Expense._read_group(
+                    domain, ["date:month"], ["total_amount:sum", "id:recordset"]
+                )
                 grouped_expenses = [(records, amount) for _key, amount, records in rg]
             else:
                 rg = Expense._read_group(domain, [gb], ["total_amount:sum"])
@@ -170,35 +231,35 @@ class HrExpenseCustomerPortal(CustomerPortal):
 
                 for k, g in groupbyelem(expenses, itemgetter(gb)):
                     kk = k.id if hasattr(k, "id") else k
-                    grouped_expenses.append((Expense.concat(*g), amounts_by_key.get(kk, 0.0)))
+                    grouped_expenses.append(
+                        (Expense.concat(*g), amounts_by_key.get(kk, 0.0))
+                    )
         else:
             grouped_expenses = [(expenses, total_amount_sum)] if expenses else []
 
-        values.update({
-            "page_name": "expense",
-            "default_url": "/my/expenses",
-            "pager": pager,
-            "expenses": expenses,
-            "grouped_expenses": grouped_expenses,
-            "total_amount_sum": total_amount_sum,
-
-            "searchbar_sortings": searchbar_sortings,
-            "searchbar_filters": searchbar_filters,
-            "searchbar_inputs": searchbar_inputs,
-            "searchbar_groupby": searchbar_groupby,
-
-            "sortby": sortby,
-            "filterby": filterby,
-            "search": search,
-            "search_in": search_in,
-            "groupby": groupby,
-        })
+        values.update(
+            {
+                "page_name": "expense",
+                "default_url": "/my/expenses",
+                "pager": pager,
+                "expenses": expenses,
+                "grouped_expenses": grouped_expenses,
+                "total_amount_sum": total_amount_sum,
+                "searchbar_sortings": searchbar_sortings,
+                "searchbar_filters": searchbar_filters,
+                "searchbar_inputs": searchbar_inputs,
+                "searchbar_groupby": searchbar_groupby,
+                "sortby": sortby,
+                "filterby": filterby,
+                "search": search,
+                "search_in": search_in,
+                "groupby": groupby,
+            }
+        )
         return request.render("hr_expense_portal.portal_my_expenses", values)
 
-
     @http.route(
-        ["/my/expenses/<int:expense_id>"],
-        type="http", auth="user", website=True
+        ["/my/expenses/<int:expense_id>"], type="http", auth="user", website=True
     )
     def portal_my_expense(self, expense_id, **kw):
         try:
@@ -211,17 +272,21 @@ class HrExpenseCustomerPortal(CustomerPortal):
             return request.redirect("/my")
 
         Attachment = request.env["ir.attachment"].sudo()
-        attachments = Attachment.search([
-            ("res_model", "=", "hr.expense"),
-            ("res_id", "=", expense.id),
-        ])
+        attachments = Attachment.search(
+            [
+                ("res_model", "=", "hr.expense"),
+                ("res_id", "=", expense.id),
+            ]
+        )
 
         values = self._prepare_portal_layout_values()
-        values.update({
-            "page_name": "expense_detail",
-            "expense": expense,
-            "attachments": attachments,
-        })
+        values.update(
+            {
+                "page_name": "expense_detail",
+                "expense": expense,
+                "attachments": attachments,
+            }
+        )
         return request.render("hr_expense_portal.portal_my_expense", values)
 
     def _sheet_searchbar_sortings(self):
@@ -247,23 +312,36 @@ class HrExpenseCustomerPortal(CustomerPortal):
         return dom
 
     def _sheet_searchbar_filters(self):
-        return OrderedDict([
-            ("all", {"label": "All", "domain": []}),
-            ("to_submit", {"label": "To Submit", "domain": [("state", "=", "draft")]}),
-            ("submitted", {"label": "Submitted", "domain": [("state", "=", "submit")]}),
-            ("approved", {"label": "Approved", "domain": [("state", "=", "approve")]}),
-            ("posted", {"label": "Posted", "domain": [("state", "=", "post")]}),
-            ("done", {"label": "Done", "domain": [("state", "=", "done")]}),
-            ("refused", {"label": "Refused", "domain": [("state", "=", "cancel")]}),
-        ])
+        return OrderedDict(
+            [
+                ("all", {"label": "All", "domain": []}),
+                (
+                    "to_submit",
+                    {"label": "To Submit", "domain": [("state", "=", "draft")]},
+                ),
+                (
+                    "submitted",
+                    {"label": "Submitted", "domain": [("state", "=", "submit")]},
+                ),
+                (
+                    "approved",
+                    {"label": "Approved", "domain": [("state", "=", "approve")]},
+                ),
+                ("posted", {"label": "Posted", "domain": [("state", "=", "post")]}),
+                ("done", {"label": "Done", "domain": [("state", "=", "done")]}),
+                ("refused", {"label": "Refused", "domain": [("state", "=", "cancel")]}),
+            ]
+        )
 
     @http.route(
         ["/my/expense-reports", "/my/expense-reports/page/<int:page>"],
-        type="http", auth="user", website=True
+        type="http",
+        auth="user",
+        website=True,
     )
-    def portal_my_expense_reports(self, page=1, sortby="date", filterby="all",
-                                  search=None, search_in="all", **kw):
-
+    def portal_my_expense_reports(
+        self, page=1, sortby="date", filterby="all", search=None, search_in="all", **kw
+    ):
         Sheet = request.env["hr.expense.sheet"]
 
         values = self._prepare_portal_layout_values()
@@ -299,19 +377,19 @@ class HrExpenseCustomerPortal(CustomerPortal):
 
         sheets = Sheet.search(domain, order=order, limit=step, offset=pager["offset"])
 
-        values.update({
-            "page_name": "expense_sheet",
-            "default_url": "/my/expense-reports",
-            "pager": pager,
-            "sheets": sheets,
-
-            "searchbar_sortings": searchbar_sortings,
-            "searchbar_filters": searchbar_filters,
-            "searchbar_inputs": searchbar_inputs,
-
-            "sortby": sortby,
-            "filterby": filterby,
-            "search": search,
-            "search_in": search_in,
-        })
+        values.update(
+            {
+                "page_name": "expense_sheet",
+                "default_url": "/my/expense-reports",
+                "pager": pager,
+                "sheets": sheets,
+                "searchbar_sortings": searchbar_sortings,
+                "searchbar_filters": searchbar_filters,
+                "searchbar_inputs": searchbar_inputs,
+                "sortby": sortby,
+                "filterby": filterby,
+                "search": search,
+                "search_in": search_in,
+            }
+        )
         return request.render("hr_expense_portal.portal_my_expense_reports", values)
