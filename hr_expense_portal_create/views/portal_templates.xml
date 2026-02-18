@@ -96,9 +96,6 @@
                                 style="overflow-y:auto; max-height: calc(100vh - 12rem);"
                             >
 
-                                <!-- =========================
-                                     KEEP: Partner details (UNCHANGED)
-                                     ========================= -->
                                 <div class="row g-3 mb-2">
                                     <div class="col-12">
                                         <div class="fw-semibold">Partner details</div>
@@ -245,11 +242,70 @@
                                     <div class="col-12">
                                         <hr class="my-2" />
                                     </div>
+
+                                    <div class="row g-3 mb-2">
+                                        <div class="col-12">
+                                            <div class="fw-semibold">Privacy</div>
+                                            <hr class="mt-2 mb-0" />
+                                        </div>
+
+                                        <div class="col-12">
+                                            <t
+                                                t-set="privacy_activities"
+                                                t-value="request.env['privacy.activity'].sudo().search([('show_in_profile', '=', True)])"
+                                            />
+                                            <t
+                                                t-set="user_privacy_consents"
+                                                t-value="request.env['privacy.consent'].sudo().search([('partner_id', '=', partner.id), ('activity_id', 'in', privacy_activities.ids)])"
+                                            />
+
+                                            <t t-if="privacy_activities">
+                                                <div class="form-text text-muted mb-2">
+                                                    Please accept the privacy notice to continue.
+                                                </div>
+
+                                                <t
+                                                    t-foreach="privacy_activities"
+                                                    t-as="activity"
+                                                >
+                                                    <t
+                                                        t-set="user_consent"
+                                                        t-value="user_privacy_consents.filtered(lambda c: c.activity_id == activity)"
+                                                    />
+
+                                                    <div class="form-check mb-2">
+                                                        <input
+                                                            class="form-check-input"
+                                                            type="checkbox"
+                                                            t-attf-name="privacy_#{str(activity.id)}"
+                                                            t-att-id="'privacy_%s' % activity.id"
+                                                            t-att-checked="'checked' if user_consent and user_consent.accepted else None"
+                                                            required="required"
+                                                        />
+                                                        <label
+                                                            class="form-check-label"
+                                                            t-att-for="'privacy_%s' % activity.id"
+                                                        >
+                                                            <t t-esc="activity.name" />
+                                                        </label>
+                                                    </div>
+                                                </t>
+                                            </t>
+
+                                            <t t-else="">
+                                                <div class="text-muted small">
+                                                    No privacy consent items are configured.
+                                                </div>
+                                            </t>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <hr class="my-2" />
+                                        </div>
+                                    </div>
+
                                 </div>
 
-                                <!-- =========================
-                                     Expense lines header (KEEP)
-                                     ========================= -->
                                 <div
                                     class="d-flex align-items-center justify-content-between mb-2"
                                 >
@@ -267,9 +323,6 @@
                                     </button>
                                 </div>
 
-                                <!-- =========================
-                                     REPLACE: table -> accordion cards
-                                     ========================= -->
                                 <div
                                     class="accordion js-expense-lines-cards"
                                     id="portalExpenseLinesAccordion"

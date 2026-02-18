@@ -33,6 +33,7 @@
         "hr_expense",
         "hr_expense_portal",
         "social_security_number_management",
+        "privacy_profile",
     ],
     "data": [
         "security/ir.model.access.csv",

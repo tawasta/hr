@@ -86,6 +86,43 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
             )
         return created
 
+    def _create_privacy_consents(self, post, partner):
+        PrivacyActivity = request.env["privacy.activity"].sudo()
+        PrivacyConsent = request.env["privacy.consent"].sudo()
+
+        activities = PrivacyActivity.search([("show_in_profile", "=", True)])
+        if not activities:
+            return True  # nothing to require/save
+
+        accepted_ids = []
+        for act in activities:
+            if post.get("privacy_%s" % act.id):
+                accepted_ids.append(act.id)
+
+        # Require: all shown activities must be
+        # accepted (matches required checkboxes in UI)
+        if set(accepted_ids) != set(activities.ids):
+            return False
+
+        for act in activities:
+            accepted = act.id in accepted_ids
+            existing = PrivacyConsent.search(
+                [("partner_id", "=", partner.id), ("activity_id", "=", act.id)],
+                limit=1,
+            )
+            if existing:
+                existing.write({"accepted": accepted, "state": "answered"})
+            else:
+                PrivacyConsent.create(
+                    {
+                        "partner_id": partner.id,
+                        "activity_id": act.id,
+                        "accepted": accepted,
+                        "state": "answered",
+                    }
+                )
+        return True
+
     def portal_my_expenses(
         self,
         page=1,
@@ -142,6 +179,12 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
     def portal_create_expense(self, **post):  # noqa: C901
         employee = self._portal_employee()
         company = request.env.company
+
+        partner = employee.sudo().work_contact_id
+        if partner:
+            ok_privacy = self._create_privacy_consents(post, partner)
+            if not ok_privacy:
+                return request.redirect("/my/expenses?create_error=1")
 
         partner_ssn = (post.get("partner_ssn") or "").strip()
         partner_street = (post.get("partner_street") or "").strip()
