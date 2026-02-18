@@ -13,6 +13,9 @@ publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
         this.$ssnInput = this.$modal.find("#partner_ssn_input");
         this.$ssnError = this.$modal.find("#partner_ssn_error");
 
+        this.$country = this.$modal.find("#partner_country_id");
+        this.$state = this.$modal.find("#partner_state_id");
+
         this.$modal.on("shown.bs.modal", () => {
             const $wrap = this.$modal.find(".js-expense-lines-cards");
             if ($wrap.length && !$wrap.find(".js-expense-line-card").length) {
@@ -20,11 +23,16 @@ publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
             }
             this._initTempusInside(this.$modal);
             this._updateLineNumbers();
+            this._filterStatesByCountry();
         });
 
         this.$modal.on("click", ".js-add-expense-line", (ev) => {
             ev.preventDefault();
             this._addLine(true);
+        });
+
+        this.$modal.on("change", "#partner_country_id", () => {
+            this._filterStatesByCountry(true);
         });
 
         this.$modal.on("click", ".js-remove-expense-line", (ev) => {
@@ -75,6 +83,68 @@ publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
         const current = parseInt($wrap.attr("data-next-index") || "1", 10);
         $wrap.attr("data-next-index", String(current + 1));
         return current;
+    },
+
+    _filterStatesByCountry(resetSelection) {
+        if (
+            !this.$country ||
+            !this.$country.length ||
+            !this.$state ||
+            !this.$state.length
+        ) {
+            return;
+        }
+
+        const countryId = (this.$country.val() || "").toString();
+        const $options = this.$state.find("option");
+
+        // Keep the placeholder always visible
+        $options.each(function () {
+            const $opt = $(this);
+            const val = ($opt.attr("value") || "").toString();
+
+            if (!val) {
+                $opt.prop("disabled", false).prop("hidden", false).show();
+                return;
+            }
+
+            const optCountry = ($opt.data("country-id") || "").toString();
+
+            if (!countryId) {
+                // No country selected => hide all states (except placeholder)
+                $opt.prop("hidden", true).hide();
+                return;
+            }
+
+            const match = optCountry === countryId;
+            $opt.prop("hidden", !match);
+            if (match) $opt.show();
+            else $opt.hide();
+        });
+
+        // If current selected state doesn't belong to selected country -> reset
+        const selectedVal = (this.$state.val() || "").toString();
+        if (selectedVal) {
+            const $selected = this.$state.find(`option[value="${selectedVal}"]`);
+            const selectedCountry = ($selected.data("country-id") || "").toString();
+            if (countryId && selectedCountry !== countryId) {
+                this.$state.val("");
+            }
+        }
+
+        if (resetSelection) {
+            this.$state.val("");
+        }
+
+        // If there are no states for this country, keep placeholder and disable select
+        const hasAny =
+            this.$state.find("option").filter(function () {
+                const val = ($(this).attr("value") || "").toString();
+                if (!val) return false;
+                return !$(this).prop("hidden");
+            }).length > 0;
+
+        this.$state.prop("disabled", countryId ? !hasAny : true);
     },
 
     _addLine(open) {

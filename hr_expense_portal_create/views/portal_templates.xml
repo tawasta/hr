@@ -223,6 +223,7 @@
                                                 <option
                                                     t-att-value="s.id"
                                                     t-att-selected="partner and partner.state_id and partner.state_id.id == s.id"
+                                                    t-att-data-country-id="s.country_id.id"
                                                 >
                                                     <t t-esc="s.name" />
                                                 </option>
