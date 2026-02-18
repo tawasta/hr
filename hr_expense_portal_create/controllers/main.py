@@ -78,7 +78,8 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
                 {
                     "name": upload.filename,
                     "datas": base64.b64encode(content),
-                    "mimetype": getattr(upload, "content_type", False) or "application/octet-stream",
+                    "mimetype": getattr(upload, "content_type", False)
+                    or "application/octet-stream",
                     "res_model": "hr.expense",
                     "res_id": 0,
                 }

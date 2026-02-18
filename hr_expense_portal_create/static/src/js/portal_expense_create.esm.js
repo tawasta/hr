@@ -49,18 +49,21 @@ publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
             }
         );
 
-        // live HETU validation
+        // Live HETU validation
         this.$modal.on("input blur", "#partner_ssn_input", (ev) => {
             this._validateHetu($(ev.currentTarget).val());
         });
 
-        // block submit if HETU invalid (empty allowed)
+        // Block submit if HETU invalid (empty allowed)
         this.$modal.on("submit", "form[action='/my/expenses/create']", (ev) => {
-            const ok = this._validateHetu(this.$ssnInput && this.$ssnInput.length ? this.$ssnInput.val() : "");
+            const ok = this._validateHetu(
+                this.$ssnInput && this.$ssnInput.length ? this.$ssnInput.val() : ""
+            );
             if (!ok) {
                 ev.preventDefault();
                 ev.stopPropagation();
-                if (this.$ssnInput && this.$ssnInput.length) this.$ssnInput.trigger("focus");
+                if (this.$ssnInput && this.$ssnInput.length)
+                    this.$ssnInput.trigger("focus");
             }
         });
 
@@ -109,7 +112,9 @@ publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
     _updateLineNumbers() {
         const $cards = this.$modal.find(".js-expense-line-card");
         $cards.each(function (i) {
-            $(this).find(".js-line-no").text(String(i + 1));
+            $(this)
+                .find(".js-line-no")
+                .text(String(i + 1));
         });
     },
 
@@ -126,10 +131,13 @@ publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
             .toString()
             .trim();
 
-        const currency = ($card.find(`[name="line_price_unit_${idx}"]`)
-            .closest(".input-group")
-            .find(".input-group-text")
-            .text() || "").trim();
+        const currency = (
+            $card
+                .find(`[name="line_price_unit_${idx}"]`)
+                .closest(".input-group")
+                .find(".input-group-text")
+                .text() || ""
+        ).trim();
 
         let summary = name ? name : "New line";
 
@@ -204,7 +212,9 @@ publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
         // If your XML doesn't include the field for some reason, don't block anything
         if (!this.$ssnInput || !this.$ssnInput.length) return true;
 
-        const raw = (value ?? "").toString().trim();
+        const raw = (value !== undefined && value !== null ? value : "")
+            .toString()
+            .trim();
 
         // Empty is allowed (matches backend: validate only if provided)
         if (!raw) {
@@ -236,7 +246,7 @@ publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
             return true;
         }
 
-        // invalid → show feedback in your existing placeholder
+        // Invalid → show feedback in your existing placeholder
         this.$ssnInput.addClass("is-invalid");
         if (this.$ssnError && this.$ssnError.length) {
             this.$ssnError

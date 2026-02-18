@@ -6,10 +6,7 @@
         inherit_id="hr_expense_portal.portal_my_expenses"
         priority="60"
     >
-        <xpath
-            expr="//t[@t-if='grouped_expenses']"
-            position="before"
-        >
+        <xpath expr="//t[@t-if='grouped_expenses']" position="before">
 
             <t t-if="request.params.get('create_ok')">
                 <div class="alert alert-success d-flex align-items-center" role="alert">
@@ -431,13 +428,19 @@
                                                                 placeholder="0.00"
                                                                 required="required"
                                                             />
-                                                            <span class="input-group-text">
-                                                                <t t-esc="currency_symbol or ''" />
+                                                            <span
+                                                                class="input-group-text"
+                                                            >
+                                                                <t
+                                                                    t-esc="currency_symbol or ''"
+                                                                />
                                                             </span>
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-12 col-md-5 col-lg-7">
+                                                    <div
+                                                        class="col-12 col-md-5 col-lg-7"
+                                                    >
                                                         <label
                                                             class="form-label"
                                                         >Receipt</label>
@@ -448,8 +451,12 @@
                                                             accept="image/*,application/pdf"
                                                             multiple="multiple"
                                                         />
-                                                        <div class="form-text text-muted mt-1">
-                                                            <i class="fa fa-info-circle me-1"></i>
+                                                        <div
+                                                            class="form-text text-muted mt-1"
+                                                        >
+                                                            <i
+                                                                class="fa fa-info-circle me-1"
+                                                            />
                                                             You can select multiple files at once (Ctrl/⌘ or Shift).
                                                         </div>
                                                     </div>
@@ -463,14 +470,20 @@
                                                             name="line_description___IDX__"
                                                             rows="4"
                                                             placeholder="Optional notes…"
-                                                        ></textarea>
+                                                        />
 
-                                                        <div class="form-text text-muted">
+                                                        <div
+                                                            class="form-text text-muted"
+                                                        >
                                                             <ul class="mb-0 ps-3">
-                                                                <li>Event, date and location</li>
-                                                                <li>Travel start (date and time)</li>
-                                                                <li>Travel end (date and time)</li>
-                                                                <li>Reason for using own car or taxi</li>
+                                                                <li
+                                                                >Event, date and location</li>
+                                                                <li
+                                                                >Travel start (date and time)</li>
+                                                                <li
+                                                                >Travel end (date and time)</li>
+                                                                <li
+                                                                >Reason for using own car or taxi</li>
                                                             </ul>
                                                         </div>
                                                     </div>
