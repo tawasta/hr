@@ -136,7 +136,7 @@
                                     </t>
                                     <t t-elif="groupby == 'category'">
                                         <t
-                                            t-esc="records[0].product_id.display_name or ''"
+                                            t-esc="records[0].product_id.sudo().display_name or ''"
                                         />
                                     </t>
                                     <span class="text-muted">(<t
@@ -172,7 +172,7 @@
                                         </a>
                                         <div class="text-muted small d-md-none">
                                             <t
-                                                t-esc="e.product_id.display_name if e.product_id else ''"
+                                                t-esc="e.product_id.sudo().display_name if e.product_id else ''"
                                             />
                                             <t t-if="e.sheet_id"> · <t
                                                     t-esc="e.sheet_id.name"
@@ -182,7 +182,7 @@
 
                                     <td class="d-none d-md-table-cell">
                                         <t
-                                            t-esc="e.product_id.display_name if e.product_id else ''"
+                                            t-esc="e.product_id.sudo().display_name if e.product_id else ''"
                                         />
                                     </td>
 
@@ -263,7 +263,7 @@
                                         t-options="{'widget': 'date'}"
                                     />
                                     <t t-if="expense.product_id"> · <t
-                                            t-esc="expense.product_id.display_name"
+                                            t-esc="expense.product_id.sudo().display_name"
                                         /></t>
                                     <t t-if="expense.sheet_id"> · <t
                                             t-esc="expense.sheet_id.name"
