@@ -7,7 +7,7 @@
         priority="60"
     >
         <xpath
-            expr="//t[@t-if='grouped_expenses']/div[contains(@class,'card')][1]"
+            expr="//t[@t-if='grouped_expenses']"
             position="before"
         >
 
@@ -441,7 +441,12 @@
                                                             class="form-control"
                                                             name="receipt___IDX__"
                                                             accept="image/*,application/pdf"
+                                                            multiple="multiple"
                                                         />
+                                                        <div class="form-text text-muted mt-1">
+                                                            <i class="fa fa-info-circle me-1"></i>
+                                                            You can select multiple files at once (Ctrl/⌘ or Shift).
+                                                        </div>
                                                     </div>
 
                                                     <div class="col-12 col-lg-4">

@@ -10,6 +10,8 @@ publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
 
         this.$modal = $("#portalCreateExpenseModal");
         if (!this.$modal.length) return this._super(...arguments);
+        this.$ssnInput = this.$modal.find("#partner_ssn_input");
+        this.$ssnError = this.$modal.find("#partner_ssn_error");
 
         this.$modal.on("shown.bs.modal", () => {
             const $wrap = this.$modal.find(".js-expense-lines-cards");
@@ -46,6 +48,21 @@ publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
                 this._updateCardHeader($card);
             }
         );
+
+        // live HETU validation
+        this.$modal.on("input blur", "#partner_ssn_input", (ev) => {
+            this._validateHetu($(ev.currentTarget).val());
+        });
+
+        // block submit if HETU invalid (empty allowed)
+        this.$modal.on("submit", "form[action='/my/expenses/create']", (ev) => {
+            const ok = this._validateHetu(this.$ssnInput && this.$ssnInput.length ? this.$ssnInput.val() : "");
+            if (!ok) {
+                ev.preventDefault();
+                ev.stopPropagation();
+                if (this.$ssnInput && this.$ssnInput.length) this.$ssnInput.trigger("focus");
+            }
+        });
 
         return this._super(...arguments);
     },
@@ -92,9 +109,7 @@ publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
     _updateLineNumbers() {
         const $cards = this.$modal.find(".js-expense-line-card");
         $cards.each(function (i) {
-            $(this)
-                .find(".js-line-no")
-                .text(String(i + 1));
+            $(this).find(".js-line-no").text(String(i + 1));
         });
     },
 
@@ -175,6 +190,52 @@ publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
                 );
             }
         });
+    },
+
+    _validateHetu(value) {
+        // If your XML doesn't include the field for some reason, don't block anything
+        if (!this.$ssnInput || !this.$ssnInput.length) return true;
+
+        const raw = (value ?? "").toString().trim();
+
+        // Empty is allowed (matches backend: validate only if provided)
+        if (!raw) {
+            this.$ssnInput.removeClass("is-invalid");
+            if (this.$ssnError && this.$ssnError.length) this.$ssnError.hide().text("");
+            return true;
+        }
+
+        const s = raw.toUpperCase();
+        const m = s.match(/^(\d{2})(0[1-9]|1[0-2])(\d{2})([-+A])(\d{3})([0-9A-Y])$/);
+
+        let ok = false;
+        if (m) {
+            const dd = m[1];
+            const mm = m[2];
+            const yy = m[3];
+            const individual = m[5];
+            const checksum = m[6];
+
+            const numberToCheck = `${dd}${mm}${yy}${individual}`;
+            const mod31 = parseInt(numberToCheck, 10) % 31;
+            const checksumChars = "0123456789ABCDEFHJKLMNPRSTUVWXY";
+            ok = checksum === checksumChars[mod31];
+        }
+
+        if (ok) {
+            this.$ssnInput.removeClass("is-invalid");
+            if (this.$ssnError && this.$ssnError.length) this.$ssnError.hide().text("");
+            return true;
+        }
+
+        // invalid → show feedback in your existing placeholder
+        this.$ssnInput.addClass("is-invalid");
+        if (this.$ssnError && this.$ssnError.length) {
+            this.$ssnError
+                .text("The format of the personal identification number is not valid.")
+                .show();
+        }
+        return false;
     },
 });
 
