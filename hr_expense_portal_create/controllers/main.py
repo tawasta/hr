@@ -61,24 +61,67 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
         _logger.warning("Invalid date input %r, falling back to today.", raw_date)
         return date.today().isoformat()
 
-    def _create_attachment(self, upload):
-        if not upload or not getattr(upload, "filename", False):
-            return request.env["ir.attachment"].sudo()
-        content = upload.read()
-        if not content:
-            return request.env["ir.attachment"].sudo()
-
+    def _create_attachments(self, uploads):
         Attachment = request.env["ir.attachment"].sudo()
-        return Attachment.create(
-            {
-                "name": upload.filename,
-                "datas": base64.b64encode(content),
-                "mimetype": getattr(upload, "content_type", False)
-                or "application/octet-stream",
-                "res_model": "hr.expense",
-                "res_id": 0,
-            }
-        )
+        if not uploads:
+            return Attachment
+
+        created = Attachment
+        for upload in uploads:
+            if not upload or not getattr(upload, "filename", False):
+                continue
+            content = upload.read()
+            if not content:
+                continue
+
+            created |= Attachment.create(
+                {
+                    "name": upload.filename,
+                    "datas": base64.b64encode(content),
+                    "mimetype": getattr(upload, "content_type", False)
+                    or "application/octet-stream",
+                    "res_model": "hr.expense",
+                    "res_id": 0,
+                }
+            )
+        return created
+
+    def _create_privacy_consents(self, post, partner):
+        PrivacyActivity = request.env["privacy.activity"].sudo()
+        PrivacyConsent = request.env["privacy.consent"].sudo()
+
+        activities = PrivacyActivity.search([("show_in_profile", "=", True)])
+        if not activities:
+            return True  # nothing to require/save
+
+        accepted_ids = []
+        for act in activities:
+            if post.get("privacy_%s" % act.id):
+                accepted_ids.append(act.id)
+
+        # Require: all shown activities must be
+        # accepted (matches required checkboxes in UI)
+        if set(accepted_ids) != set(activities.ids):
+            return False
+
+        for act in activities:
+            accepted = act.id in accepted_ids
+            existing = PrivacyConsent.search(
+                [("partner_id", "=", partner.id), ("activity_id", "=", act.id)],
+                limit=1,
+            )
+            if existing:
+                existing.write({"accepted": accepted, "state": "answered"})
+            else:
+                PrivacyConsent.create(
+                    {
+                        "partner_id": partner.id,
+                        "activity_id": act.id,
+                        "accepted": accepted,
+                        "state": "answered",
+                    }
+                )
+        return True
 
     def portal_my_expenses(
         self,
@@ -118,6 +161,7 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
                     "partner_iban": bank.acc_number if bank else "",
                     "countries": Country.search([], order="name asc"),
                     "states": State.search([], order="name asc"),
+                    "currency_symbol": company.currency_id.symbol or "",
                 }
             )
         except Exception as e:
@@ -135,6 +179,12 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
     def portal_create_expense(self, **post):  # noqa: C901
         employee = self._portal_employee()
         company = request.env.company
+
+        partner = employee.sudo().work_contact_id
+        if partner:
+            ok_privacy = self._create_privacy_consents(post, partner)
+            if not ok_privacy:
+                return request.redirect("/my/expenses?create_error=1")
 
         partner_ssn = (post.get("partner_ssn") or "").strip()
         partner_street = (post.get("partner_street") or "").strip()
@@ -276,8 +326,9 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
             )
             kept_indices.append(idx)
 
-            upload = post.get(f"receipt_{idx}")
-            attachments_by_index[idx] = self._create_attachment(upload)
+            uploads = request.httprequest.files.getlist(f"receipt_{idx}") or []
+            uploads = [u for u in uploads if getattr(u, "filename", None)]
+            attachments_by_index[idx] = self._create_attachments(uploads)
 
         if not expense_vals_list or any_invalid:
             _logger.warning(
@@ -296,10 +347,11 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
 
         try:
             for expense, idx in zip(expenses, kept_indices):  # noqa B905
-                att = attachments_by_index.get(idx)
-                if att and att.exists():
-                    att.write({"res_id": expense.id})
-                    expense.sudo().attach_document(attachment_ids=[att.id])
+                atts = attachments_by_index.get(idx)
+                if atts and atts.exists():
+                    atts.write({"res_id": expense.id})
+                    # attach_document accepts multiple IDs
+                    expense.sudo().attach_document(attachment_ids=atts.ids)
         except Exception as e:
             _logger.exception("Attaching receipts failed: %s", e)
             request.env.cr.rollback()

@@ -49,7 +49,7 @@
                 <t t-set="title">Expenses</t>
                 <t t-set="url" t-value="'/my/expenses'" />
                 <t t-set="text">Browse and review your expense lines</t>
-                <t t-set="placeholder_count" t-value="'expense_count'" />
+                <t t-set="config_card" t-value="True" />
             </t>
 
             <t t-call="portal.portal_docs_entry">
@@ -57,7 +57,7 @@
                 <t t-set="title">Expense Reports</t>
                 <t t-set="url" t-value="'/my/expense-reports'" />
                 <t t-set="text">Track submissions, approvals and payments</t>
-                <t t-set="placeholder_count" t-value="'expense_sheet_count'" />
+                <t t-set="config_card" t-value="True" />
             </t>
         </t>
         </div>
