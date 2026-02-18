@@ -421,18 +421,23 @@
                                                         >Unit price <span
                                                                 class="text-danger"
                                                             >*</span></label>
-                                                        <input
-                                                            type="number"
-                                                            class="form-control text-end"
-                                                            name="line_price_unit___IDX__"
-                                                            step="0.01"
-                                                            min="0.01"
-                                                            placeholder="0.00"
-                                                            required="required"
-                                                        />
+                                                        <div class="input-group">
+                                                            <input
+                                                                type="number"
+                                                                class="form-control text-end"
+                                                                name="line_price_unit___IDX__"
+                                                                step="0.01"
+                                                                min="0.01"
+                                                                placeholder="0.00"
+                                                                required="required"
+                                                            />
+                                                            <span class="input-group-text">
+                                                                <t t-esc="currency_symbol or ''" />
+                                                            </span>
+                                                        </div>
                                                     </div>
 
-                                                    <div class="col-12 col-lg-4">
+                                                    <div class="col-12 col-md-5 col-lg-7">
                                                         <label
                                                             class="form-label"
                                                         >Receipt</label>
@@ -449,16 +454,25 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-12 col-lg-4">
+                                                    <div class="col-12">
                                                         <label
                                                             class="form-label"
                                                         >Internal Notes</label>
-                                                        <input
-                                                            type="text"
+                                                        <textarea
                                                             class="form-control"
                                                             name="line_description___IDX__"
+                                                            rows="4"
                                                             placeholder="Optional notes…"
-                                                        />
+                                                        ></textarea>
+
+                                                        <div class="form-text text-muted">
+                                                            <ul class="mb-0 ps-3">
+                                                                <li>Event, date and location</li>
+                                                                <li>Travel start (date and time)</li>
+                                                                <li>Travel end (date and time)</li>
+                                                                <li>Reason for using own car or taxi</li>
+                                                            </ul>
+                                                        </div>
                                                     </div>
 
                                                     <div

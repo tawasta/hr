@@ -123,6 +123,7 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
                     "partner_iban": bank.acc_number if bank else "",
                     "countries": Country.search([], order="name asc"),
                     "states": State.search([], order="name asc"),
+                    "currency_symbol": company.currency_id.symbol or "",
                 }
             )
         except Exception as e:

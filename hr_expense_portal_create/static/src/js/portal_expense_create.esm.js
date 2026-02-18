@@ -116,7 +116,6 @@ publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
     _updateCardHeader($card) {
         const idx = $card.attr("data-idx");
 
-        // Names become line_name_1 etc (from your logs)
         const name = ($card.find(`[name="line_name_${idx}"]`).val() || "")
             .toString()
             .trim();
@@ -127,8 +126,17 @@ publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
             .toString()
             .trim();
 
+        const currency = ($card.find(`[name="line_price_unit_${idx}"]`)
+            .closest(".input-group")
+            .find(".input-group-text")
+            .text() || "").trim();
+
         let summary = name ? name : "New line";
-        if (qty && unit) summary += ` · ${qty} × ${unit}`;
+
+        if (qty && unit) {
+            summary += ` · ${qty} × ${unit}${currency ? " " + currency : ""}`;
+        }
+
         $card.find(".js-line-summary").text(summary);
     },
 
