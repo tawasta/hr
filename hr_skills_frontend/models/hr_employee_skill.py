@@ -12,3 +12,8 @@ class EmployeeSkill(models.Model):
         index=True,
         readonly=True,
     )
+
+class HrSkillType(models.Model):
+    _inherit = "hr.skill.type"
+
+    sequence = fields.Integer(default=10)

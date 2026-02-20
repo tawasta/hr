@@ -109,4 +109,15 @@
         </field>
     </record>
 
+     <record id="hr_skill_type_view_tree" model="ir.ui.view">
+        <field name="name">hr.skill.type.tree.inherit</field>
+        <field name="model">hr.skill.type</field>
+        <field name="inherit_id" ref="hr_skills.hr_skill_type_view_tree" />
+        <field name="arch" type="xml">
+            <field name="name" position="before">
+                <field name="sequence" widget="handle" />
+            </field>
+        </field>
+    </record>
+
 </odoo>

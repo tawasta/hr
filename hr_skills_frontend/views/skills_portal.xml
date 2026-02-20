@@ -39,22 +39,20 @@
                     <span class="badge text-bg-light" t-esc="len(skills)" />
                   </div>
                   <div class="vstack gap-2">
-                    <t t-foreach="skills" t-as="sk">
+                    <t t-foreach="skills.sorted(key=lambda sk: ((sk.skill_type_id.sequence or 0), (sk.skill_type_id.name or ''), (sk.name or '')))" t-as="sk">
                       <div class="form-check">
                         <input
-                                                    class="form-check-input"
-                                                    type="checkbox"
-                                                    name="skill_ids"
-                                                    t-att-value="sk.id"
-                                                    t-att-checked="'checked' if sk.id in selected_skill_ids else None"
-                                                    onchange="this.form.submit()"
-                                                />
+                          class="form-check-input"
+                          type="checkbox"
+                          name="skill_ids"
+                          t-att-value="sk.id"
+                          t-att-checked="'checked' if sk.id in selected_skill_ids else None"
+                          onchange="this.form.submit()"
+                        />
                         <label class="form-check-label">
                           <t t-esc="sk.name" />
                           <t t-if="sk.skill_type_id">
-                            <small class="text-muted"> · <t
-                                                                t-esc="sk.skill_type_id.name"
-                                                            /></small>
+                            <small class="text-muted"> · <t t-esc="sk.skill_type_id.name" /></small>
                           </t>
                         </label>
                       </div>
