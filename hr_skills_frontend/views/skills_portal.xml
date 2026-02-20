@@ -39,7 +39,10 @@
                     <span class="badge text-bg-light" t-esc="len(skills)" />
                   </div>
                   <div class="vstack gap-2">
-                    <t t-foreach="skills" t-as="sk">
+                    <t
+                                            t-foreach="skills.sorted(key=lambda sk: ((sk.skill_type_id.sequence or 0), (sk.skill_type_id.name or ''), (sk.name or '')))"
+                                            t-as="sk"
+                                        >
                       <div class="form-check">
                         <input
                                                     class="form-check-input"
