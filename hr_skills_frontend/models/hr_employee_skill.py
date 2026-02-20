@@ -13,6 +13,7 @@ class EmployeeSkill(models.Model):
         readonly=True,
     )
 
+
 class HrSkillType(models.Model):
     _inherit = "hr.skill.type"
 
