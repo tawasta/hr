@@ -11,7 +11,8 @@
             <t t-if="request.params.get('create_ok')">
                 <div class="alert alert-success d-flex align-items-center" role="alert">
                     <i class="fa fa-check-circle me-2" />
-                    <div>Expense report created successfully.</div>
+                    <div
+                    >Expense report created successfully, we will review it as soon as possible..</div>
                 </div>
             </t>
 
@@ -19,7 +20,7 @@
                 <div class="alert alert-danger d-flex align-items-center" role="alert">
                     <i class="fa fa-exclamation-triangle me-2" />
                     <div
-                    >Could not create expense report. Please check required fields and try again.</div>
+                    >Could not create expense reimbursement request. Please check the required fields and try again.</div>
                 </div>
             </t>
 
@@ -28,10 +29,12 @@
                     class="card-body d-flex flex-wrap align-items-center justify-content-between gap-2"
                 >
                     <div>
-                        <div class="fw-semibold">Create a new expense report</div>
+                        <div
+                            class="fw-semibold"
+                        >Create a New Expense Reimbursement Request</div>
                         <div
                             class="text-muted small"
-                        >Add multiple expense lines, then submit them as one report.</div>
+                        >Report your expenses and submit a reimbursement request.</div>
                     </div>
 
                     <div class="d-flex gap-2">
@@ -41,7 +44,9 @@
                             data-bs-toggle="modal"
                             data-bs-target="#portalCreateExpenseModal"
                         >
-                            <i class="fa fa-plus me-2" />Create expense report
+                            <i
+                                class="fa fa-plus me-2"
+                            />Create an Expense Reimbursement Request
                         </button>
                     </div>
                 </div>
@@ -98,10 +103,7 @@
 
                                 <div class="row g-3 mb-2">
                                     <div class="col-12">
-                                        <div class="fw-semibold">Partner details</div>
-                                        <div
-                                            class="text-muted small"
-                                        >These details are taken from your employee/contact information.</div>
+                                        <div class="fw-semibold">Personal Details</div>
                                         <hr class="mt-2 mb-0" />
                                     </div>
 
@@ -132,16 +134,10 @@
                                             class="invalid-feedback d-block"
                                             style="display:none;"
                                         />
-                                        <div
-                                            class="form-text text-muted"
-                                        >Will be stored encrypted (never saved in plain text).</div>
                                     </div>
 
                                     <div class="col-12">
-                                        <div class="fw-semibold">Address</div>
-                                        <div
-                                            class="text-muted small"
-                                        >This address will be saved to your private contact.</div>
+                                        <div class="fw-semibold">Address Details</div>
                                         <hr class="mt-2 mb-0" />
                                     </div>
 
@@ -231,7 +227,7 @@
                                     <div class="col-12 col-md-6">
                                         <label
                                             class="form-label"
-                                        >Bank account (IBAN)</label>
+                                        >Bank Account (IBAN)</label>
                                         <input
                                             type="text"
                                             class="form-control"
@@ -245,7 +241,9 @@
 
                                     <div class="row g-3 mb-2">
                                         <div class="col-12">
-                                            <div class="fw-semibold">Privacy</div>
+                                            <div
+                                                class="fw-semibold"
+                                            >Privacy Consents</div>
                                             <hr class="mt-2 mb-0" />
                                         </div>
 
@@ -291,7 +289,6 @@
                                                     </div>
                                                 </t>
                                             </t>
-
                                             <t t-else="">
                                                 <div class="text-muted small">
                                                     No privacy consent items are configured.
@@ -310,16 +307,20 @@
                                     class="d-flex align-items-center justify-content-between mb-2"
                                 >
                                     <div>
-                                        <div class="fw-semibold">Expense lines</div>
+                                        <div
+                                            class="fw-semibold"
+                                        >Expense Reimbursement Details</div>
                                         <div
                                             class="text-muted small"
-                                        >Each line becomes one expense line in the report.</div>
+                                        >Add expenses as their separate lines.</div>
                                     </div>
                                     <button
                                         type="button"
                                         class="btn btn-outline-primary btn-sm js-add-expense-line"
                                     >
-                                        <i class="fa fa-plus me-2" />Add line
+                                        <i
+                                            class="fa fa-plus me-2"
+                                        />Add a New Expense Line
                                     </button>
                                 </div>
 
@@ -333,7 +334,8 @@
 
                                 <div class="alert alert-info py-2 small mb-0 mt-3">
                                     <i class="fa fa-info-circle me-2" />
-                                    Clicking Create will generate one expense report (hr.expense.sheet) and submit it for approval.
+                                    After having added <strong
+                                    >all expense reimbursement lines</strong>, click Submit Expense Reimbursement for Approval.
                                 </div>
 
                                 <template id="portal_expense_line_tpl">
@@ -497,7 +499,7 @@
                                                     >
                                                         <label
                                                             class="form-label"
-                                                        >Receipt</label>
+                                                        >Receipts / Other attachments</label>
                                                         <input
                                                             type="file"
                                                             class="form-control"
@@ -518,17 +520,21 @@
                                                     <div class="col-12">
                                                         <label
                                                             class="form-label"
-                                                        >Internal Notes</label>
+                                                        >Additional Information about the Expense</label>
                                                         <textarea
                                                             class="form-control"
                                                             name="line_description___IDX__"
                                                             rows="4"
-                                                            placeholder="Optional notes…"
                                                         />
 
+                                                        <!--
+                                                        TODO: consider making this text configurable
+                                                        in module settings
+                                                        -->
                                                         <div
                                                             class="form-text text-muted"
                                                         >
+                                                            Please describe:
                                                             <ul class="mb-0 ps-3">
                                                                 <li
                                                                 >Event, date and location</li>
@@ -551,7 +557,7 @@
                                                         >
                                                             <i
                                                                 class="fa fa-trash me-2"
-                                                            />Remove line
+                                                            />Remove This Expense Line
                                                         </button>
                                                     </div>
 
@@ -571,7 +577,9 @@
                                     data-bs-dismiss="modal"
                                 >Cancel</button>
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fa fa-save me-2" />Create report
+                                    <i
+                                        class="fa fa-save me-2"
+                                    />Submit Expense Reimbursement for Approval
                                 </button>
                             </div>
 
