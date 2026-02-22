@@ -29,9 +29,15 @@
         </xpath>
     </template>
 
+
+    <!--
+    TODO: Consider if separate entries for expenses and expense reports needed for
+    portal users, or if Expenses is enough?
+    For now, visibility of both can be toggled on/off separately
+    -->
     <template
         id="portal_my_home_expense_entries"
-        name="Show Expenses / Expense Reports"
+        name="Show Expenses"
         customize_show="True"
         inherit_id="portal.portal_my_home"
         priority="50"
@@ -46,12 +52,30 @@
             >
             <t t-call="portal.portal_docs_entry">
                 <t t-set="icon" t-value="'/hr_expense/static/description/icon.png'" />
-                <t t-set="title">Expenses</t>
+                <t t-set="title">Expense Reimbursements</t>
                 <t t-set="url" t-value="'/my/expenses'" />
-                <t t-set="text">Browse and review your expense lines</t>
+                <t t-set="text">Manage your expense reimbursements</t>
                 <t t-set="config_card" t-value="True" />
             </t>
+        </t>
+        </div>
+    </template>
 
+    <template
+        id="portal_my_home_expense_report_entries"
+        name="Show Expense Reports"
+        customize_show="True"
+        inherit_id="portal.portal_my_home"
+        priority="50"
+    >
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="before">
+            <t t-set="portal_service_category_enable" t-value="True" />
+        </xpath>
+
+        <div id="portal_service_category" position="inside">
+            <t
+                t-if="request.env.user.has_group('hr_expense_portal.group_portal_expense_access')"
+            >
             <t t-call="portal.portal_docs_entry">
                 <t t-set="icon" t-value="'/hr_expense/static/description/icon.png'" />
                 <t t-set="title">Expense Reports</t>
@@ -62,6 +86,7 @@
         </t>
         </div>
     </template>
+
 
     <template id="portal_my_expenses" name="My Expenses">
         <t t-call="portal.portal_layout">

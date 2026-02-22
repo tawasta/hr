@@ -32,8 +32,8 @@
         "hr_expense",
     ],
     "data": [
-        "security/ir.model.access.csv",
         "security/security.xml",
+        "security/ir.model.access.csv",
         "views/portal_templates.xml",
     ],
 }

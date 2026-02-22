@@ -1,0 +1,65 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* hr_expense_portal
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0-20250428\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-22 14:50+0000\n"
+"PO-Revision-Date: 2026-02-22 14:50+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hr_expense_portal
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal.portal_my_expenses
+msgid "<span class=\"text-muted\">-</span>"
+msgstr ""
+
+#. module: hr_expense_portal
+#. odoo-python
+#: code:addons/hr_expense_portal/controllers/main.py:0
+#, python-format
+msgid "Access Denied"
+msgstr "Pääsy estetty"
+
+#. module: hr_expense_portal
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal.portal_my_expense
+msgid "Expense"
+msgstr "Kulukorvaus"
+
+#. module: hr_expense_portal
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal.portal_my_home_expense_entries
+msgid "Expense Reimbursements"
+msgstr "Kulukorvaukset"
+
+#. module: hr_expense_portal
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal.portal_my_expense_reports
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal.portal_my_home_expense_report_entries
+msgid "Expense Reports"
+msgstr ""
+
+#. module: hr_expense_portal
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal.portal_breadcrumbs_hr_expense
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal.portal_my_expenses
+msgid "Expenses"
+msgstr "Kulukorvaukset"
+
+#. module: hr_expense_portal
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal.portal_my_home_expense_entries
+msgid "Manage your expense reimbursements"
+msgstr "Hallinnoi kulukorvauksiasi"
+
+#. module: hr_expense_portal
+#: model:res.groups,name:hr_expense_portal.group_portal_expense_access
+msgid "Portal: Expenses"
+msgstr "Portaali: kulukorvaukset"
+
+#. module: hr_expense_portal
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal.portal_my_home_expense_report_entries
+msgid "Track submissions, approvals and payments"
+msgstr ""
