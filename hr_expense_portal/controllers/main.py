@@ -86,12 +86,27 @@ class HrExpenseCustomerPortal(CustomerPortal):
         return OrderedDict(
             [
                 ("all", {"label": _("All"), "domain": []}),
-                ("to_report", {"label": _("To Report"), "domain": [("state", "=", "draft")]}),
-                ("to_submit", {"label": _("To Submit"), "domain": [("state", "=", "reported")]}),
-                ("submitted", {"label": _("Submitted"), "domain": [("state", "=", "submitted")]}),
-                ("approved", {"label": _("Approved"), "domain": [("state", "=", "approved")]}),
+                (
+                    "to_report",
+                    {"label": _("To Report"), "domain": [("state", "=", "draft")]},
+                ),
+                (
+                    "to_submit",
+                    {"label": _("To Submit"), "domain": [("state", "=", "reported")]},
+                ),
+                (
+                    "submitted",
+                    {"label": _("Submitted"), "domain": [("state", "=", "submitted")]},
+                ),
+                (
+                    "approved",
+                    {"label": _("Approved"), "domain": [("state", "=", "approved")]},
+                ),
                 ("done", {"label": _("Done"), "domain": [("state", "=", "done")]}),
-                ("refused", {"label": _("Refused"), "domain": [("state", "=", "refused")]}),
+                (
+                    "refused",
+                    {"label": _("Refused"), "domain": [("state", "=", "refused")]},
+                ),
                 ("today", {"label": _("Today"), "domain": [("date", "=", today)]}),
                 (
                     "this_month",
