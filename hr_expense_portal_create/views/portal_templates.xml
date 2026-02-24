@@ -286,13 +286,19 @@
                                                             t-att-for="'privacy_%s' % activity.id"
                                                         >
                                                             <t t-esc="activity.name" />
-                                                            <t t-if="'link' in activity._fields and 'link_name' in activity._fields and activity.link and activity.link_name">
+                                                            <t
+                                                                t-if="'link' in activity._fields and 'link_name' in activity._fields and activity.link and activity.link_name"
+                                                            >
                                                                 <div class="small mt-1">
-                                                                    <a t-att-href="activity.link"
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    class="link-primary">
-                                                                        <t t-esc="activity.link_name"/>
+                                                                    <a
+                                                                        t-att-href="activity.link"
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        class="link-primary"
+                                                                    >
+                                                                        <t
+                                                                            t-esc="activity.link_name"
+                                                                        />
                                                                     </a>
                                                                 </div>
                                                             </t>
