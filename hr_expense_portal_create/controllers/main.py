@@ -194,6 +194,31 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
         partner_country_id = self._to_int(post.get("partner_country_id"), 0)
         partner_state_id = self._to_int(post.get("partner_state_id"), 0)
 
+        partner_iban = (post.get("partner_iban") or "").strip()
+        if partner_iban:
+            try:
+                partner = employee.sudo().work_contact_id
+                if partner:
+                    Bank = request.env["res.partner.bank"].sudo()
+
+                    # Try to update existing bank account linked to employee
+                    bank = employee.sudo().bank_account_id
+                    if bank:
+                        bank.write({"acc_number": partner_iban})
+                    else:
+                        # Create new bank account for partner and link to employee
+                        new_bank = Bank.create(
+                            {
+                                "partner_id": partner.id,
+                                "acc_number": partner_iban,
+                            }
+                        )
+                        employee.sudo().write({"bank_account_id": new_bank.id})
+            except Exception as e:
+                _logger.exception("Saving IBAN failed: %s", e)
+                request.env.cr.rollback()
+                return request.redirect("/my/expenses?create_error=1")
+
         if partner_ssn or any(
             [
                 partner_street,

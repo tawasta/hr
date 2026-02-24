@@ -98,48 +98,21 @@
 
             <t t-if="not grouped_expenses">
                 <div class="alert alert-warning" role="alert">
-                    <t t-out="'There are no expenses matching your criteria.'" />
+                    There are no expenses matching your criteria.
                 </div>
             </t>
 
             <t t-if="grouped_expenses">
-                <div class="card mb-3">
-                    <div
-                        class="card-body d-flex flex-wrap align-items-center justify-content-between gap-2"
-                    >
-                        <div class="d-flex flex-column">
-                            <strong class="h5 m-0">
-                                <t t-out="'Total:'" />
-                                <span
-                                    t-esc="total_amount_sum"
-                                    t-options="{'widget': 'monetary', 'display_currency': request.env.company.currency_id}"
-                                />
-                            </strong>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <a
-                                class="btn btn-outline-secondary btn-sm"
-                                href="/my/expense-reports"
-                            >
-                                <t t-out="'Go to Reports'" />
-                            </a>
-                        </div>
-                    </div>
-                </div>
 
                 <t t-call="portal.portal_table">
                     <thead>
                         <tr>
-                            <th><t t-out="'Date'" /></th>
-                            <th><t t-out="'Description'" /></th>
-                            <th class="d-none d-md-table-cell"><t
-                                    t-out="'Category'"
-                                /></th>
-                            <th class="d-none d-md-table-cell"><t
-                                    t-out="'Report'"
-                                /></th>
-                            <th><t t-out="'Status'" /></th>
-                            <th class="text-end"><t t-out="'Amount'" /></th>
+                            <th>Date</th>
+                            <th>Description</th>
+                            <th class="d-none d-md-table-cell">Category</th>
+                            <th class="d-none d-md-table-cell">Report</th>
+                            <th>Status</th>
+                            <th class="text-end">Amount</th>
                         </tr>
                     </thead>
 
@@ -169,9 +142,7 @@
                                         />)</span>
                                 </th>
                                 <th class="text-end">
-                                    <span class="text-muted me-1"><t
-                                            t-out="'Subtotal:'"
-                                        /></span>
+                                    <span class="text-muted me-1">Subtotal:</span>
                                     <span
                                         t-esc="grp_amount"
                                         t-options="{'widget': 'monetary', 'display_currency': request.env.company.currency_id}"
@@ -265,7 +236,7 @@
 
             <t t-if="not expense">
                 <div class="alert alert-warning" role="alert">
-                    <t t-out="'Expense not found.'" />
+                    Expense not found.
                 </div>
             </t>
 
@@ -298,9 +269,7 @@
 
                             <div class="text-end">
                                 <div class="mb-1">
-                                    <small class="text-muted"><t
-                                            t-out="'Status:'"
-                                        /></small>
+                                    <small class="text-muted">Status:</small>
                                 </div>
                                 <t t-set="st" t-value="expense.state" />
                                 <span
@@ -322,9 +291,7 @@
                         <div class="row g-3">
                             <div class="col-12 col-lg-6">
                                 <div class="d-flex justify-content-between">
-                                    <span class="text-muted"><t
-                                            t-out="'Total'"
-                                        /></span>
+                                    <span class="text-muted">Total</span>
                                     <strong>
                                         <span
                                             t-field="expense.total_amount"
@@ -337,9 +304,7 @@
                                     class="d-flex justify-content-between mt-2"
                                     t-if="expense.payment_mode"
                                 >
-                                    <span class="text-muted"><t
-                                            t-out="'Paid By'"
-                                        /></span>
+                                    <span class="text-muted">Paid By</span>
                                     <span t-esc="expense.payment_mode" />
                                 </div>
 
@@ -347,18 +312,14 @@
                                     class="d-flex justify-content-between mt-2"
                                     t-if="expense.sheet_id"
                                 >
-                                    <span class="text-muted"><t
-                                            t-out="'Report'"
-                                        /></span>
+                                    <span class="text-muted">Report</span>
                                     <span t-esc="expense.sheet_id.name" />
                                 </div>
                             </div>
 
                             <div class="col-12 col-lg-6">
                                 <div class="d-flex justify-content-between">
-                                    <span class="text-muted"><t
-                                            t-out="'Employee'"
-                                        /></span>
+                                    <span class="text-muted">Employee</span>
                                     <span
                                         t-esc="expense.employee_id.display_name if expense.employee_id else ''"
                                     />
@@ -368,9 +329,7 @@
                                     class="d-flex justify-content-between mt-2"
                                     t-if="expense.price_unit"
                                 >
-                                    <span class="text-muted"><t
-                                            t-out="'Unit Price'"
-                                        /></span>
+                                    <span class="text-muted">Unit Price</span>
                                     <span
                                         t-field="expense.price_unit"
                                         t-options="{'widget': 'monetary', 'display_currency': expense.company_currency_id}"
@@ -381,9 +340,7 @@
                                     class="d-flex justify-content-between mt-2"
                                     t-if="expense.quantity"
                                 >
-                                    <span class="text-muted"><t
-                                            t-out="'Quantity'"
-                                        /></span>
+                                    <span class="text-muted">Quantity</span>
                                     <span t-esc="expense.quantity" />
                                 </div>
                             </div>
@@ -393,9 +350,7 @@
 
                 <div class="card mb-3" t-if="attachments">
                     <div class="card-body">
-                        <strong class="d-block mb-2"><t
-                                t-out="'Attachments'"
-                            /></strong>
+                        <strong class="d-block mb-2">Attachments</strong>
                         <div class="row">
                             <div class="col-12">
                                 <ul class="list-group">
@@ -427,7 +382,7 @@
 
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="mb-3"><t t-out="'Communication'" /></h5>
+                        <h5 class="mb-3">Communication</h5>
                         <t t-call="portal.message_thread">
                             <t t-set="object" t-value="expense" />
                         </t>
@@ -448,7 +403,7 @@
 
             <t t-if="not sheets">
                 <div class="alert alert-warning" role="alert">
-                    <t t-out="'There are no expense reports matching your criteria.'" />
+                    There are no expense reports matching your criteria.
                 </div>
             </t>
 
@@ -456,10 +411,10 @@
                 <t t-call="portal.portal_table">
                     <thead>
                         <tr>
-                            <th><t t-out="'Date'" /></th>
-                            <th><t t-out="'Report'" /></th>
-                            <th><t t-out="'Status'" /></th>
-                            <th class="text-end"><t t-out="'Total'" /></th>
+                            <th>Date</th>
+                            <th>Report</th>
+                            <th>Status</th>
+                            <th class="text-end">Total</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -474,7 +429,7 @@
                                 <td>
                                     <strong><t t-esc="s.name" /></strong>
                                     <div class="text-muted small">
-                                        <t t-esc="s.nb_expense" /> <t t-out="'lines'" />
+                                        <t t-esc="s.nb_expense" /> lines
                                     </div>
                                 </td>
                                 <td>
