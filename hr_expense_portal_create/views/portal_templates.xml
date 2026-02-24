@@ -377,9 +377,7 @@
                                                 >#<span
                                                         class="js-line-no"
                                                     >1</span></span>
-                                                <span
-                                                    class="js-line-summary"
-                                                >New line</span>
+                                                <span class="js-line-summary" />
                                             </button>
                                         </h2>
 

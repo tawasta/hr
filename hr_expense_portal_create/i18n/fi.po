@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0-20250428\n"
+"Project-Id-Version: Odoo Server 17.0-20251222\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-02-22 14:53+0000\n"
-"PO-Revision-Date: 2026-02-22 14:53+0000\n"
+"POT-Creation-Date: 2026-02-24 08:35+0000\n"
+"PO-Revision-Date: 2026-02-24 08:35+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -81,11 +81,9 @@ msgstr "<option value=\"\">Valitse...</option>"
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
 msgid ""
-"<span class=\"me-2 text-muted fw-semibold\">#<span class=\"js-line-no\">1</span></span>\n"
-"                                                <span class=\"js-line-summary\">New line</span>"
+"<span class=\"me-2 text-muted fw-semibold\">#<span class=\"js-line-"
+"no\">1</span></span>"
 msgstr ""
-"<span class=\"me-2 text-muted fw-semibold\">#<span class=\"js-line-no\">1</span></span>\n"
-"                                                <span class=\"js-line-summary\">Uusi kulukorvausrivi</span>"
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
@@ -94,8 +92,10 @@ msgstr "Lisää kulutiedot omille riveilleen."
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
-msgid "Additional Information about the Expense"
-msgstr "Kulun tarkemmat tiedot"
+msgid ""
+"Additional Information about the Expense <span class=\"text-"
+"danger\">*</span>"
+msgstr "Lisätiedot kulusta <span class=\"text-danger\">*</span>"
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
@@ -134,8 +134,8 @@ msgid ""
 "Could not create expense reimbursement request. Please check the required "
 "fields and try again."
 msgstr ""
-"Kulukorvaushakemuksen tekeminen epäonnistui. Ole hyvä ja tarkista pakolliset"
-"kentät ja yritä uudelleen."
+"Kulukorvaushakemuksen tekeminen epäonnistui. Ole hyvä ja tarkista "
+"pakollisetkentät ja yritä uudelleen."
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
@@ -232,7 +232,8 @@ msgstr "Kulukorvauksen tarkemmat tiedot"
 msgid ""
 "Expense report created successfully, we will review it as soon as possible.."
 msgstr ""
-"Kulukorvaushakemus luotiin onnistuneesti, käsittelemme sen mahdollisimman pian."
+"Kulukorvaushakemus luotiin onnistuneesti, käsittelemme sen mahdollisimman "
+"pian."
 
 #. module: hr_expense_portal_create
 #: model:ir.model.fields,field_description:hr_expense_portal_create.field_hr_employee_ssn_decrypt_wizard__id
@@ -255,6 +256,14 @@ msgid "Name"
 msgstr "Nimi"
 
 #. module: hr_expense_portal_create
+#. odoo-javascript
+#: code:addons/hr_expense_portal_create/static/src/js/portal_expense_create.esm.js:0
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+#, python-format
+msgid "New line"
+msgstr "Uusi rivi"
+
+#. module: hr_expense_portal_create
 #. odoo-python
 #: code:addons/hr_expense_portal_create/wizard/employee_ssn_decrypt_wizard.py:0
 #, python-format
@@ -275,8 +284,7 @@ msgstr "Ei kontaktia"
 msgid ""
 "No encrypted personal identification number found on the employee's private "
 "contact."
-msgstr ""
-"Ei löytynyt salattua henkilötunnusta työntekijän kontaktille."
+msgstr "Ei löytynyt salattua henkilötunnusta työntekijän kontaktille."
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
@@ -341,9 +349,9 @@ msgid ""
 "                        number is only shown in a temporary notification and is never\n"
 "                        stored in the database in plain text."
 msgstr ""
-"Henkilötunnuksen näyttäminen vaatii salausavaimen.  Voit pyytää sen järjestelmän pääkäyttäjältä. "
-"Salaamaton henkilötunnus näytetään vain hetkellisesti, eikä sitä tallenneta salaamattomana "
-"tietokantaan."
+"Henkilötunnuksen näyttäminen vaatii salausavaimen.  Voit pyytää sen "
+"järjestelmän pääkäyttäjältä. Salaamaton henkilötunnus näytetään vain "
+"hetkellisesti, eikä sitä tallenneta salaamattomana tietokantaan."
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
@@ -365,7 +373,8 @@ msgstr "Katuosoite (rivi 2)"
 #: code:addons/hr_expense_portal_create/controllers/main.py:0
 #, python-format
 msgid "The current user has no related employee. Please contact support."
-msgstr "Käyttäjään ei ole kytketty työntekijätietuetta. Ota yhteyttä ylläpitoon."
+msgstr ""
+"Käyttäjään ei ole kytketty työntekijätietuetta. Ota yhteyttä ylläpitoon."
 
 #. module: hr_expense_portal_create
 #. odoo-python
@@ -379,7 +388,7 @@ msgstr "Avain on virheellinen"
 #: code:addons/hr_expense_portal_create/models/employee.py:0
 #, python-format
 msgid "This employee has no private contact (work contact)."
-msgstr ""
+msgstr "Työntekijällä ei ole yksityistä yhteystietoa (työyhteystieto)."
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
@@ -404,12 +413,12 @@ msgstr "Postinumero"
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
 msgid "dd.MM.yyyy"
-msgstr ""
+msgstr "pp.kk.vvvv"
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
 msgid "e.g. 131052-308T"
-msgstr ""
+msgstr "esim. 131052-308T"
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button

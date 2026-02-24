@@ -1,5 +1,4 @@
 /** @odoo-module **/
-
 import publicWidget from "@web/legacy/js/public/public_widget";
 
 publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
@@ -209,10 +208,12 @@ publicWidget.registry.PortalExpenseModalMulti = publicWidget.Widget.extend({
                 .text() || ""
         ).trim();
 
-        let summary = name ? name : "New line";
+        let summary = name || "";
 
         if (qty && unit) {
-            summary += ` · ${qty} × ${unit}${currency ? " " + currency : ""}`;
+            summary += `${summary ? " · " : ""}${qty} × ${unit}${
+                currency ? " " + currency : ""
+            }`;
         }
 
         $card.find(".js-line-summary").text(summary);
