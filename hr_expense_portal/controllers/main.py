@@ -33,27 +33,27 @@ class HrExpenseCustomerPortal(CustomerPortal):
 
     def _expense_searchbar_sortings(self):
         return {
-            "date": {"label": "Newest", "order": "date desc, id desc"},
-            "amount": {"label": "Amount", "order": "total_amount desc, id desc"},
-            "state": {"label": "Status", "order": "state asc, date desc"},
-            "name": {"label": "Description", "order": "name asc, date desc"},
+            "date": {"label": _("Newest"), "order": "date desc, id desc"},
+            "amount": {"label": _("Amount"), "order": "total_amount desc, id desc"},
+            "state": {"label": _("Status"), "order": "state asc, date desc"},
+            "name": {"label": _("Description"), "order": "name asc, date desc"},
         }
 
     def _expense_searchbar_inputs(self):
         return {
-            "all": {"input": "all", "label": "Search in All"},
-            "name": {"input": "name", "label": "Search in Description"},
-            "category": {"input": "category", "label": "Search in Category"},
-            "report": {"input": "report", "label": "Search in Report"},
+            "all": {"input": "all", "label": _("Search in All")},
+            "name": {"input": "name", "label": _("Search in Description")},
+            "category": {"input": "category", "label": _("Search in Category")},
+            "report": {"input": "report", "label": _("Search in Report")},
         }
 
     def _expense_searchbar_groupby(self):
         return {
-            "none": {"input": "none", "label": "None"},
-            "state": {"input": "state", "label": "Status"},
-            "month": {"input": "month", "label": "Month"},
-            "report": {"input": "report", "label": "Expense Report"},
-            "category": {"input": "category", "label": "Category"},
+            "none": {"input": "none", "label": _("None")},
+            "state": {"input": "state", "label": _("Status")},
+            "month": {"input": "month", "label": _("Month")},
+            "report": {"input": "report", "label": _("Expense Report")},
+            "category": {"input": "category", "label": _("Category")},
         }
 
     def _expense_groupby_mapping(self):
@@ -85,33 +85,18 @@ class HrExpenseCustomerPortal(CustomerPortal):
 
         return OrderedDict(
             [
-                ("all", {"label": "All", "domain": []}),
-                (
-                    "to_report",
-                    {"label": "To Report", "domain": [("state", "=", "draft")]},
-                ),
-                (
-                    "to_submit",
-                    {"label": "To Submit", "domain": [("state", "=", "reported")]},
-                ),
-                (
-                    "submitted",
-                    {"label": "Submitted", "domain": [("state", "=", "submitted")]},
-                ),
-                (
-                    "approved",
-                    {"label": "Approved", "domain": [("state", "=", "approved")]},
-                ),
-                ("done", {"label": "Done", "domain": [("state", "=", "done")]}),
-                (
-                    "refused",
-                    {"label": "Refused", "domain": [("state", "=", "refused")]},
-                ),
-                ("today", {"label": "Today", "domain": [("date", "=", today)]}),
+                ("all", {"label": _("All"), "domain": []}),
+                ("to_report", {"label": _("To Report"), "domain": [("state", "=", "draft")]}),
+                ("to_submit", {"label": _("To Submit"), "domain": [("state", "=", "reported")]}),
+                ("submitted", {"label": _("Submitted"), "domain": [("state", "=", "submitted")]}),
+                ("approved", {"label": _("Approved"), "domain": [("state", "=", "approved")]}),
+                ("done", {"label": _("Done"), "domain": [("state", "=", "done")]}),
+                ("refused", {"label": _("Refused"), "domain": [("state", "=", "refused")]}),
+                ("today", {"label": _("Today"), "domain": [("date", "=", today)]}),
                 (
                     "this_month",
                     {
-                        "label": "This month",
+                        "label": _("This month"),
                         "domain": [
                             ("date", ">=", date_utils.start_of(today, "month")),
                             ("date", "<=", date_utils.end_of(today, "month")),
@@ -121,7 +106,7 @@ class HrExpenseCustomerPortal(CustomerPortal):
                 (
                     "last_month",
                     {
-                        "label": "Last month",
+                        "label": _("Last month"),
                         "domain": [
                             ("date", ">=", date_utils.start_of(last_month, "month")),
                             ("date", "<=", date_utils.end_of(last_month, "month")),
@@ -131,7 +116,7 @@ class HrExpenseCustomerPortal(CustomerPortal):
                 (
                     "this_quarter",
                     {
-                        "label": "This quarter",
+                        "label": _("This quarter"),
                         "domain": [
                             ("date", ">=", quarter_start),
                             ("date", "<=", quarter_end),
@@ -141,7 +126,7 @@ class HrExpenseCustomerPortal(CustomerPortal):
                 (
                     "this_year",
                     {
-                        "label": "This year",
+                        "label": _("This year"),
                         "domain": [
                             ("date", ">=", date_utils.start_of(today, "year")),
                             ("date", "<=", date_utils.end_of(today, "year")),
@@ -151,7 +136,7 @@ class HrExpenseCustomerPortal(CustomerPortal):
                 (
                     "last_year",
                     {
-                        "label": "Last year",
+                        "label": _("Last year"),
                         "domain": [
                             ("date", ">=", date_utils.start_of(last_year, "year")),
                             ("date", "<=", date_utils.end_of(last_year, "year")),
