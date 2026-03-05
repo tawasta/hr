@@ -1,0 +1,426 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* hr_expense_portal_create
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0-20251222\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-24 08:35+0000\n"
+"PO-Revision-Date: 2026-02-24 08:35+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "0.00"
+msgstr ""
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid ""
+"<i class=\"fa fa-info-circle me-1\"/>\n"
+"                                                            You can select multiple files at once (Ctrl/⌘ or Shift)."
+msgstr ""
+"<i class=\"fa fa-info-circle me-1\"/>\n"
+"                                                            Valitse useampia tiedostoja kerralla painamalla Ctrl/⌘ tai Shift."
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid ""
+"<i class=\"fa fa-info-circle me-2\"/>\n"
+"                                    After having added <strong>all expense reimbursement lines</strong>, click Submit Expense Reimbursement for Approval."
+msgstr ""
+"<i class=\"fa fa-info-circle me-2\"/>\n"
+"                                    Sen jälkeen kun olet <strong>lisännyt kaikki kulukorvausrivit</strong>, paina Lähetä kulukorvaushakemus hyväksyttäväksi."
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "<i class=\"fa fa-plus me-2\"/>Add a New Expense Line"
+msgstr "<i class=\"fa fa-plus me-2\"/>Lisää uusi kulukorvausrivi"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "<i class=\"fa fa-plus me-2\"/>Create an Expense Reimbursement Request"
+msgstr "<i class=\"fa fa-plus me-2\"/>Luo uusi kulukorvaushakemus"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "<i class=\"fa fa-receipt me-2\"/>Create expense report"
+msgstr "<i class=\"fa fa-receipt me-2\"/>Luo kulukorvaushakemus"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "<i class=\"fa fa-save me-2\"/>Submit Expense Reimbursement for Approval"
+msgstr "<i class=\"fa fa-save me-2\"/>Lähetä kulukorvaushakemus hyväksyttäväksi"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "<i class=\"fa fa-trash me-2\"/>Remove This Expense Line"
+msgstr "<i class=\"fa fa-trash me-2\"/>Poista tämä kulukorvausrivi"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "<option value=\"\">Select country…</option>"
+msgstr "<option value=\"\">Valitse maa...</option>"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "<option value=\"\">Select state…</option>"
+msgstr "<option value=\"\">Valitse osavaltio...</option>"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "<option value=\"\">Select…</option>"
+msgstr "<option value=\"\">Valitse...</option>"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid ""
+"<span class=\"me-2 text-muted fw-semibold\">#<span class=\"js-line-"
+"no\">1</span></span>"
+msgstr ""
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Add expenses as their separate lines."
+msgstr "Lisää kulutiedot omille riveilleen."
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid ""
+"Additional Information about the Expense <span class=\"text-"
+"danger\">*</span>"
+msgstr "Lisätiedot kulusta <span class=\"text-danger\">*</span>"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Address Details"
+msgstr "Osoitetiedot"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Bank Account (IBAN)"
+msgstr "Pankkitili (IBAN)"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Cancel"
+msgstr "Peruuta"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Category <span class=\"text-danger\">*</span>"
+msgstr "Kategoria <span class=\"text-danger\">*</span>"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "City"
+msgstr "Kaupunki"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.view_hr_employee_ssn_decrypt_wizard_form
+msgid "Close"
+msgstr "Sulje"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid ""
+"Could not create expense reimbursement request. Please check the required "
+"fields and try again."
+msgstr ""
+"Kulukorvaushakemuksen tekeminen epäonnistui. Ole hyvä ja tarkista "
+"pakollisetkentät ja yritä uudelleen."
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Country"
+msgstr "Maa"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Create a New Expense Reimbursement Request"
+msgstr "Luo uusi kulukorvaushakemus"
+
+#. module: hr_expense_portal_create
+#: model:ir.model.fields,field_description:hr_expense_portal_create.field_hr_employee_ssn_decrypt_wizard__create_uid
+msgid "Created by"
+msgstr "Luonut"
+
+#. module: hr_expense_portal_create
+#: model:ir.model.fields,field_description:hr_expense_portal_create.field_hr_employee_ssn_decrypt_wizard__create_date
+msgid "Created on"
+msgstr "Luoptu"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Date <span class=\"text-danger\">*</span>"
+msgstr "Kulun päivämäärä <span class=\"text-danger\">*</span>"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.view_hr_employee_ssn_decrypt_wizard_form
+msgid "Decrypt"
+msgstr "Pura salaus"
+
+#. module: hr_expense_portal_create
+#: model:ir.model,name:hr_expense_portal_create.model_hr_employee_ssn_decrypt_wizard
+msgid "Decrypt Employee Personal ID"
+msgstr "Pura työntekijän henkilötunnuksen salaus"
+
+#. module: hr_expense_portal_create
+#. odoo-python
+#: code:addons/hr_expense_portal_create/models/employee.py:0
+#: model:ir.actions.act_window,name:hr_expense_portal_create.action_hr_employee_ssn_decrypt_wizard
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.view_hr_employee_ssn_decrypt_wizard_form
+#, python-format
+msgid "Decrypt Personal ID"
+msgstr "Pura henkilötunnuksen salaus"
+
+#. module: hr_expense_portal_create
+#. odoo-python
+#: code:addons/hr_expense_portal_create/wizard/employee_ssn_decrypt_wizard.py:0
+#, python-format
+msgid "Decrypted Personal Identification Number"
+msgstr "Salaamaton henkilötunnus"
+
+#. module: hr_expense_portal_create
+#: model:ir.model.fields,field_description:hr_expense_portal_create.field_hr_employee_ssn_decrypt_wizard__key
+msgid "Decryption Key"
+msgstr "Salausavain"
+
+#. module: hr_expense_portal_create
+#. odoo-python
+#: code:addons/hr_expense_portal_create/wizard/employee_ssn_decrypt_wizard.py:0
+#: code:addons/hr_expense_portal_create/wizard/employee_ssn_decrypt_wizard.py:0
+#, python-format
+msgid "Decryption failed"
+msgstr "Salauksen purku epäonnistui"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Description <span class=\"text-danger\">*</span>"
+msgstr "Kuvaus <span class=\"text-danger\">*</span>"
+
+#. module: hr_expense_portal_create
+#: model:ir.model.fields,field_description:hr_expense_portal_create.field_hr_employee_ssn_decrypt_wizard__display_name
+msgid "Display Name"
+msgstr "Näyttönimi"
+
+#. module: hr_expense_portal_create
+#: model:ir.model,name:hr_expense_portal_create.model_hr_employee
+#: model:ir.model.fields,field_description:hr_expense_portal_create.field_hr_employee_ssn_decrypt_wizard__employee_id
+msgid "Employee"
+msgstr "Työntekijä"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Event, date and location"
+msgstr "Tapahtuma, ajankohta ja paikka"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Expense Reimbursement Details"
+msgstr "Kulukorvauksen tarkemmat tiedot"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid ""
+"Expense report created successfully, we will review it as soon as possible.."
+msgstr ""
+"Kulukorvaushakemus luotiin onnistuneesti, käsittelemme sen mahdollisimman "
+"pian."
+
+#. module: hr_expense_portal_create
+#: model:ir.model.fields,field_description:hr_expense_portal_create.field_hr_employee_ssn_decrypt_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: hr_expense_portal_create
+#: model:ir.model.fields,field_description:hr_expense_portal_create.field_hr_employee_ssn_decrypt_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Viimeksi päivittänyt"
+
+#. module: hr_expense_portal_create
+#: model:ir.model.fields,field_description:hr_expense_portal_create.field_hr_employee_ssn_decrypt_wizard__write_date
+msgid "Last Updated on"
+msgstr "Viimeksi päivitetty"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Name"
+msgstr "Nimi"
+
+#. module: hr_expense_portal_create
+#. odoo-javascript
+#: code:addons/hr_expense_portal_create/static/src/js/portal_expense_create.esm.js:0
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+#, python-format
+msgid "New line"
+msgstr "Uusi rivi"
+
+#. module: hr_expense_portal_create
+#. odoo-python
+#: code:addons/hr_expense_portal_create/wizard/employee_ssn_decrypt_wizard.py:0
+#, python-format
+msgid "No Personal Identification Number"
+msgstr "Ei henkilötunnusta"
+
+#. module: hr_expense_portal_create
+#. odoo-python
+#: code:addons/hr_expense_portal_create/models/employee.py:0
+#, python-format
+msgid "No Private Contact"
+msgstr "Ei kontaktia"
+
+#. module: hr_expense_portal_create
+#. odoo-python
+#: code:addons/hr_expense_portal_create/wizard/employee_ssn_decrypt_wizard.py:0
+#, python-format
+msgid ""
+"No encrypted personal identification number found on the employee's private "
+"contact."
+msgstr "Ei löytynyt salattua henkilötunnusta työntekijän kontaktille."
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "No privacy consent items are configured."
+msgstr "Ei huomioitavia tietosuojalausekkeita."
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Personal Details"
+msgstr "Omat tiedot"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Personal Identification Number"
+msgstr "Henkilötunnus"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Please accept the privacy notice to continue."
+msgstr "Ole hyvä ja hyväksi tietosuojalausekkeet jatkaaksesi."
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Please describe:"
+msgstr "Ole hyvä ja kuvaa tässä:"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Privacy Consents"
+msgstr "Tietosuojalausekkeet"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Qty <span class=\"text-danger\">*</span>"
+msgstr "Määrä <span class=\"text-danger\">*</span>"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Reason for using own car or taxi"
+msgstr "Syy oman auton tai taksin käytölle"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Receipts / Other attachments"
+msgstr "Kuitit / muut liitteet"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Report your expenses and submit a reimbursement request."
+msgstr "Ilmoita kuluja ja luo niistä kulukorvaushakemus."
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.view_hr_employee_form_hide_core_ssn_and_add_button
+msgid "Show Personal ID"
+msgstr "Näytä henkilötunnus"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.view_hr_employee_ssn_decrypt_wizard_form
+msgid ""
+"Showing Personal Identification Numbers requires a decryption key.\n"
+"                        You can request it from your system administrator. The decrypted\n"
+"                        number is only shown in a temporary notification and is never\n"
+"                        stored in the database in plain text."
+msgstr ""
+"Henkilötunnuksen näyttäminen vaatii salausavaimen.  Voit pyytää sen "
+"järjestelmän pääkäyttäjältä. Salaamaton henkilötunnus näytetään vain "
+"hetkellisesti, eikä sitä tallenneta salaamattomana tietokantaan."
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "State"
+msgstr "Osavaltio"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Street"
+msgstr "Katuosoite"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Street 2"
+msgstr "Katuosoite (rivi 2)"
+
+#. module: hr_expense_portal_create
+#. odoo-python
+#: code:addons/hr_expense_portal_create/controllers/main.py:0
+#, python-format
+msgid "The current user has no related employee. Please contact support."
+msgstr ""
+"Käyttäjään ei ole kytketty työntekijätietuetta. Ota yhteyttä ylläpitoon."
+
+#. module: hr_expense_portal_create
+#. odoo-python
+#: code:addons/hr_expense_portal_create/wizard/employee_ssn_decrypt_wizard.py:0
+#, python-format
+msgid "The key you provided is incorrect."
+msgstr "Avain on virheellinen"
+
+#. module: hr_expense_portal_create
+#. odoo-python
+#: code:addons/hr_expense_portal_create/models/employee.py:0
+#, python-format
+msgid "This employee has no private contact (work contact)."
+msgstr "Työntekijällä ei ole yksityistä yhteystietoa (työyhteystieto)."
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Travel end (date and time)"
+msgstr "Matkan päättyminen (päivämäärä ja aika)"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Travel start (date and time)"
+msgstr "Matkan alku (päivämäärä ja aika)"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "Unit price <span class=\"text-danger\">*</span>"
+msgstr "Yksikköhinta <span class=\"text-danger\">*</span>"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "ZIP"
+msgstr "Postinumero"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "dd.MM.yyyy"
+msgstr "pp.kk.vvvv"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "e.g. 131052-308T"
+msgstr "esim. 131052-308T"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "e.g. Taxi to customer meeting"
+msgstr "esim. taksimatka tapahtumapaikalle"

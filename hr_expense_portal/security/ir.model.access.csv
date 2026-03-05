@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_expense_portal_read,hr.expense portal read,hr_expense.model_hr_expense,base.group_portal,1,0,0,0
+access_hr_expense_sheet_portal_read,hr.expense.sheet portal read,hr_expense.model_hr_expense_sheet,base.group_portal,1,0,0,0
+access_hr_employee_read_portal_expense,access_hr_employee_read_portal_expense,hr.model_hr_employee_public,hr_expense_portal.group_portal_expense_access,1,0,0,0
