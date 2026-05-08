@@ -39,6 +39,8 @@
         "security/ir.model.access.csv",
         "views/portal_templates.xml",
         "views/employee.xml",
+        "views/product.xml",
+        "views/hr_expense_views.xml",
         "wizard/employee_ssn_decrypt_wizard.xml",
     ],
     "assets": {
