@@ -25,4 +25,41 @@
         </field>
     </record>
 
+    <record id="view_hr_expense_sheet_form_inherit_portal_manual_price"
+        model="ir.ui.view">
+        <field name="name">
+            hr.expense.sheet.form.inherit.portal.manual.price
+        </field>
+
+        <field name="model">hr.expense.sheet</field>
+
+        <field name="inherit_id"
+            ref="hr_expense.view_hr_expense_sheet_form"/>
+
+        <field name="arch" type="xml">
+
+            <!-- price_unit editable -->
+            <xpath expr="//field[@name='expense_line_ids']/tree/field[@name='price_unit']"
+                position="attributes">
+                <attribute name="readonly">0</attribute>
+                <attribute name="optional">show</attribute>
+            </xpath>
+
+            <!-- quantity editable -->
+            <xpath expr="//field[@name='expense_line_ids']/tree/field[@name='quantity']"
+                position="attributes">
+                <attribute name="readonly">0</attribute>
+                <attribute name="optional">show</attribute>
+            </xpath>
+
+            <!-- total editable -->
+            <xpath expr="//field[@name='expense_line_ids']/tree/field[@name='total_amount_currency']"
+                position="attributes">
+                <attribute name="readonly">0</attribute>
+                <attribute name="optional">show</attribute>
+            </xpath>
+
+        </field>
+    </record>
+
 </odoo>

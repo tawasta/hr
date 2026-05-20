@@ -345,6 +345,7 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
                     "total_amount_currency": total_amount_currency,
                     # IMPORTANT: UI removed Paid-by, but model often needs this
                     "payment_mode": "own_account",
+                    "portal_manual_price": True,
                 }
             )
             kept_indices.append(idx)
