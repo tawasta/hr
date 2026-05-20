@@ -4,11 +4,11 @@
     <record id="product_product_tree_view_expense_sequence" model="ir.ui.view">
         <field name="name">product.product.tree.expense.sequence</field>
         <field name="model">product.product</field>
-        <field name="inherit_id" ref="product.product_product_tree_view"/>
+        <field name="inherit_id" ref="product.product_product_tree_view" />
         <field name="arch" type="xml">
 
             <xpath expr="//tree" position="inside">
-                <field name="sequence" widget="handle"/>
+                <field name="sequence" widget="handle" />
             </xpath>
 
         </field>
@@ -17,11 +17,11 @@
     <record id="product_product_form_view_expense_sequence" model="ir.ui.view">
         <field name="name">product.product.form.expense.sequence</field>
         <field name="model">product.product</field>
-        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="inherit_id" ref="product.product_normal_form_view" />
         <field name="arch" type="xml">
 
             <xpath expr="//field[@name='name']" position="after">
-                <field name="sequence"/>
+                <field name="sequence" />
             </xpath>
 
         </field>

@@ -1,4 +1,4 @@
-from odoo import _, models, api, fields
+from odoo import _, api, fields, models
 
 
 class HrEmployee(models.Model):
@@ -27,7 +27,8 @@ class HrEmployee(models.Model):
             "target": "new",
             "context": {"default_employee_id": self.id},
         }
-    
+
+
 class HrExpense(models.Model):
     _inherit = "hr.expense"
 

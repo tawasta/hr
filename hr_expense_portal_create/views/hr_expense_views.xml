@@ -4,13 +4,13 @@
     <record id="hr_expense_view_form_show_mileage_review_fields" model="ir.ui.view">
         <field name="name">hr.expense.view.form.show.mileage.review.fields</field>
         <field name="model">hr.expense</field>
-        <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
+        <field name="inherit_id" ref="hr_expense.hr_expense_view_form" />
         <field name="arch" type="xml">
 
             <xpath expr="//div[@class='oe_title']/h1" position="after">
                 <group string="Mileage Reimbursement Review">
                     <group>
-                        <field name="quantity" readonly="1"/>
+                        <field name="quantity" readonly="1" />
                         <field
                             name="total_amount_currency"
                             string="Approved Amount"
@@ -25,36 +25,43 @@
         </field>
     </record>
 
-    <record id="view_hr_expense_sheet_form_inherit_portal_manual_price"
-        model="ir.ui.view">
+    <record
+        id="view_hr_expense_sheet_form_inherit_portal_manual_price"
+        model="ir.ui.view"
+    >
         <field name="name">
             hr.expense.sheet.form.inherit.portal.manual.price
         </field>
 
         <field name="model">hr.expense.sheet</field>
 
-        <field name="inherit_id"
-            ref="hr_expense.view_hr_expense_sheet_form"/>
+        <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form" />
 
         <field name="arch" type="xml">
 
             <!-- price_unit editable -->
-            <xpath expr="//field[@name='expense_line_ids']/tree/field[@name='price_unit']"
-                position="attributes">
+            <xpath
+                expr="//field[@name='expense_line_ids']/tree/field[@name='price_unit']"
+                position="attributes"
+            >
                 <attribute name="readonly">0</attribute>
                 <attribute name="optional">show</attribute>
             </xpath>
 
             <!-- quantity editable -->
-            <xpath expr="//field[@name='expense_line_ids']/tree/field[@name='quantity']"
-                position="attributes">
+            <xpath
+                expr="//field[@name='expense_line_ids']/tree/field[@name='quantity']"
+                position="attributes"
+            >
                 <attribute name="readonly">0</attribute>
                 <attribute name="optional">show</attribute>
             </xpath>
 
             <!-- total editable -->
-            <xpath expr="//field[@name='expense_line_ids']/tree/field[@name='total_amount_currency']"
-                position="attributes">
+            <xpath
+                expr="//field[@name='expense_line_ids']/tree/field[@name='total_amount_currency']"
+                position="attributes"
+            >
                 <attribute name="readonly">0</attribute>
                 <attribute name="optional">show</attribute>
             </xpath>

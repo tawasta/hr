@@ -186,7 +186,9 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
 
         partner_ssn = (post.get("partner_ssn") or "").strip()
         if partner and not partner.encrypted_social_security_number and not partner_ssn:
-            _logger.warning("PORTAL EXPENSE CREATE: missing personal identification number")
+            _logger.warning(
+                "PORTAL EXPENSE CREATE: missing personal identification number"
+            )
             return request.redirect("/my/expenses?create_error=1")
         partner_street = (post.get("partner_street") or "").strip()
         partner_street2 = (post.get("partner_street2") or "").strip()
