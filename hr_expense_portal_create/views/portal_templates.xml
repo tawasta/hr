@@ -128,6 +128,7 @@
                                             id="partner_ssn_input"
                                             placeholder="e.g. 131052-308T"
                                             autocomplete="off"
+                                            t-att-required="'required' if not partner.encrypted_social_security_number else None"
                                         />
                                         <div
                                             id="partner_ssn_error"
@@ -205,26 +206,6 @@
                                     </div>
 
                                     <div class="col-12 col-md-6">
-                                        <label class="form-label">State</label>
-                                        <select
-                                            class="form-select"
-                                            name="partner_state_id"
-                                            id="partner_state_id"
-                                        >
-                                            <option value="">Select state…</option>
-                                            <t t-foreach="states" t-as="s">
-                                                <option
-                                                    t-att-value="s.id"
-                                                    t-att-selected="partner and partner.state_id and partner.state_id.id == s.id"
-                                                    t-att-data-country-id="s.country_id.id"
-                                                >
-                                                    <t t-esc="s.name" />
-                                                </option>
-                                            </t>
-                                        </select>
-                                    </div>
-
-                                    <div class="col-12 col-md-6">
                                         <label
                                             class="form-label"
                                         >Bank Account (IBAN)</label>
@@ -233,6 +214,7 @@
                                             class="form-control"
                                             t-att-value="partner_iban or ''"
                                             name="partner_iban"
+                                            required="required"
                                         />
                                     </div>
 
