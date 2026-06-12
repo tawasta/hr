@@ -206,4 +206,15 @@
 
         </xpath>
     </template>
+
+    <template
+        id="portal_skills_modal_body_hide_profile_fields"
+        inherit_id="hr_skills_frontend.portal_skills_modal_body"
+        priority="101"
+    >
+        <xpath
+            expr="//div[@id='profile-block']/ancestor::div[contains(@class, 'mb-4')][1]"
+            position="replace"
+        />
+    </template>
 </odoo>
