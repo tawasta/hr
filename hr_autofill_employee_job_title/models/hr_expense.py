@@ -1,8 +1,4 @@
-import logging
-
 from odoo import _, api, models
-
-_logger = logging.getLogger(__name__)
 
 
 class HrExpense(models.Model):
@@ -32,7 +28,5 @@ class HrExpense(models.Model):
                             default_title,
                         )
                     )
-        else:
-            _logger.info("HR_AUTOFILL EXPENSE: no website_id in context")
 
         return expenses
