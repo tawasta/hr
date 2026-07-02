@@ -59,6 +59,8 @@ class TalenomCsvExport(models.Model):
         return self.env["hr.expense"].search(
             [
                 ("state", "=", "done"),
+                ("talenom_export", "=", True),
+                ("talenom_export_date", "=", False),
             ]
         )
 
@@ -203,18 +205,18 @@ class TalenomCsvExport(models.Model):
 
         return buffer.getvalue().encode(self.CSV_ENCODING)
 
-    def _build_filename(self, export_type):
+    def _build_filename(self, export_type, company_code):
         """Build the filename according to the Talenom naming convention."""
         today = fields.Date.context_today(self)
 
         if export_type == "employees":
-            prefix = "13214PALKK_HLO_ODO"
+            suffix = "PALKK_HLO_ODO"
         elif export_type == "payroll":
-            prefix = "13214PALKK_PAL_ODO"
+            suffix = "PALKK_TAPA_ODO"
         else:
             raise ValueError("Unsupported Talenom CSV export type: %s" % export_type)
 
-        return f"{prefix}_{today.strftime('%d%m%Y')}.csv"
+        return f"{company_code}{suffix}_{today.strftime('%d%m%Y')}.csv"
 
     def _format_date(self, value):
         """Format an Odoo date value."""
@@ -228,44 +230,72 @@ class TalenomCsvExport(models.Model):
 
     @api.model
     def _cron_generate_csv(self, export_type="employees"):
-        """Generate the CSV and store it as an attachment."""
+        """Generate one CSV per company and store it as an attachment.
+
+        The company is derived from the exported employee/expense records,
+        since a single instance can export data for several Talenom
+        companies, each identified by its own talenom_company_code.
+        """
         if export_type == "employees":
-            records = self._get_employee_records()
+            all_records = self._get_employee_records()
             headers = self.EMPLOYEE_HEADERS
-            rows = self._employee_rows(records)
+            build_rows = self._employee_rows
             description = "Talenom employee CSV export"
         elif export_type == "payroll":
-            records = self._get_payroll_records()
+            all_records = self._get_payroll_records()
             headers = self.PAYROLL_HEADERS
-            rows = self._payroll_rows(records)
+            build_rows = self._payroll_rows
             description = "Talenom payroll CSV export"
         else:
             raise ValueError("Unsupported Talenom CSV export type: %s" % export_type)
 
-        csv_bytes = self._build_csv(headers, rows)
-        filename = self._build_filename(export_type)
-
-        attachment = (
-            self.env["ir.attachment"]
-            .sudo()
-            .create(
-                {
-                    "name": filename,
-                    "type": "binary",
-                    "datas": base64.b64encode(csv_bytes),
-                    "mimetype": "text/csv",
-                    "res_model": self._name,
-                    "description": description,
-                }
+        attachments = self.env["ir.attachment"]
+        for company in all_records.company_id:
+            records = all_records.filtered(
+                lambda r, company=company: r.company_id == company
             )
-        )
 
-        _logger.info(
-            "Talenom CSV created: export_type=%s attachment_id=%s filename=%s rows=%s",
-            export_type,
-            attachment.id,
-            filename,
-            len(rows),
-        )
+            company_code = company.talenom_company_code
+            if not company_code:
+                _logger.warning(
+                    "Talenom CSV export skipped for company_id=%s (%s): "
+                    "talenom_company_code is not set.",
+                    company.id,
+                    company.name,
+                )
+                continue
 
-        return attachment
+            rows = build_rows(records)
+            csv_bytes = self._build_csv(headers, rows)
+            filename = self._build_filename(export_type, company_code)
+
+            attachment = (
+                self.env["ir.attachment"]
+                .sudo()
+                .create(
+                    {
+                        "name": filename,
+                        "type": "binary",
+                        "datas": base64.b64encode(csv_bytes),
+                        "mimetype": "text/csv",
+                        "res_model": self._name,
+                        "description": description,
+                    }
+                )
+            )
+            attachments |= attachment
+
+            if export_type == "payroll":
+                records.write({"talenom_export_date": fields.Datetime.now()})
+
+            _logger.info(
+                "Talenom CSV created: export_type=%s company_id=%s attachment_id=%s "
+                "filename=%s rows=%s",
+                export_type,
+                company.id,
+                attachment.id,
+                filename,
+                len(rows),
+            )
+
+        return attachments

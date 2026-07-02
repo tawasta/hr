@@ -28,6 +28,10 @@ Before using this module:
   ``social_security_number_encryption_key``.
 * Ensure employee master data is complete.
 * Configure expense analytics according to your reporting requirements.
+* Set the **Talenom Company Code** field on every company (``res.company``)
+  that should be exported. This code is used as the numeric prefix of the
+  generated CSV filenames (e.g. ``13214``). Companies without a code
+  configured are skipped, with a warning logged.
 * Optionally configure the system parameter
   ``talenom_csv_export.use_headers`` (``True``/``False``) to control
   whether generated CSV files include a header row. Defaults to
@@ -39,15 +43,22 @@ Usage
 Employee export
 ---------------
 
-The scheduled employee export generates a CSV file containing employee master
-data in the format required by Talenom Payroll. Only active employees with a
-job position (``job_id``) set are included.
+The scheduled employee export generates one CSV file per company containing
+employee master data in the format required by Talenom Payroll. Only active
+employees with a job position (``job_id``) set are included.
 
 Payroll export
 --------------
 
-The scheduled payroll export generates a CSV file based on approved expense
-records.
+The scheduled payroll export generates one CSV file per company based on
+approved expense records. An expense is included only if its **Export to
+Talenom** (``talenom_export``) checkbox is enabled (enabled by default) and
+it has not already been exported (``talenom_export_date`` is not set). Once
+exported, the expense's ``talenom_export_date`` is stamped so it is not
+included again.
+
+Both exports group records by company and use each company's **Talenom
+Company Code** as the filename prefix.
 
 Credits
 =======
