@@ -1,7 +1,7 @@
 ##############################################################################
 #
 #    Author: Futural Oy
-#    Copyright 2019 Futural Oy (https://futural.fi)
+#    Copyright 2026 Futural Oy (https://futural.fi)
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -19,8 +19,8 @@
 ##############################################################################
 
 {
-    "name": "Talenom CSV Export",
-    "summary": "CSV export for Talenom employee and payroll data",
+    "name": "HR Employee Job Begin Date",
+    "summary": "Add job begin date to employee records",
     "version": "17.0.1.0.0",
     "category": "Human Resources",
     "website": "https://github.com/tawasta/hr",
@@ -29,12 +29,9 @@
     "application": False,
     "installable": True,
     "depends": [
-        "hr_employee_job_begin_date",
-        "hr_expense",
-        "social_security_number_management",
+        "hr",
     ],
     "data": [
-        "security/ir.model.access.csv",
-        "data/ir_cron.xml",
+        "views/hr_employee.xml",
     ],
 }

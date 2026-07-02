@@ -10,6 +10,7 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
+[hr_employee_job_begin_date](hr_employee_job_begin_date/) | 17.0.1.0.0 |  | Add job begin date to employee records
 [hr_expense_current_date_as_accounting_date](hr_expense_current_date_as_accounting_date/) | 17.0.1.0.0 |  | When confirming expense sheet, use current date as accounting date
 [hr_expense_hide_mobile_app](hr_expense_hide_mobile_app/) | 17.0.1.0.0 |  | Don't show mobile app suggestion (as it doesn't work on CE)
 [hr_expense_portal](hr_expense_portal/) | 17.0.1.0.0 |  | Employee-friendly Expense & Expense Report portal
