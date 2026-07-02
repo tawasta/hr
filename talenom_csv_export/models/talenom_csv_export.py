@@ -3,7 +3,7 @@ import csv
 import io
 import logging
 
-from odoo import api, fields, models
+from odoo import api, fields, models, tools
 
 _logger = logging.getLogger(__name__)
 
@@ -14,6 +14,7 @@ class TalenomCsvExport(models.Model):
 
     CSV_DELIMITER = ";"
     CSV_ENCODING = "utf-8-sig"
+    USE_HEADERS_PARAM = "talenom_csv_export.use_headers"
 
     EMPLOYEE_HEADERS = [
         "henkilönumero",
@@ -166,6 +167,15 @@ class TalenomCsvExport(models.Model):
             )
         return rows
 
+    def _get_use_headers(self):
+        param = (
+            self.env["ir.config_parameter"]
+            .sudo()
+            .get_param(self.USE_HEADERS_PARAM, default="True")
+        )
+
+        return tools.str2bool(param)
+
     def _build_csv(self, headers, rows):
         """Build the CSV content and return it as encoded bytes."""
         buffer = io.StringIO()
@@ -178,7 +188,8 @@ class TalenomCsvExport(models.Model):
             lineterminator="\n",
         )
 
-        writer.writerow(headers)
+        if self._get_use_headers():
+            writer.writerow(headers)
         writer.writerows(rows)
 
         return buffer.getvalue().encode(self.CSV_ENCODING)

@@ -28,6 +28,10 @@ Before using this module:
   ``social_security_number_encryption_key``.
 * Ensure employee master data is complete.
 * Configure expense analytics according to your reporting requirements.
+* Optionally configure the system parameter
+  ``talenom_csv_export.use_headers`` (``True``/``False``) to control
+  whether generated CSV files include a header row. Defaults to
+  ``True`` if not set.
 
 Usage
 =====
