@@ -40,7 +40,8 @@ Employee export
 ---------------
 
 The scheduled employee export generates a CSV file containing employee master
-data in the format required by Talenom Payroll.
+data in the format required by Talenom Payroll. Only active employees with a
+job position (``job_id``) set are included.
 
 Payroll export
 --------------

@@ -50,6 +50,7 @@ class TalenomCsvExport(models.Model):
         return self.env["hr.employee"].search(
             [
                 ("active", "=", True),
+                ("job_id", "!=", False),
             ]
         )
 
@@ -63,7 +64,7 @@ class TalenomCsvExport(models.Model):
 
     def _get_social_security_number(self, employee):
         """Return the decrypted personal identification number."""
-        partner = employee.user_partner_id
+        partner = employee.work_contact_id
 
         if not partner.encrypted_social_security_number:
             return ""
@@ -124,21 +125,29 @@ class TalenomCsvExport(models.Model):
                 [
                     emp.barcode,
                     self._get_social_security_number(emp),
-                    emp.user_partner_id.lastname,
+                    emp.work_contact_id.lastname,
                     " ".join(
                         filter(
                             None,
                             [
-                                emp.user_partner_id.firstname,
-                                emp.user_partner_id.firstname2,
+                                emp.work_contact_id.firstname,
+                                emp.work_contact_id.firstname2,
                             ],
                         )
                     ),
-                    emp.user_partner_id.street or "",
-                    emp.user_partner_id.zip or "",
-                    emp.user_partner_id.city or "",
-                    emp.bank_account_id.acc_number,
-                    emp.bank_account_id.bank_id.name,
+                    " ".join(
+                        filter(
+                            None,
+                            [
+                                emp.work_contact_id.street,
+                                emp.work_contact_id.street2,
+                            ],
+                        )
+                    ),
+                    emp.work_contact_id.zip or "",
+                    emp.work_contact_id.city or "",
+                    emp.bank_account_id.acc_number or "",
+                    emp.bank_account_id.bank_id.name or "",
                     emp.job_id.name or "",
                     self._format_date(emp.job_begin_date),
                     self._format_date(emp.job_begin_date),
