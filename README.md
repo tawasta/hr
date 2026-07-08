@@ -11,6 +11,7 @@ Available addons
 addon | version | maintainers | summary
 --- | --- | --- | ---
 [hr_autofill_employee_job_title](hr_autofill_employee_job_title/) | 17.0.1.0.0 |  | Automatically autofills employee job title upon creation via portal
+[hr_employee_job_begin_date](hr_employee_job_begin_date/) | 17.0.1.0.0 |  | Add job begin date to employee records
 [hr_expense_current_date_as_accounting_date](hr_expense_current_date_as_accounting_date/) | 17.0.1.0.0 |  | When confirming expense sheet, use current date as accounting date
 [hr_expense_hide_mobile_app](hr_expense_hide_mobile_app/) | 17.0.1.0.0 |  | Don't show mobile app suggestion (as it doesn't work on CE)
 [hr_expense_portal](hr_expense_portal/) | 17.0.1.0.0 |  | Employee-friendly Expense & Expense Report portal
@@ -22,5 +23,6 @@ addon | version | maintainers | summary
 [hr_timesheet_sheet_table_transparency_fix](hr_timesheet_sheet_table_transparency_fix/) | 17.0.1.0.0 |  | Fix header/footer transparency in timesheet filling view
 [hr_timesheet_sheet_total_time_button](hr_timesheet_sheet_total_time_button/) | 17.0.1.0.0 |  | Adds Total time -button to HR timesheet form view
 [hr_timesheet_sheet_tree_view_sort_by_date_start](hr_timesheet_sheet_tree_view_sort_by_date_start/) | 17.0.1.0.0 |  | Sort sheets by Date From field in tree view
+[talenom_csv_export](talenom_csv_export/) | 17.0.1.0.0 |  | CSV export for Talenom employee and payroll data
 
 [//]: # (end addons)
