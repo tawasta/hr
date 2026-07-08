@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0-20260619\n"
+"Project-Id-Version: Odoo Server 17.0-20260630\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-29 13:19+0000\n"
-"PO-Revision-Date: 2026-06-29 13:19+0000\n"
+"POT-Creation-Date: 2026-07-08 13:52+0000\n"
+"PO-Revision-Date: 2026-07-08 13:52+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -21,15 +21,15 @@ msgid "Config Settings"
 msgstr "Asetukset"
 
 #. module: hr_autofill_employee_job_title
-#: model:ir.model.fields,field_description:hr_autofill_employee_job_title.field_res_config_settings__hr_employee_default_job_title
+#: model:ir.model.fields,field_description:hr_autofill_employee_job_title.field_res_config_settings__hr_employee_default_job_id
 #: model_terms:ir.ui.view,arch_db:hr_autofill_employee_job_title.res_config_settings_view_form_inherit_hr_autofill_job_title
-msgid "Default Employee Job Title"
+msgid "Default Employee Job Position"
 msgstr "Oletustyötehtävä"
 
 #. module: hr_autofill_employee_job_title
-#: model:ir.model.fields,help:hr_autofill_employee_job_title.field_res_config_settings__hr_employee_default_job_title
+#: model:ir.model.fields,help:hr_autofill_employee_job_title.field_res_config_settings__hr_employee_default_job_id
 msgid ""
-"Default job title assigned to employees created from an expense report."
+"Default job position assigned to employees created from an expense report."
 msgstr "Kulukorvauksen yhteydessä määriteltävä käyttäjän oletustyötehtävä."
 
 #. module: hr_autofill_employee_job_title
@@ -39,7 +39,13 @@ msgstr "Kulu"
 
 #. module: hr_autofill_employee_job_title
 #: model_terms:ir.ui.view,arch_db:hr_autofill_employee_job_title.res_config_settings_view_form_inherit_hr_autofill_job_title
-msgid "Set the default job title for employees created from expense reports."
+msgid "Select a Job Position..."
+msgstr "Valitse työtehtävä..."
+
+#. module: hr_autofill_employee_job_title
+#: model_terms:ir.ui.view,arch_db:hr_autofill_employee_job_title.res_config_settings_view_form_inherit_hr_autofill_job_title
+msgid ""
+"Set the default job position for employees created from expense reports."
 msgstr "Aseta oletustyötehtävä, joka asetetaan työntekijälle kulukorvauksen yhteydessä."
 
 #. module: hr_autofill_employee_job_title
@@ -47,11 +53,7 @@ msgstr "Aseta oletustyötehtävä, joka asetetaan työntekijälle kulukorvauksen
 #: code:addons/hr_autofill_employee_job_title/models/hr_expense.py:0
 #, python-format
 msgid ""
-"This user was automatically given a job title ‰s as a result of submitting "
-"an expense report."
-msgstr "Tälle käyttäjälle asetettiin automaattisesti työtehtävä ‰s kulukorvaushakemuksen yhteydessä."
-
-#. module: hr_autofill_employee_job_title
-#: model_terms:ir.ui.view,arch_db:hr_autofill_employee_job_title.res_config_settings_view_form_inherit_hr_autofill_job_title
-msgid "e.g. Employee"
+"This user was automatically assigned to job position %s as a result of "
+"submitting an expense report."
 msgstr ""
+"Kulukorvausraportin lähettämisen seurauksena tälle käyttäjälle annettiin automaattisesti työtehtävä %s."
