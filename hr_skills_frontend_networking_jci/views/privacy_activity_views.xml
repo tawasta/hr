@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record id="privacy_activity_form_inherit_skills_networking" model="ir.ui.view">
+        <field name="name">privacy.activity.form.inherit.skills.networking</field>
+        <field name="model">privacy.activity</field>
+        <field name="inherit_id" ref="privacy.activity_form" />
+        <field name="arch" type="xml">
+            <field name="controller_id" position="after">
+                <field name="show_in_skills_networking" />
+            </field>
+        </field>
+    </record>
+</odoo>
