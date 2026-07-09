@@ -15,12 +15,12 @@
                 position="inside"
             >
                 <setting
-                    string="Default Employee Job Title"
-                    help="Set the default job title for employees created from expense reports."
+                    string="Default Employee Job Position"
+                    help="Set the default job position for employees created from expense reports."
                 >
                     <field
-                        name="hr_employee_default_job_title"
-                        placeholder="e.g. Employee"
+                        name="hr_employee_default_job_id"
+                        placeholder="Select a Job Position..."
                     />
                 </setting>
             </xpath>
