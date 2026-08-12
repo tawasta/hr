@@ -21,7 +21,7 @@
 {
     "name": "HR Skills Frontend",
     "summary": "HR Skills Frontend",
-    "version": "17.0.1.0.0",
+    "version": "17.0.1.0.1",
     "category": "Human Resources",
     "website": "https://github.com/tawasta/hr",
     "author": "Futural",
@@ -37,6 +37,8 @@
         "data/website_menu.xml",
         "data/ir_cron.xml",
         "security/ir.model.access.csv",
+        "security/hr_skills_frontend_security.xml",
+        "views/hr_employee_views.xml",
         "views/product.xml",
         "views/skills_portal_access_views.xml",
         "views/skills_portal.xml",

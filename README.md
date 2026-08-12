@@ -17,7 +17,7 @@ addon | version | maintainers | summary
 [hr_expense_portal](hr_expense_portal/) | 17.0.1.0.0 |  | Employee-friendly Expense & Expense Report portal
 [hr_expense_portal_create](hr_expense_portal_create/) | 17.0.1.0.0 |  | HR Expense Portal - Create Expenses
 [hr_expense_sheet_status_message](hr_expense_sheet_status_message/) | 17.0.1.4.4 |  | Sends a message when expense sheet status is changed
-[hr_skills_frontend](hr_skills_frontend/) | 17.0.1.0.0 |  | HR Skills Frontend
+[hr_skills_frontend](hr_skills_frontend/) | 17.0.1.0.1 |  | HR Skills Frontend
 [hr_timesheet_employee_hour_balance](hr_timesheet_employee_hour_balance/) | 17.0.1.0.0 |  | Show the hour balance for each employee
 [hr_timesheet_review_by_employee_manager](hr_timesheet_review_by_employee_manager/) | 17.0.1.0.0 |  | New timesheet review policy: "By Employee Manager"
 [hr_timesheet_sheet_table_transparency_fix](hr_timesheet_sheet_table_transparency_fix/) | 17.0.1.0.0 |  | Fix header/footer transparency in timesheet filling view

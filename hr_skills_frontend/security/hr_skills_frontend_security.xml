@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo noupdate="1">
+
+    <!--
+        Portal users are only allowed to read these models while they hold
+        an active grant in hr.skills.portal.access (see
+        HrSkillsPortalAccess.user_has_portal_skills_access()). Without an
+        active grant the domain evaluates to "match nothing", so the ACL
+        rows added in ir.model.access.csv for base.group_portal have no
+        practical effect until access is granted.
+    -->
+
+    <record id="hr_employee_skill_rule_portal" model="ir.rule">
+        <field name="name">Employee skill: portal: read while access is granted</field>
+        <field name="model_id" ref="hr_skills.model_hr_employee_skill" />
+        <field
+            name="domain_force"
+        >[(1, '=', 1)] if user.env['hr.skills.portal.access'].sudo().user_has_portal_skills_access(user) else [(1, '=', 0)]</field>
+        <field name="perm_write" eval="False" />
+        <field name="perm_create" eval="False" />
+        <field name="perm_unlink" eval="False" />
+        <field name="groups" eval="[(4, ref('base.group_portal'))]" />
+    </record>
+
+    <record id="hr_employee_rule_portal_skills" model="ir.rule">
+        <field name="name">Employee: portal: read while skills access is granted</field>
+        <field name="model_id" ref="hr.model_hr_employee" />
+        <field
+            name="domain_force"
+        >[(1, '=', 1)] if user.env['hr.skills.portal.access'].sudo().user_has_portal_skills_access(user) else [(1, '=', 0)]</field>
+        <field name="perm_write" eval="False" />
+        <field name="perm_create" eval="False" />
+        <field name="perm_unlink" eval="False" />
+        <field name="groups" eval="[(4, ref('base.group_portal'))]" />
+    </record>
+
+    <record id="hr_department_rule_portal_skills" model="ir.rule">
+        <field
+            name="name"
+        >Department: portal: read while skills access is granted</field>
+        <field name="model_id" ref="hr.model_hr_department" />
+        <field
+            name="domain_force"
+        >[(1, '=', 1)] if user.env['hr.skills.portal.access'].sudo().user_has_portal_skills_access(user) else [(1, '=', 0)]</field>
+        <field name="perm_write" eval="False" />
+        <field name="perm_create" eval="False" />
+        <field name="perm_unlink" eval="False" />
+        <field name="groups" eval="[(4, ref('base.group_portal'))]" />
+    </record>
+
+    <record id="hr_skill_rule_portal_skills" model="ir.rule">
+        <field name="name">Skill: portal: read while skills access is granted</field>
+        <field name="model_id" ref="hr_skills.model_hr_skill" />
+        <field
+            name="domain_force"
+        >[(1, '=', 1)] if user.env['hr.skills.portal.access'].sudo().user_has_portal_skills_access(user) else [(1, '=', 0)]</field>
+        <field name="perm_write" eval="False" />
+        <field name="perm_create" eval="False" />
+        <field name="perm_unlink" eval="False" />
+        <field name="groups" eval="[(4, ref('base.group_portal'))]" />
+    </record>
+
+    <record id="hr_skill_level_rule_portal_skills" model="ir.rule">
+        <field
+            name="name"
+        >Skill level: portal: read while skills access is granted</field>
+        <field name="model_id" ref="hr_skills.model_hr_skill_level" />
+        <field
+            name="domain_force"
+        >[(1, '=', 1)] if user.env['hr.skills.portal.access'].sudo().user_has_portal_skills_access(user) else [(1, '=', 0)]</field>
+        <field name="perm_write" eval="False" />
+        <field name="perm_create" eval="False" />
+        <field name="perm_unlink" eval="False" />
+        <field name="groups" eval="[(4, ref('base.group_portal'))]" />
+    </record>
+
+    <record id="hr_skill_type_rule_portal_skills" model="ir.rule">
+        <field
+            name="name"
+        >Skill type: portal: read while skills access is granted</field>
+        <field name="model_id" ref="hr_skills.model_hr_skill_type" />
+        <field
+            name="domain_force"
+        >[(1, '=', 1)] if user.env['hr.skills.portal.access'].sudo().user_has_portal_skills_access(user) else [(1, '=', 0)]</field>
+        <field name="perm_write" eval="False" />
+        <field name="perm_create" eval="False" />
+        <field name="perm_unlink" eval="False" />
+        <field name="groups" eval="[(4, ref('base.group_portal'))]" />
+    </record>
+
+</odoo>

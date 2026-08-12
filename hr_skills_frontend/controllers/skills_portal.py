@@ -204,7 +204,7 @@ class HrSkillPortal(CustomerPortal):
     # -------------------------
 
     def _apply_skill_level_filters(
-        self, SkillSudo, base_domain, selected_skill_ids, selected_level_ids
+        self, Skill, base_domain, selected_skill_ids, selected_level_ids
     ):
         """
         Apply AND filters for selected skills and/or
@@ -223,7 +223,7 @@ class HrSkillPortal(CustomerPortal):
         domain = list(base_domain) if base_domain else []
 
         if selected_skill_ids and selected_level_ids:
-            rg_rows = SkillSudo.read_group(
+            rg_rows = Skill.read_group(
                 domain=AND(
                     [
                         domain,
@@ -263,7 +263,7 @@ class HrSkillPortal(CustomerPortal):
             return domain
 
         if selected_skill_ids:
-            rg_rows = SkillSudo.read_group(
+            rg_rows = Skill.read_group(
                 domain=AND([domain, [("skill_id", "in", selected_skill_ids)]]),
                 fields=["employee_id", "skill_id"],
                 groupby=["employee_id", "skill_id"],
@@ -291,7 +291,7 @@ class HrSkillPortal(CustomerPortal):
             return domain
 
         if selected_level_ids:
-            rg_rows = SkillSudo.read_group(
+            rg_rows = Skill.read_group(
                 domain=AND([domain, [("skill_level_id", "in", selected_level_ids)]]),
                 fields=["employee_id", "skill_level_id"],
                 groupby=["employee_id", "skill_level_id"],
@@ -328,9 +328,17 @@ class HrSkillPortal(CustomerPortal):
     def _prepare_skill_values(self, page, sortby, search, search_in, groupby):
         """
         Collect all values required by the template.
-        - Applies record rules to the domain (respects security).
         - Adds sidebar data (skills, levels) and shows current selections.
         - Applies AND logic for selected skills/levels via _apply_skill_level_filters().
+
+        Access is gated on hr.skills.portal.access. This is enforced twice:
+        - Here, so a user without access skips the query pipeline entirely
+          and the template renders its "access restricted" notice instead.
+        - By the ir.rule records in security/hr_skills_frontend_security.xml,
+          which grant base.group_portal real (non-sudo) read access to
+          hr.employee.skill/hr.employee/hr.department/hr.skill/
+          hr.skill.level/hr.skill.type only while the same grant is active
+          — so this method never needs sudo() to read them.
         """
         values = self._prepare_portal_layout_values()
         Skill = request.env["hr.employee.skill"]
@@ -339,18 +347,8 @@ class HrSkillPortal(CustomerPortal):
         user = request.env.user
         has_access = Access.user_has_portal_skills_access(user)
 
-        domain = []
-        if Skill.check_access_rights("read"):
-            domain = AND(
-                [domain, request.env["ir.rule"]._compute_domain(Skill._name, "read")]
-            )
-        SkillSudo = Skill.sudo()
-
-        # Read selections from query
-        selected_skill_ids = self._get_multi_ids("skill_ids")
-        selected_level_ids = self._get_multi_ids("level_ids")
-
-        # Searchbar config
+        # Searchbar config is rendered above the has_access check in the
+        # template, so it must be populated regardless of access.
         searchbar_sortings = dict(
             sorted(
                 self._skill_searchbar_sortings().items(), key=lambda i: i[1]["sequence"]
@@ -358,10 +356,37 @@ class HrSkillPortal(CustomerPortal):
         )
         searchbar_inputs = self._skill_searchbar_inputs()
         searchbar_groupby = self._skill_searchbar_groupby()
-
-        # Defaults
         sortby = sortby if sortby in searchbar_sortings else "date"
         groupby = groupby if groupby in searchbar_groupby else "employee"
+
+        values.update(
+            {
+                "page_name": "hr_employee_skill",
+                "default_url": "/all/skills",
+                "searchbar_sortings": searchbar_sortings,
+                "searchbar_groupby": OrderedDict(
+                    sorted(searchbar_groupby.items(), key=lambda i: i[1]["order"])
+                ),
+                "searchbar_inputs": OrderedDict(
+                    sorted(searchbar_inputs.items(), key=lambda i: i[1]["order"])
+                ),
+                "search_in": search_in or "all",
+                "search": search,
+                "sortby": sortby,
+                "groupby": groupby,
+                "has_access": has_access,
+            }
+        )
+
+        if not has_access:
+            return values
+
+        domain = []
+
+        # Read selections from query
+        selected_skill_ids = self._get_multi_ids("skill_ids")
+        selected_level_ids = self._get_multi_ids("level_ids")
+
         order = self._order_with_groupby(searchbar_sortings[sortby]["order"], groupby)
 
         # Free text search
@@ -372,11 +397,11 @@ class HrSkillPortal(CustomerPortal):
 
         # Apply skill/level AND-filters using a single helper
         domain = self._apply_skill_level_filters(
-            SkillSudo, domain, selected_skill_ids, selected_level_ids
+            Skill, domain, selected_skill_ids, selected_level_ids
         )
 
         # Fetch page of records
-        total = SkillSudo.search_count(domain)
+        total = Skill.search_count(domain)
         pager = portal_pager(
             url="/all/skills",
             url_args={
@@ -395,40 +420,26 @@ class HrSkillPortal(CustomerPortal):
             page=page,
             step=self._items_per_page,
         )
-        records = SkillSudo.search(
+        records = Skill.search(
             domain, order=order, limit=self._items_per_page, offset=pager["offset"]
         )
         grouped_records = self._group_records(records, groupby)
 
         # Sidebar lists
-        SkillM = request.env["hr.skill"].sudo()
-        LevelM = request.env["hr.skill.level"].sudo()
+        SkillM = request.env["hr.skill"]
+        LevelM = request.env["hr.skill.level"]
         skills = SkillM.search([])
         levels = LevelM.search([])
 
         values.update(
             {
-                "page_name": "hr_employee_skill",
-                "default_url": "/all/skills",
                 "grouped_records": grouped_records,
                 "pager": pager,
-                "searchbar_sortings": searchbar_sortings,
-                "searchbar_groupby": OrderedDict(
-                    sorted(searchbar_groupby.items(), key=lambda i: i[1]["order"])
-                ),
-                "searchbar_inputs": OrderedDict(
-                    sorted(searchbar_inputs.items(), key=lambda i: i[1]["order"])
-                ),
-                "search_in": search_in or "all",
-                "search": search,
-                "sortby": sortby,
-                "groupby": groupby,
                 # sidebar data + current selections
                 "skills": skills,
                 "levels": levels,
                 "selected_skill_ids": selected_skill_ids,
                 "selected_level_ids": selected_level_ids,
-                "has_access": has_access,
             }
         )
         return values

@@ -31,9 +31,16 @@ Timed grants are configured in Odoo via:
 
 If timed access is not enabled, no further configuration is required.
 
-Additionally, the parameter  
-``hr_skills_frontend.mode``  
+Additionally, the parameter
+``hr_skills_frontend.mode``
 controls whether users can add **one skill at a time** (`single`) or **all skills of a type at once** (`type_all`) in the “My skills” modal.
+
+The employee form's **Related User** field (``hr.employee.user_id``) can be
+linked to a portal user, not only an internal one — the standard HR domain
+that hides portal users from that field's dropdown is relaxed by this
+module. This lets an admin manually create an ``hr.employee`` record and
+link it to an existing portal contact so that contact can manage their own
+skills via the **My skills** portal modal.
 
 Usage
 =====
