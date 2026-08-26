@@ -28,7 +28,7 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
             ("company_id", "=", False),
             ("company_id", "=", company.id),
         ]
-        return Product.search(domain, order="name asc")
+        return Product.search(domain, order="sequence asc, name asc")
 
     def _to_float(self, value, default=0.0):
         if value in (None, "", False):
@@ -152,7 +152,6 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
             bank = employee.sudo().bank_account_id
 
             Country = request.env["res.country"].sudo()
-            State = request.env["res.country.state"].sudo()
 
             response.qcontext.update(
                 {
@@ -160,7 +159,6 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
                     "partner": partner,
                     "partner_iban": bank.acc_number if bank else "",
                     "countries": Country.search([], order="name asc"),
-                    "states": State.search([], order="name asc"),
                     "currency_symbol": company.currency_id.symbol or "",
                 }
             )
@@ -187,12 +185,16 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
                 return request.redirect("/my/expenses?create_error=1")
 
         partner_ssn = (post.get("partner_ssn") or "").strip()
+        if partner and not partner.encrypted_social_security_number and not partner_ssn:
+            _logger.warning(
+                "PORTAL EXPENSE CREATE: missing personal identification number"
+            )
+            return request.redirect("/my/expenses?create_error=1")
         partner_street = (post.get("partner_street") or "").strip()
         partner_street2 = (post.get("partner_street2") or "").strip()
         partner_zip = (post.get("partner_zip") or "").strip()
         partner_city = (post.get("partner_city") or "").strip()
         partner_country_id = self._to_int(post.get("partner_country_id"), 0)
-        partner_state_id = self._to_int(post.get("partner_state_id"), 0)
 
         partner_iban = (post.get("partner_iban") or "").strip()
         if partner_iban:
@@ -226,7 +228,6 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
                 partner_zip,
                 partner_city,
                 partner_country_id,
-                partner_state_id,
             ]
         ):
             try:
@@ -238,7 +239,6 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
                         "zip": partner_zip or False,
                         "city": partner_city or False,
                         "country_id": partner_country_id or False,
-                        "state_id": partner_state_id or False,
                     }
                     if partner_ssn:
                         vals_partner["social_security_number"] = partner_ssn
@@ -347,6 +347,7 @@ class HrExpenseCustomerPortalCreate(HrExpenseCustomerPortal):
                     "total_amount_currency": total_amount_currency,
                     # IMPORTANT: UI removed Paid-by, but model often needs this
                     "payment_mode": "own_account",
+                    "portal_manual_price": True,
                 }
             )
             kept_indices.append(idx)
