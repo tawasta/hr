@@ -443,7 +443,7 @@
                                                             type="text"
                                                             class="form-control"
                                                             name="line_name___IDX__"
-                                                            placeholder="e.g. Taxi to customer meeting"
+                                                            placeholder="Event"
                                                             required="required"
                                                         />
                                                     </div>
@@ -534,14 +534,16 @@
                                                         <div
                                                             class="form-text text-muted"
                                                         >
-                                                            Please describe:
+                                                            You can add more information about the expense here.
+                                                            <br />
+                                                            <br />
+                                                            <strong
+                                                            >If you are claiming travel compensation, please state:</strong>
                                                             <ul class="mb-0 ps-3">
                                                                 <li
-                                                                >Event, date and location</li>
+                                                                >Travel start (date, time and address)</li>
                                                                 <li
-                                                                >Travel start (date and time)</li>
-                                                                <li
-                                                                >Travel end (date and time)</li>
+                                                                >Travel end (date, time and address)</li>
                                                                 <li
                                                                 >Reason for using own car or taxi</li>
                                                             </ul>
