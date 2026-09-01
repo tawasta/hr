@@ -219,8 +219,8 @@ msgstr "Työntekijä"
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
-msgid "Event, date and location"
-msgstr "Tapahtuma, ajankohta ja paikka"
+msgid "Event"
+msgstr "Tapahtuma"
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
@@ -239,6 +239,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:hr_expense_portal_create.field_hr_employee_ssn_decrypt_wizard__id
 msgid "ID"
 msgstr ""
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "If you are claiming travel compensation, please state:"
+msgstr "Jos haet matkakorvausta, niin ilmoita:"
 
 #. module: hr_expense_portal_create
 #: model:ir.model.fields,field_description:hr_expense_portal_create.field_hr_employee_ssn_decrypt_wizard__write_uid
@@ -308,11 +313,6 @@ msgstr "Ole hyvä ja hyväksi tietosuojalausekkeet jatkaaksesi."
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
-msgid "Please describe:"
-msgstr "Ole hyvä ja kuvaa tässä:"
-
-#. module: hr_expense_portal_create
-#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
 msgid "Privacy Consents"
 msgstr "Tietosuojalausekkeet"
 
@@ -324,7 +324,7 @@ msgstr "Määrä <span class=\"text-danger\">*</span>"
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
 msgid "Reason for using own car or taxi"
-msgstr "Syy oman auton tai taksin käytölle"
+msgstr "Peruste oman auton tai taksin käytölle"
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
@@ -392,18 +392,23 @@ msgstr "Työntekijällä ei ole yksityistä yhteystietoa (työyhteystieto)."
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
-msgid "Travel end (date and time)"
-msgstr "Matkan päättyminen (päivämäärä ja aika)"
+msgid "Travel end (date, time and address)"
+msgstr "Matkan päättyminen (pvm, aika ja osoite)"
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
-msgid "Travel start (date and time)"
-msgstr "Matkan alku (päivämäärä ja aika)"
+msgid "Travel start (date, time and address)"
+msgstr "Matkan aloitus (pvm, aika ja osoite)"
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
 msgid "Unit price <span class=\"text-danger\">*</span>"
 msgstr "Yksikköhinta <span class=\"text-danger\">*</span>"
+
+#. module: hr_expense_portal_create
+#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
+msgid "You can add more information about the expense here."
+msgstr "Tähän voit kirjata lisätietoa kuluun liittyen."
 
 #. module: hr_expense_portal_create
 #: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
@@ -420,7 +425,3 @@ msgstr "pp.kk.vvvv"
 msgid "e.g. 131052-308T"
 msgstr "esim. 131052-308T"
 
-#. module: hr_expense_portal_create
-#: model_terms:ir.ui.view,arch_db:hr_expense_portal_create.portal_my_expenses_add_create_button
-msgid "e.g. Taxi to customer meeting"
-msgstr "esim. taksimatka tapahtumapaikalle"
