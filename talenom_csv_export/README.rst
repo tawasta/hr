@@ -9,7 +9,8 @@ Talenom CSV Export
 This module generates CSV files for importing employee and payroll data into
 Talenom Payroll.
 
-Generated CSV files are stored as ``ir.attachment`` records.
+Generated CSV files are stored as ``ir.attachment`` records, and also saved
+to disk under ``<data_dir>/talenom/``.
 
 Features
 ========
@@ -18,6 +19,8 @@ Features
 * Export payroll expense data to CSV.
 * Generate CSV files automatically using scheduled actions.
 * Store generated CSV files as Odoo attachments.
+* Save generated CSV files to disk, for pickup by an external process
+  (e.g. a file transfer to Talenom).
 
 Configuration
 =============

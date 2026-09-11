@@ -2,8 +2,9 @@ import base64
 import csv
 import io
 import logging
+from pathlib import Path
 
-from odoo import api, fields, models
+from odoo import api, fields, models, tools
 
 _logger = logging.getLogger(__name__)
 
@@ -196,6 +197,19 @@ class TalenomCsvExport(models.Model):
 
         return f"{prefix}_{today.strftime('%d%m%Y')}.csv"
 
+    def _get_talenom_export_dir(self):
+        """Return the directory CSV exports are saved to, creating it if needed."""
+        export_dir = Path(tools.config["data_dir"]) / "talenom"
+        export_dir.mkdir(parents=True, exist_ok=True)
+        return export_dir
+
+    def _save_csv_to_disk(self, filename, csv_bytes):
+        """Save the generated CSV file to disk, alongside the ir.attachment."""
+        file_path = self._get_talenom_export_dir() / filename
+        with open(file_path, "wb") as file:
+            file.write(csv_bytes)
+        _logger.info("Talenom CSV saved to disk: %s", file_path)
+
     def _format_date(self, value):
         """Format an Odoo date value."""
         if not value:
@@ -224,6 +238,8 @@ class TalenomCsvExport(models.Model):
 
         csv_bytes = self._build_csv(headers, rows)
         filename = self._build_filename(export_type)
+
+        self._save_csv_to_disk(filename, csv_bytes)
 
         attachment = (
             self.env["ir.attachment"]
