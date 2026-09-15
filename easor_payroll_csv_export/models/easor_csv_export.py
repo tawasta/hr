@@ -9,9 +9,9 @@ from odoo import api, fields, models, tools
 _logger = logging.getLogger(__name__)
 
 
-class TalenomCsvExport(models.Model):
-    _name = "talenom.csv.export"
-    _description = "Talenom CSV Export"
+class EasorCsvExport(models.Model):
+    _name = "easor.csv.export"
+    _description = "Easor CSV Export"
 
     CSV_DELIMITER = ";"
     CSV_ENCODING = "utf-8-sig"
@@ -46,23 +46,34 @@ class TalenomCsvExport(models.Model):
     ]
 
     def _get_employee_records(self):
-        """Return employees included in the export."""
-        return self.env["hr.employee"].search(
-            [
-                ("active", "=", True),
-            ]
-        )
+        """
+        Return employees included in the export
+        """
+        domain = [
+            ("active", "=", True),
+            "|",
+            ("barcode", "!=", False),
+            ("user_partner_id", "!=", False),
+            # TODO: Only export changed/created employees
+            # TODO: Only export employees that have barcode or SSN
+        ]
+
+        return self.env["hr.employee"].search(domain)
 
     def _get_payroll_records(self):
-        """Return expenses included in the payroll export."""
-        return self.env["hr.expense"].search(
-            [
-                ("state", "=", "done"),
-            ]
-        )
+        """
+        Return expenses included in the payroll export
+        """
+        domain = [
+            ("state", "=", "done"),
+            # TODO: Only export unexported expenses
+        ]
+        return self.env["hr.expense"].search(domain)
 
     def _get_social_security_number(self, employee):
-        """Return the decrypted personal identification number."""
+        """
+        Return the decrypted personal identification number
+        """
         partner = employee.user_partner_id
 
         if not partner.encrypted_social_security_number:
@@ -116,32 +127,35 @@ class TalenomCsvExport(models.Model):
         return cost_center, project
 
     def _employee_rows(self, records=None):
-        """Convert employee records into CSV rows."""
+        """
+        Convert employee records into CSV rows
+        """
         rows = []
 
         for emp in records:
             rows.append(
                 [
-                    emp.barcode,
+                    emp.barcode or "",
                     self._get_social_security_number(emp),
-                    emp.user_partner_id.lastname,
+                    emp.user_partner_id.lastname or "",
                     " ".join(
                         filter(
                             None,
                             [
-                                emp.user_partner_id.firstname,
-                                emp.user_partner_id.firstname2,
+                                emp.user_partner_id.firstname or "",
+                                # TODO: Do we want to force firstname2 to dependencies?
+                                # emp.user_partner_id.firstname2,
                             ],
                         )
                     ),
                     emp.user_partner_id.street or "",
                     emp.user_partner_id.zip or "",
                     emp.user_partner_id.city or "",
-                    emp.bank_account_id.acc_number,
-                    emp.bank_account_id.bank_id.name,
+                    emp.bank_account_id.acc_number or "",
+                    emp.bank_account_id.bank_id.name or "",
                     emp.job_id.name or "",
-                    self._format_date(emp.job_begin_date),
-                    self._format_date(emp.job_begin_date),
+                    self._format_date(emp.job_begin_date) or "",
+                    self._format_date(emp.job_begin_date) or "",
                     "1",
                 ]
             )
@@ -149,7 +163,9 @@ class TalenomCsvExport(models.Model):
         return rows
 
     def _payroll_rows(self, records=None):
-        """Convert payroll records into CSV rows."""
+        """
+        Convert payroll records into CSV rows
+        """
         rows = []
 
         for expense in records:
@@ -168,7 +184,9 @@ class TalenomCsvExport(models.Model):
         return rows
 
     def _build_csv(self, headers, rows):
-        """Build the CSV content and return it as encoded bytes."""
+        """
+        Build the CSV content and return it as encoded bytes
+        """
         buffer = io.StringIO()
 
         writer = csv.writer(
@@ -185,7 +203,9 @@ class TalenomCsvExport(models.Model):
         return buffer.getvalue().encode(self.CSV_ENCODING)
 
     def _build_filename(self, export_type):
-        """Build the filename according to the Talenom naming convention."""
+        """
+        Build the filename according to the Easor naming convention
+        """
         today = fields.Date.context_today(self)
 
         if export_type == "employees":
@@ -193,25 +213,22 @@ class TalenomCsvExport(models.Model):
         elif export_type == "payroll":
             prefix = "13214PALKK_PAL_ODO"
         else:
-            raise ValueError("Unsupported Talenom CSV export type: %s" % export_type)
+            raise ValueError("Unsupported Easor CSV export type: %s" % export_type)
 
         return f"{prefix}_{today.strftime('%d%m%Y')}.csv"
 
-    def _get_talenom_export_dir(self):
-        """Return the directory CSV exports are saved to, creating it if needed."""
-        export_dir = Path(tools.config["data_dir"]) / "talenom"
+    def _get_easor_export_dir(self):
+        """
+        Return the directory CSV exports are saved to, creating it if needed.
+        """
+        export_dir = Path(tools.config["data_dir"]) / "easor"
         export_dir.mkdir(parents=True, exist_ok=True)
         return export_dir
 
-    def _save_csv_to_disk(self, filename, csv_bytes):
-        """Save the generated CSV file to disk, alongside the ir.attachment."""
-        file_path = self._get_talenom_export_dir() / filename
-        with open(file_path, "wb") as file:
-            file.write(csv_bytes)
-        _logger.info("Talenom CSV saved to disk: %s", file_path)
-
     def _format_date(self, value):
-        """Format an Odoo date value."""
+        """
+        Returns the formatted date string in the format "dd.mm.yyyy"
+        """
         if not value:
             return ""
 
@@ -220,48 +237,56 @@ class TalenomCsvExport(models.Model):
 
         return value.strftime("%d.%m.%Y")
 
-    @api.model
-    def _cron_generate_csv(self, export_type="employees"):
-        """Generate the CSV and store it as an attachment."""
-        if export_type == "employees":
-            records = self._get_employee_records()
-            headers = self.EMPLOYEE_HEADERS
-            rows = self._employee_rows(records)
-            description = "Talenom employee CSV export"
-        elif export_type == "payroll":
-            records = self._get_payroll_records()
-            headers = self.PAYROLL_HEADERS
-            rows = self._payroll_rows(records)
-            description = "Talenom payroll CSV export"
-        else:
-            raise ValueError("Unsupported Talenom CSV export type: %s" % export_type)
-
-        csv_bytes = self._build_csv(headers, rows)
-        filename = self._build_filename(export_type)
-
-        self._save_csv_to_disk(filename, csv_bytes)
-
-        attachment = (
-            self.env["ir.attachment"]
-            .sudo()
-            .create(
+    def _save_csv(self, file_name, csv_bytes, save_to="disk"):
+        """
+        Save the generated CSV to disk or as an attachment
+        """
+        if save_to == "disk":
+            file_path = self._get_easor_export_dir() / file_name
+            with open(file_path, "wb") as file:
+                file.write(csv_bytes)
+            # For logging purposes
+            file_name = file_path
+        elif save_to == "attachment":
+            self.env["ir.attachment"].sudo().create(
                 {
-                    "name": filename,
+                    "name": file_name,
                     "type": "binary",
                     "datas": base64.b64encode(csv_bytes),
                     "mimetype": "text/csv",
                     "res_model": self._name,
-                    "description": description,
+                    "description": "Easor CSV export",
                 }
             )
-        )
+        else:
+            raise ValueError("Unsupported save_to option: %s" % save_to)
 
-        _logger.info(
-            "Talenom CSV created: export_type=%s attachment_id=%s filename=%s rows=%s",
-            export_type,
-            attachment.id,
-            filename,
-            len(rows),
-        )
+        _logger.info(f"Easor CSV saved to {save_to}: '{file_name}'")
 
-        return attachment
+    @api.model
+    def _cron_generate_csv(self, export_type="employees"):
+        """
+        Generate the CSV and store it to the disk and as an attachment
+        """
+        if export_type == "employees":
+            records = self._get_employee_records()
+            headers = self.EMPLOYEE_HEADERS
+            rows = self._employee_rows(records)
+        elif export_type == "payroll":
+            records = self._get_payroll_records()
+            headers = self.PAYROLL_HEADERS
+            rows = self._payroll_rows(records)
+        else:
+            raise ValueError("Unsupported Easor CSV export type: %s" % export_type)
+
+        csv_bytes = self._build_csv(headers, rows)
+        filename = self._build_filename(export_type)
+
+        # TODO: Configurable "debug"-option for saving the attachment
+        debug = 1
+        if debug:
+            self._save_csv(filename, csv_bytes, save_to="attachment")
+
+        self._save_csv(filename, csv_bytes)
+
+        return
