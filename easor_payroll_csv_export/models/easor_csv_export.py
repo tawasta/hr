@@ -28,8 +28,8 @@ class EasorCsvExport(models.Model):
         "BIC",
         "ammattinimike",
         "työsuhteen alkupäivämäärä",
-        # "kustannuspaikka",
-        # "kustannuslaji",
+        "kustannuspaikka",
+        "kustannuslaji",
         "voimaantulopäivämäärä",
         "vakuutuskoodi",
     ]
@@ -41,7 +41,7 @@ class EasorCsvExport(models.Model):
         "määrä",
         "hinta",
         "kustannuspaikka",
-        # "kustannuslaji",
+        "kustannuslaji",
         "projekti",
     ]
 
@@ -118,10 +118,11 @@ class EasorCsvExport(models.Model):
             analytic_account = self.env["account.analytic.account"].browse(
                 int(account_id)
             )
-            plan_name = analytic_account.plan_id.name
-            if plan_name == "Projects":
+            plan_name = analytic_account.plan_id.name.lower()
+            # TODO: Name matching is error prone
+            if plan_name == "projects":
                 project = plan_name
-            if plan_name == "Cost center":
+            if plan_name == "cost center":
                 cost_center = plan_name
 
         return cost_center, project
@@ -156,7 +157,9 @@ class EasorCsvExport(models.Model):
                     emp.job_id.name or "",
                     self._format_date(emp.job_begin_date) or "",
                     self._format_date(emp.job_begin_date) or "",
-                    "1",
+                    "",  # kustannuspaikka
+                    "",  # kustannuslaji
+                    "1",  # projekti
                 ]
             )
 
@@ -178,6 +181,7 @@ class EasorCsvExport(models.Model):
                     expense.quantity,
                     expense.price_unit,
                     cost_center,
+                    "",  # kustannuslaji
                     project,
                 ]
             )
@@ -197,7 +201,11 @@ class EasorCsvExport(models.Model):
             lineterminator="\n",
         )
 
-        writer.writerow(headers)
+        # TODO: Configurable headers.
+        # By default, headers should not be included
+        use_headers = False
+        if use_headers:
+            writer.writerow(headers)
         writer.writerows(rows)
 
         return buffer.getvalue().encode(self.CSV_ENCODING)
